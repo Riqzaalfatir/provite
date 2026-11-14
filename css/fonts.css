@@ -1,0 +1,18 @@
+
+/* CONSTANTIA */
+@font-face {
+  font-family: "Constantia";
+  src: url("fonts/constan.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CONSTANTINE */
+@font-face {
+  font-family: "Constantine";
+  src: url("fonts/Constantinee.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

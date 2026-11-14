@@ -1,0 +1,381 @@
+
+/* HEADER MOBILE MENU ITEMS */
+.header-menu-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: "Caudex", serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #2F2F2F;
+
+  opacity: 0;
+  transform: translateX(-30px);
+
+  transition:
+    opacity 400ms ease,
+    transform 400ms ease;
+}
+
+.header-menu-item.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.header-menu-item::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 300ms ease;
+}
+
+.header-menu-item:hover,
+.header-menu-item:focus-visible {
+  transform: translateX(22px);
+}
+
+.header-menu-item:hover::before,
+.header-menu-item:focus-visible::before {
+  opacity: 1;
+  transform: translateX(-22px);
+}
+
+
+
+/* ========================== GALLERY ========================== */
+
+.gallery-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 700ms ease-in-out;
+  touch-action: pan-y;
+}
+
+.gallery-slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========================== LIGHTBOX ========================== */
+
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.96);
+  color: white;
+  overflow: hidden;
+}
+
+.gallery-lightbox[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 99999;
+}
+
+.gallery-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.96);
+}
+
+.gallery-lightbox-main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 0;
+  padding: 15px;
+  gap: 8px;
+}
+
+#galleryLightboxImage {
+  display: block;
+  width: auto;
+  max-width: calc(100% - 90px);
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center;
+  transition: transform 200ms ease;
+  cursor: zoom-in;
+}
+
+.gallery-close {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  z-index: 10;
+  font-size: 34px;
+  line-height: 1;
+  color: white;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.gallery-counter {
+  padding-top: 18px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.gallery-arrow {
+  flex-shrink: 0;
+  width: 32px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.gallery-toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 0 12px;
+}
+
+.gallery-toolbar button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #777;
+  border-radius: 6px;
+  background: #222;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.gallery-thumbnails {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 10px 15px 20px;
+}
+
+.gallery-thumbnail {
+  flex: 0 0 auto;
+  width: 54px;
+  height: 66px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.gallery-thumbnail.active {
+  opacity: 1;
+  border-color: white;
+}
+
+html.gallery-lightbox-open,
+body.gallery-lightbox-open {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-track,
+  #galleryLightboxImage {
+    transition: none;
+  }
+}
+
+
+
+/* ================= WISHES ALL MESSAGES ================= */
+
+.wishes-message-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 46vw;
+  overflow: hidden;
+  border: 1px solid #DED8CC;
+  border-radius: 2.56vw;
+  background: #FBF9F4;
+  color: #737573;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wishes-message-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  padding: 3.08vw;
+}
+
+.wishes-message-quote {
+  font-size: 7vw;
+  line-height: 1;
+  color: #D4D0C8;
+}
+
+.wishes-message-text {
+  display: -webkit-box;
+  margin-top: 3vw;
+  overflow: hidden;
+  font-family: "Constantia", serif;
+  font-size: 3.08vw;
+  line-height: 1.5;
+  font-variant: small-caps;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+
+.wishes-message-footer {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+  min-height: 12vw;
+  padding: 1.5vw 3.08vw;
+  border-top: 1px solid #E1DBD1;
+  background: #F2EEE6;
+}
+
+.wishes-message-avatar {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 7vw;
+  height: 7vw;
+  border-radius: 50%;
+  background: white;
+  font-family: "Constantia", serif;
+  font-size: 2.8vw;
+  font-weight: bold;
+  color: #4B3D2A;
+}
+
+.wishes-message-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: "Constantia", serif;
+  font-size: 3.08vw;
+  font-variant: small-caps;
+}
+
+@media (min-width: 768px) {
+  .wishes-message-card {
+    height: 180px;
+    border-radius: 10px;
+  }
+
+  .wishes-message-content {
+    padding: 12px;
+  }
+
+  .wishes-message-quote {
+    font-size: 27px;
+  }
+
+  .wishes-message-text {
+    margin-top: 12px;
+    font-size: 12px;
+  }
+
+  .wishes-message-footer {
+    min-height: 47px;
+    gap: 8px;
+    padding: 6px 12px;
+  }
+
+  .wishes-message-avatar {
+    width: 27px;
+    height: 27px;
+    font-size: 11px;
+  }
+
+  .wishes-message-name {
+    font-size: 12px;
+  }
+}
+
+
+
+/* ================= SCROLL ANIMATION ================= */
+
+/* Initial State */
+.fade-up,
+.fade-in,
+.fade-left,
+.fade-right {
+  opacity: 0;
+  transition:
+    opacity 1500ms ease,
+    transform 1500ms ease;
+  will-change: opacity, transform;
+}
+
+/* Fade Up: dari bawah ke atas */
+.fade-up {
+  transform: translateY(40px);
+}
+
+/* Fade In: muncul perlahan */
+.fade-in {
+  transform: none;
+}
+
+/* Fade Left: dari kanan ke kiri */
+.fade-left {
+  transform: translateX(40px);
+}
+
+/* Fade Right: dari kiri ke kanan */
+.fade-right {
+  transform: translateX(-40px);
+}
+
+/* Visible State */
+.fade-up.is-visible,
+.fade-in.is-visible,
+.fade-left.is-visible,
+.fade-right.is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .fade-in,
+  .fade-left,
+  .fade-right {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
