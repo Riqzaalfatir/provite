@@ -387,6 +387,31 @@
           // Masukkan Opening Card ke tengah layar desktop
           openingContent.replaceChildren(clonedCard);
 
+          const appState = frame.contentWindow.BryanApp?.state;
+
+          if (appState) {
+            const couple = clonedCard.querySelector("#openingCoupleName");
+            const guest = clonedCard.querySelector("#openingGuestName");
+            const date = clonedCard.querySelector("#openingWeddingDate");
+
+            const event = appState.dataEvent;
+
+            if (couple && event?.groomName && event?.brideName) {
+              couple.textContent = `${event.groomName} & ${event.brideName}`;
+            }
+
+            if (guest && appState.guest?.name) {
+              guest.textContent = appState.guest.name;
+            }
+
+            // Salin tanggal yang sudah diformat dari iframe
+            const originalDate = doc.getElementById("openingWeddingDate");
+
+            if (date && originalDate) {
+              date.innerHTML = originalDate.innerHTML;
+            }
+          }
+
           // Tampilkan opening fullscreen
           desktopOpening.style.display = "flex";
           desktopOpening.style.opacity = "1";
@@ -423,6 +448,59 @@
             }, 900);
           });
         }, 80);
+      });
+
+      window.addEventListener("message", function (event) {
+        if (event.origin !== window.location.origin) return;
+
+        const iframe = document.getElementById("invitationFrame");
+
+        // Pastikan pesan berasal dari iframe undangan
+        if (event.source !== iframe?.contentWindow) return;
+
+        if (event.data?.type !== "BRYAN_GUEST_READY") return;
+
+        const guestName = event.data.guestName;
+
+        if (typeof guestName !== "string" || !guestName.trim()) return;
+
+        // Perbarui nama tamu pada Opening desktop
+        const desktopOpening = document.getElementById("desktopOpeningContent");
+
+        const guestElement = desktopOpening?.querySelector("#openingGuestName");
+
+        if (guestElement) {
+          guestElement.textContent = guestName;
+        }
+
+        console.log("[Bryan Desktop] Guest updated:", guestName);
+      });
+
+      window.addEventListener("message", function (event) {
+        if (event.origin !== window.location.origin) return;
+
+        const iframe = document.getElementById("invitationFrame");
+
+        if (event.source !== iframe?.contentWindow) return;
+        if (event.data?.type !== "BRYAN_OPENING_EVENT_READY") return;
+
+        const desktop = document.getElementById("desktopOpeningContent");
+        if (!desktop) return;
+
+        const couple = desktop.querySelector("#openingCoupleName");
+        const date = desktop.querySelector("#openingWeddingDate");
+
+        const { groomName, brideName, dateHTML } = event.data;
+
+        if (couple && groomName && brideName) {
+          couple.textContent = `${groomName} & ${brideName}`;
+        }
+
+        if (date && typeof dateHTML === "string") {
+          date.innerHTML = dateHTML;
+        }
+
+        console.log("[Bryan Desktop] Opening event updated");
       });
     </script>
   </body>

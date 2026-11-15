@@ -32,20 +32,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!track) return;
 
-    const slides = Array.from(
-      track.querySelectorAll(".gallery-slide")
-    );
+   let photos = [];
 
-    if (!slides.length) return;
-
-    const photos = slides.map((slide) => {
-      const img = slide.querySelector("img");
-
-      return {
-        src: img.getAttribute("src"),
-        alt: img.getAttribute("alt") || "Wedding photo",
-      };
-    });
+function readPhotos() {
+  photos = Array.from(
+    track.querySelectorAll(".gallery-slide img")
+  ).map((img) => ({
+    src: img.getAttribute("src"),
+    alt: img.getAttribute("alt") || "Wedding photo"
+  }));
+}
 
     let currentIndex = 0;
     let autoplayTimer = null;
@@ -79,14 +75,40 @@ document.addEventListener("DOMContentLoaded", () => {
       }, AUTOPLAY_DELAY);
     }
 
-    // Klik foto untuk membuka Lightbox
-    slides.forEach((slide, index) => {
-      slide.addEventListener("click", () => {
-        if (swiped) return;
+    function refreshGallery() {
+  stopAutoplay();
+  readPhotos();
 
-        openLightbox(photos, index);
-      });
-    });
+  currentIndex = 0;
+  track.style.transform = "translateX(0%)";
+
+  if (photos.length > 0) {
+    goToSlide(0);
+    startAutoplay();
+  }
+
+  console.log(
+    `[Gallery] ${trackId}: ${photos.length} foto`
+  );
+}
+
+    // Klik foto untuk membuka Lightbox
+   track.addEventListener("click", (event) => {
+  if (swiped) return;
+
+  const slide = event.target.closest(".gallery-slide");
+  if (!slide || !track.contains(slide)) return;
+
+  const slides = Array.from(
+    track.querySelectorAll(".gallery-slide")
+  );
+
+  const index = slides.indexOf(slide);
+
+  if (index >= 0) {
+    openLightbox(photos, index);
+  }
+});
 
     // Swipe mobile
     track.addEventListener(
@@ -124,14 +146,14 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       { passive: true }
     );
+refreshGallery();
 
-    goToSlide(0);
-    startAutoplay();
-
-    galleries.push({
-      startAutoplay,
-      stopAutoplay,
-    });
+galleries.push({
+  trackId,
+  startAutoplay,
+  stopAutoplay,
+  refreshGallery
+});
   }
 
   // ==========================
@@ -336,4 +358,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initGallery("galleryTrack");
   initGallery("galleryTrack2");
+
+ window.addEventListener("bryan:gallery-updated", () => {
+  galleries.forEach((gallery) => {
+    gallery.refreshGallery();
+  });
+});
 });

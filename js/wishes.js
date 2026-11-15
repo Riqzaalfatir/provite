@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // DATA CONTOH STATIS
   // =====================================
   
-const wishes = [
+let wishes = [
   {
     id: 1,
     nama: "Lorem Ipsum",
@@ -225,6 +225,111 @@ const wishes = [
     }
   }
 
+
+  // =====================================
+  // TWINKLEBOOK API INTEGRATION
+  // =====================================
+
+  let wishesSubmitting = false;
+  let wishesEventId = null;
+  let guestNameAutofilled = false;
+
+  function unwrap(result) {
+    return result?.data?.data ?? result?.data ?? null;
+  }
+
+  function decodeHtml(text) {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = String(text ?? "");
+    return textarea.value;
+  }
+
+  function refreshWishesView() {
+    if (showAll) {
+      renderGrid();
+    } else {
+      renderNormal();
+    }
+  }
+
+  function autofillGuestName() {
+    const guestName = window.BryanApp?.state?.guest?.name;
+
+    // Hanya isi otomatis sekali, jangan menimpa ketikan tamu.
+    if (
+      guestName &&
+      !guestNameAutofilled &&
+      !inputName.value.trim()
+    ) {
+      inputName.value = guestName;
+      guestNameAutofilled = true;
+    }
+  }
+
+  async function loadWishes() {
+    const app = window.BryanApp?.state;
+    const api = window.TwinkleAPI;
+
+    if (!app?.dataEvent?.id || !api?.getAllPMG) return;
+
+    wishesEventId = app.dataEvent.id;
+    autofillGuestName();
+
+    try {
+      const result = await api.getAllPMG(wishesEventId);
+
+      if (!result?.ok) {
+        throw new Error("Failed to load wishes");
+      }
+
+      const data = unwrap(result);
+
+      const list = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.items)
+          ? data.items
+          : Array.isArray(data?.data)
+            ? data.data
+            : null;
+
+      if (!list) {
+        throw new Error("Invalid wishes response");
+      }
+
+      // Sama seperti referensi Next.js:
+      // daftar API dipakai jika memiliki pesan.
+      if (list.length > 0) {
+        wishes = list.map((item, index) => ({
+          id: item.id ?? index,
+          nama: decodeHtml(item.name),
+          pesan: decodeHtml(item.message)
+        }));
+      }
+
+      refreshWishesView();
+
+      console.log("[BryanApp] Wishes loaded:", {
+        eventId: wishesEventId,
+        apiCount: list.length,
+        displayed: wishes.length
+      });
+
+    } catch (error) {
+      console.error("[BryanApp] Wishes API error:", error);
+      // Tidak menghapus data yang sudah tampil.
+    }
+  }
+
+  window.addEventListener("bryan:data-ready", () => {
+    loadWishes();
+  });
+
+  // Jika app.js selesai sebelum listener ini dipasang.
+  if (window.BryanApp?.state?.status === "success") {
+    loadWishes();
+  }
+
+
   viewAllBtn.addEventListener("click", () => {
     setView(!showAll);
   });
@@ -311,16 +416,19 @@ const wishes = [
     }
   });
 
+ 
   // =====================================
-  // SEND WISH - STATIC DEMO
+  // SEND WISH - TWINKLEBOOK API
   // =====================================
-  form.addEventListener("submit", (event) => {
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (wishesSubmitting) return;
 
     const nama = inputName.value.trim();
     const pesan = inputMessage.value.trim();
 
-    // Validasi form
     if (!nama || !pesan) {
       if (typeof window.showNotifModal === "function") {
         window.showNotifModal("incomplete_wishes");
@@ -330,33 +438,83 @@ const wishes = [
       return;
     }
 
-    // Tambah pesan baru ke data sementara
-    wishes.unshift({
-      id: Date.now(),
-      nama,
-      pesan
-    });
+    const api = window.TwinkleAPI;
+    const app = window.BryanApp?.state;
 
-    // Kosongkan pesan setelah dikirim
-    inputMessage.value = "";
+    const eventId = app?.dataEvent?.id || wishesEventId;
 
-    // Refresh tampilan aktif
-    if (showAll) {
-      renderGrid();
-      all.scrollTop = 0;
-    } else {
-      renderNormal();
-      wishList.scrollTop = 0;
+    if (!eventId || !api?.submitPMG) {
+      alert("Wishes service is not ready. Please try again.");
+      return;
     }
 
-    // Popup terima kasih
-    popupName.textContent = "Thank You";
-    popupInitials.textContent = "♥";
-    popupMessage.textContent =
-      "Message Sent!\n\nThank you for your warm wishes and prayers. We truly appreciate your message.";
+    const submitButton = document.getElementById("wishSubmit");
 
-    openPopup();
+    wishesSubmitting = true;
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.style.opacity = "0.6";
+    }
+
+    try {
+      // Payload mengikuti referensi Ferdy & Hashena.
+      const payload = {
+        eventId: eventId,
+        mediaFileId: null,
+        name: nama,
+        message: pesan,
+        status: 1,
+        type: 1
+      };
+
+      const result = await api.submitPMG(payload);
+
+      if (!result?.ok) {
+        throw new Error(
+          result?.data?.message ||
+          "Failed to send your wishes."
+        );
+      }
+
+      // Berhasil diterima backend.
+      inputMessage.value = "";
+
+      // Refresh daftar dari server, bukan menambah
+      // pesan lokal yang belum tentu disetujui.
+      await loadWishes();
+
+      // Popup terima kasih menggunakan desain asli.
+      popupName.textContent = "Thank You";
+      popupInitials.textContent = "♥";
+      popupMessage.textContent =
+        "Message Sent!\n\n" +
+        "Thank you for your warm wishes and prayers. " +
+        "Your message has been received.";
+
+      openPopup();
+
+      console.log("[BryanApp] Wishes submitted successfully");
+
+    } catch (error) {
+      console.error("[BryanApp] Wishes submit failed:", error);
+
+      if (typeof window.showNotifModal === "function") {
+        window.showNotifModal("submit_failed");
+      } else {
+        alert(error.message || "Failed to send your wishes.");
+      }
+
+    } finally {
+      wishesSubmitting = false;
+
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.style.opacity = "";
+      }
+    }
   });
+
 
   // =====================================
   // INITIAL RENDER

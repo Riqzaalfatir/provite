@@ -28,8 +28,13 @@
     <link rel="stylesheet" href="css/tailwind.css" />
     <link rel="stylesheet" href="css/style.css" />
 
-    <script src="js/countdown.js" defer></script>
+    <!-- TWINKLEBOOK API FOUNDATION -->
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/app.js" defer></script>
 
+    <!-- EXISTING BRYAN & VANESSA SCRIPTS -->
+    <script src="js/countdown.js" defer></script>
     <script src="js/notif.js" defer></script>
     <script src="js/rsvp.js" defer></script>
     <script src="js/gift.js" defer></script>
@@ -41,30 +46,25 @@
     <script src="js/animation.js" defer></script>
     <script src="js/hero.js" defer></script>
     <script src="js/floating.js" defer></script>
+    <script src="js/music.js" defer></script>
 
-  
-<script src="js/loading.js" defer></script>
-<script src="js/animation.js" defer></script>
+    <!-- HIDE OPENING KHUSUS DESKTOP IFRAME -->
+    <script>
+      if (
+        window.parent !== window &&
+        window.parent.matchMedia("(min-width: 1024px)").matches
+      ) {
+        document.documentElement.classList.add("desktop-iframe");
+      }
+    </script>
 
-<!-- HIDE OPENING KHUSUS DESKTOP IFRAME -->
-<script>
-  if (
-    window.parent !== window &&
-    window.parent.matchMedia("(min-width: 1024px)").matches
-  ) {
-    document.documentElement.classList.add("desktop-iframe");
-  }
-</script>
-
-<style>
-  html.desktop-iframe #openingScreen {
-    visibility: hidden !important;
-  }
-</style>
-
-</head>
-
+    <style>
+      html.desktop-iframe #openingScreen {
+        visibility: hidden !important;
+      }
+    </style>
   </head>
+
   <body class="">
     <!-- ================= LOADING SCREEN ================= -->
     <section
@@ -218,12 +218,14 @@
           </p>
 
           <h1
+            id="openingCoupleName"
             class="mt-[2px] font-cinzel text-[26px] font-medium uppercase leading-[1.3] md:mt-[12px] md:text-[30px] text-[#474541] tracking-wide"
           >
             BRYAN &amp; VANESSA
           </h1>
 
           <p
+            id="openingWeddingDate"
             class="mt-[2px] font-constantine text-[12px] uppercase md:mt-[9px] md:text-[14px] text-[#474541]"
           >
             FRIDAY, 18<sup>TH</sup> DECEMBER 2026
@@ -365,21 +367,16 @@
     </header>
 
     <!--========================== HERO ==========================-->
-    
-<!--========================== HERO ==========================-->
-<section id="hero" class="relative w-full h-screen">
-  <video
-    
-    src="assets/video/hero.mp4"
-    autoplay
-    muted
-    playsinline
-    preload="auto"
-   
-    class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-  ></video>
-</section>
-
+    <section id="hero" class="relative w-full h-screen">
+      <video
+        src="assets/video/hero.mp4"
+        autoplay
+        muted
+        playsinline
+        preload="auto"
+        class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+      ></video>
+    </section>
 
     <!--========================== PROFILE ==========================-->
     <section id="profile" class="relative w-full overflow-hidden">
@@ -422,6 +419,7 @@
           </p>
 
           <h2
+            id="profileGroomName"
             class="fade-up mt-[10.5vw] font-cinzel font-medium text-[7.69vw] uppercase leading-[8.46vw] md:mt-[49px] md:text-[30px] md:leading-[41px]"
           >
             Bryan Hans<br />
@@ -435,6 +433,7 @@
           </p>
 
           <p
+            id="profileGroomParent"
             class="fade-up mt-[1.3vw] font-constan text-[3.59vw] leading-[5.64vw] md:mt-[5px] md:text-[14px] md:leading-[25px]"
           >
             Mr. Handy Sundjaja &amp;<br />Mrs. Lenny Simon
@@ -444,14 +443,17 @@
             href="https://www.instagram.com/bryanhans7_/"
             target="_blank"
             rel="noopener noreferrer"
-            class="fade-up mt-[4.4vw] flex items-center gap-[1vw] hover:opacity-80 md:mt-[27px] md:gap-[6px]"
+            class="fade-up mt-[4.4vw] flex w-full items-center justify-center gap-[1.54vw] hover:opacity-80 md:mt-[27px] md:gap-[6px]"
           >
             <img
-              src="assets/icons/instagram.png"
+              src="assets/icons/instagram.webp"
               alt="Instagram"
-              class="h-[4.1vw] w-[3.33vw] md:h-[16px] md:w-[13px]"
+              class="block h-[4.1vw] w-[3.33vw] shrink-0 object-contain md:h-[16px] md:w-[13px]"
             />
-            <span class="pt-[0.13vw] font-constan text-[2.82vw] md:text-[11px]">
+
+            <span
+              class="block font-constan text-[2.82vw] leading-none md:text-[11px]"
+            >
               bryanhans7_
             </span>
           </a>
@@ -463,6 +465,7 @@
           </span>
 
           <h2
+            id="profileBrideName"
             class="fade-up font-cinzel text-[7.69vw] font-medium uppercase leading-[8.46vw] md:text-[30px] md:leading-[41px]"
           >
             Vanessa Reygina<br />Agatha
@@ -475,6 +478,7 @@
           </p>
 
           <p
+            id="profileBrideParent"
             class="fade-up mt-[1.3vw] font-constan text-[3.59vw] leading-[5.64vw] md:mt-[5px] md:text-[14px] md:leading-[25px]"
           >
             Mr. Aan Fredyan Hermawan &amp;<br />Mrs. Anita Theresia
@@ -484,14 +488,17 @@
             href="https://www.instagram.com/vanessareygin/"
             target="_blank"
             rel="noopener noreferrer"
-            class="fade-up mt-[4.4vw] flex items-center gap-[1.54vw] hover:opacity-80 md:mt-[27px] md:gap-[6px]"
+            class="fade-up mt-[4.4vw] flex w-full items-center justify-center gap-[1.54vw] hover:opacity-80 md:mt-[27px] md:gap-[6px]"
           >
             <img
-              src="assets/icons/instagram.png"
+              src="assets/icons/instagram.webp"
               alt="Instagram"
-              class="h-[4.1vw] w-[3.33vw] md:h-[16px] md:w-[13px]"
+              class="block h-[4.1vw] w-[3.33vw] shrink-0 object-contain md:h-[16px] md:w-[13px]"
             />
-            <span class="font-constan text-[2.82vw] md:text-[11px]">
+
+            <span
+              class="block font-constan text-[2.82vw] leading-none md:text-[11px]"
+            >
               vanessareygin
             </span>
           </a>
@@ -550,70 +557,93 @@
       <div
         class="flex flex-col items-center pb-[9.8vw] pt-[9.5vw] md:pb-[39.11px] md:pt-[44px]"
       >
+        <!-- TANGGAL PERNIKAHAN DINAMIS -->
         <h2
+          id="countdownWeddingDate"
           class="fade-up font-cinzel text-[6.15vw] uppercase leading-[7.69vw] text-[#FBFCFC] md:text-[24px] md:leading-[30px]"
         >
           Friday, 18<sup class="text-[3.59vw] md:text-[14px]">th</sup> December
           2026
         </h2>
 
+        <!-- COUNTDOWN CONTAINER -->
         <div
           class="mt-[3.9vw] flex items-center justify-center gap-[3.84vw] md:mt-[18px] md:gap-[14.98px]"
         >
+          <!-- DAYS -->
           <div
             class="fade-up flex h-[18.43vw] w-[18.82vw] flex-col items-center justify-center gap-[2vw] rounded-[1.4vw] bg-[#FBFCFC] pb-[2.6vw] shadow-[0_0.51vw_1.54vw_rgba(0,0,0,0.25)] md:h-[71.89px] md:w-[73.39px] md:gap-[10px] md:rounded-[6px] md:shadow-[0_2px_6px_rgba(0,0,0,0.25)]"
             style="transition-delay: 150ms"
           >
             <span
+              id="countdownDays"
               class="font-constan text-[10.75vw] leading-[10.26vw] text-[#24020A] md:text-[41.94px] md:leading-[40px]"
-              >59</span
             >
+              59
+            </span>
+
             <span
               class="font-constan text-[2.3vw] leading-[3.59vw] text-[#24020A] md:text-[10px] md:leading-[14px]"
-              >Days</span
             >
+              Days
+            </span>
           </div>
 
+          <!-- HOURS -->
           <div
             class="fade-up flex h-[18.43vw] w-[18.82vw] flex-col items-center justify-center gap-[2vw] rounded-[1.4vw] bg-[#FBFCFC] pb-[2.6vw] shadow-[0_0.51vw_1.54vw_rgba(0,0,0,0.25)] md:h-[71.89px] md:w-[73.39px] md:gap-[10px] md:rounded-[6px] md:shadow-[0_2px_6px_rgba(0,0,0,0.25)]"
             style="transition-delay: 300ms"
           >
             <span
+              id="countdownHours"
               class="font-constan text-[10.75vw] leading-[10.26vw] text-[#24020A] md:text-[41.94px] md:leading-[40px]"
-              >59</span
             >
+              59
+            </span>
+
             <span
               class="font-constan text-[2.3vw] leading-[3.59vw] text-[#24020A] md:text-[10px] md:leading-[14px]"
-              >Hours</span
             >
+              Hours
+            </span>
           </div>
 
+          <!-- MINUTES -->
           <div
             class="fade-up flex h-[18.43vw] w-[18.82vw] flex-col items-center justify-center gap-[2vw] rounded-[1.4vw] bg-[#FBFCFC] pb-[2.6vw] shadow-[0_0.51vw_1.54vw_rgba(0,0,0,0.25)] md:h-[71.89px] md:w-[73.39px] md:gap-[10px] md:rounded-[6px] md:shadow-[0_2px_6px_rgba(0,0,0,0.25)]"
             style="transition-delay: 300ms"
           >
             <span
+              id="countdownMinutes"
               class="font-constan text-[10.75vw] leading-[10.26vw] text-[#24020A] md:text-[41.94px] md:leading-[40px]"
-              >59</span
             >
+              59
+            </span>
+
             <span
               class="font-constan text-[2.3vw] leading-[3.59vw] text-[#24020A] md:text-[10px] md:leading-[14px]"
-              >Minutes</span
             >
+              Minutes
+            </span>
           </div>
 
+          <!-- SECONDS -->
           <div
             class="fade-up flex h-[18.43vw] w-[18.82vw] flex-col items-center justify-center gap-[2vw] rounded-[1.4vw] bg-[#FBFCFC] pb-[2.6vw] shadow-[0_0.51vw_1.54vw_rgba(0,0,0,0.25)] md:h-[71.89px] md:w-[73.39px] md:gap-[10px] md:rounded-[6px] md:shadow-[0_2px_6px_rgba(0,0,0,0.25)]"
             style="transition-delay: 450ms"
           >
             <span
+              id="countdownSeconds"
               class="font-constan text-[10.75vw] leading-[10.26vw] text-[#24020A] md:text-[41.94px] md:leading-[40px]"
-              >59</span
             >
+              59
+            </span>
+
             <span
               class="font-constan text-[2.3vw] leading-[3.59vw] text-[#24020A] md:text-[10px] md:leading-[14px]"
-              >Seconds</span
             >
+              Seconds
+            </span>
           </div>
         </div>
       </div>
@@ -649,11 +679,23 @@
           class="fade-up z-10 h-auto w-[29.74vw] mt-[1vw] max-w-none select-none pointer-events-none md:w-[116px]"
         />
 
-        <img
+        <!-- <img
           src="assets/images/event/balroomsudirman.webp"
           alt="Sudirman Grand Ballroom"
           class="fade-up mt-[7vw] h-auto w-[70.51vw] max-w-none md:mt-[70px] md:w-[275px] mix-blend-multiply opacity-70"
-        />
+        /> -->
+
+        <!-- ILUSTRASI SUDIRMAN GRAND BALLROOM -->
+        <div
+          class="fade-up mt-[7vw] flex w-full items-center justify-center md:mt-[70px]"
+        >
+          <img
+            src="assets/images/event/balroomsudirman.webp"
+            alt="Sudirman Grand Ballroom"
+            class="block h-[29.74vw] w-[70.51vw] max-w-none object-contain md:h-[116px] md:w-[275px]"
+            style="opacity: 0.55; filter: saturate(0.7) contrast(0.85)"
+          />
+        </div>
 
         <h3
           class="fade-up mt-[3.5vw] font-cinzel text-[4.1vw] font-bold uppercase tracking-[0.03em] text-[#474541] md:mt-[15px] md:text-[16px]"
@@ -675,31 +717,49 @@
           Google Maps
         </a>
 
-        <h3
-          class="fade-up mt-[8.4vw] font-cinzel text-[4.1vw] font-bold uppercase tracking-[0.03em] text-[#474541] md:mt-[35px] md:text-[16px]"
-        >
-          Holy Matrimony
-        </h3>
-        <p
-          class="fade-up mt-[3.2vw] font-constan text-[4.1vw] text-[#474541] md:mt-[20px] md:text-[16px]"
-        >
-          11.30 WIB
-        </p>
+        <!-- DAFTAR ACARA DINAMIS BERDASARKAN PIN -->
+        <div id="eventSessionList" class="flex flex-col items-center" hidden>
+          <!-- ACARA PERTAMA -->
+          <div data-event-session class="flex flex-col items-center">
+            <h3
+              data-session-name
+              class="fade-up mt-[8.4vw] font-cinzel text-[4.1vw] font-bold uppercase tracking-[0.03em] text-[#474541] md:mt-[35px] md:text-[16px]"
+            >
+              Holy Matrimony
+            </h3>
 
-        <span
-          class="fade-up my-[6.6vw] block h-[3.08vw] w-[3.08vw] rounded-full bg-[#4B3D2A] md:my-[30px] md:h-[12px] md:w-[12px]"
-        ></span>
+            <p
+              data-session-time
+              class="fade-up mt-[3.2vw] font-constan text-[4.1vw] text-[#474541] md:mt-[20px] md:text-[16px]"
+            >
+              11.30 WIB
+            </p>
+          </div>
 
-        <h3
-          class="fade-up mt-[0vw] font-cinzel text-[4.1vw] font-bold uppercase tracking-[0.03em] text-[#474541] md:mt-[32px] md:text-[16px]"
-        >
-          Wedding Reception
-        </h3>
-        <p
-          class="fade-up mt-[3.2vw] font-constan text-[4.1vw] leading-[5.13vw] text-[#474541] md:mt-[20px] md:text-[16px] md:leading-[20px]"
-        >
-          18.00 WIB
-        </p>
+          <!-- PEMISAH -->
+          <span
+            id="eventSessionDivider"
+            class="fade-up my-[6.6vw] block h-[3.08vw] w-[3.08vw] rounded-full bg-[#4B3D2A] md:my-[30px] md:h-[12px] md:w-[12px]"
+          ></span>
+
+          <!-- ACARA KEDUA -->
+          <div data-event-session class="flex flex-col items-center">
+            <h3
+              data-session-name
+              class="fade-up mt-[0vw] font-cinzel text-[4.1vw] font-bold uppercase tracking-[0.03em] text-[#474541] md:mt-[32px] md:text-[16px]"
+            >
+              Wedding Reception
+            </h3>
+
+            <p
+              data-session-time
+              class="fade-up mt-[3.2vw] font-constan text-[4.1vw] leading-[5.13vw] text-[#474541] md:mt-[20px] md:text-[16px] md:leading-[20px]"
+            >
+              18.00 WIB
+            </p>
+          </div>
+        </div>
+        <!-- END DAFTAR ACARA DINAMIS -->
       </div>
 
       <!-- ORNAMENT ATAS BAWAH -->
@@ -884,6 +944,7 @@
           </p>
 
           <p
+            id="rsvpGuestName"
             class="fade-up mt-[3.3vw] font-constan text-[4.1vw] md:mt-[16px] md:text-[16px] text-[#4B4B44] tracking-wide"
           >
             [Guest Name]
@@ -892,7 +953,8 @@
           <p
             class="fade-up mt-[5.5vw] font-constan text-[3.59vw] text-[#4B4B44] md:mt-[30px] md:text-[14px]"
           >
-            Kindly Confirm Your Attendance<br />Before [Due Date]
+            Kindly Confirm Your Attendance<br />
+            Before <span id="rsvpDeadline">[Due Date]</span>
           </p>
 
           <div
@@ -911,11 +973,19 @@
               type="button"
               id="rsvpUnable"
               aria-pressed="false"
-              class="fade-left flex h-[10.77vw] w-[36.15vw] items-center justify-center rounded-[1.54vw] border border-[#4B3D2A] bg-transparent text-center font-constan text-[3.59vw] uppercase text-[#4B4B44] transition-colors duration-200 md:h-[42px] md:w-[141px] md:rounded-[6px] md:text-[14px] leading-[16px]"
+              class="fade-left flex h-[10.77vw] w-[36.15vw] flex-col items-center justify-center rounded-[1.54vw] border border-[#4B3D2A] bg-transparent text-center font-constan text-[3.59vw] uppercase leading-[1.2] text-[#4B4B44] transition-colors duration-200 md:h-[42px] md:w-[141px] md:rounded-[6px] md:text-[14px]"
             >
-              Unable to<br />Attend
+              Unable to
+              <span>Attend</span>
             </button>
           </div>
+
+          <!-- SMART RSVP: SESI, JUMLAH TAMU, DAN PERTANYAAN -->
+          <div
+            id="rsvpSmartForm"
+            class="mt-[6vw] flex w-full flex-col items-center gap-[4vw] font-constan text-[#4B4B44]"
+            hidden
+          ></div>
 
           <p
             class="fade-up mt-[16.6vw] font-constan text-[3.59vw] text-[#4B4B44] md:mt-[75px] md:text-[14px]"
@@ -926,9 +996,10 @@
           <button
             type="button"
             id="rsvpConfirmBtn"
-            class="fade-up mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase text-white leading-none md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
+            class="fade-up mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] flex-col items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase leading-[1.2] text-white md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
           >
-            Confirm Unable<br />To Attend
+            Confirm Unable
+            <span>To Attend</span>
           </button>
 
           <p
@@ -940,6 +1011,7 @@
 
           <a
             href="#"
+            id="rsvpChatSupport"
             target="_blank"
             rel="noopener noreferrer"
             class="fade-up mt-[3.85vw] flex h-[7.69vw] w-[41.28vw] items-center justify-center gap-[1.54vw] rounded-[1.54vw] bg-[#12877B] font-constan text-[3.59vw] uppercase leading-none text-white hover:opacity-90 md:mt-[15px] md:h-[30px] md:w-[161px] md:gap-[6px] md:rounded-[6px] md:text-[14px]"
@@ -1042,10 +1114,13 @@
 
           <!-- KARTU REKENING BCA -->
           <div
-            class="fade-up mt-[8.97vw] flex h-[16.92vw] w-[63.33vw] items-center justify-between rounded-[2.8vw] bg-white px-[4.62vw] text-left shadow-[0_0.51vw_2.05vw_rgba(0,0,0,0.2)] md:mt-[35px] md:h-[66px] md:w-[247px] md:rounded-[10.92px] md:px-[18px] md:shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
+            id="giftCard"
+            class="fade-up mt-[8.97vw] flex h-[16.92vw] w-[63.33vw] items-center justify-between rounded-[2.8vw] border border-white bg-white px-[4.62vw] text-left md:mt-[35px] md:h-[66px] md:w-[247px] md:rounded-[10.92px] md:px-[18px]"
+            style="box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.19)"
           >
             <div class="flex items-center gap-[2.56vw] md:gap-[10px]">
               <img
+                id="giftBankIcon"
                 src="assets/icons/bca.png"
                 alt="BCA"
                 class="h-[8.72vw] w-auto max-w-none md:h-[34px]"
@@ -1055,8 +1130,8 @@
                 class="font-constan text-[3.59vw] leading-[18px] text-black md:text-[14px]"
               >
                 <p id="giftNumber">123456789</p>
-                <p>BCA</p>
-                <p>Provite</p>
+                <p id="giftBankName">BCA</p>
+                <p id="giftAccountName">Provite</p>
               </div>
             </div>
 
@@ -1205,19 +1280,21 @@
               class="fade-up mx-auto mb-[4.1vw] flex h-[7.69vw] w-[73.08vw] cursor-pointer items-center justify-center rounded-[2.56vw] bg-[#4B3D2A] p-0 transition-opacity hover:opacity-90 md:mb-[16px] md:h-[30px] md:w-[285px] md:rounded-[10px]"
             >
               <div
-                class="flex items-center justify-center gap-[2vw] md:gap-[10px]"
+                class="flex h-full items-center justify-center gap-[2vw] md:gap-[10px]"
+                
               >
                 <img
                   src="assets/icons/send.png"
-                  alt="Send"
-                  width="25"
-                  height="26"
-                  class="h-[4.36vw] w-[4.1vw] object-contain md:h-[17px] md:w-[16px]"
+                  alt=""
+                  aria-hidden="true"
+                  class="block h-[4.36vw] w-[4.1vw] shrink-0 object-contain md:h-[17px] md:w-[16px]"
                 />
+
                 <span
-                  class="font-constan text-[3.59vw] uppercase leading-none text-white md:text-[14px]"
-                  >Send</span
+                  class="block font-constan text-[3.59vw] uppercase leading-none text-white md:text-[14px]"
                 >
+                  Send
+                </span>
               </div>
             </button>
           </form>
@@ -1320,23 +1397,27 @@
           </div>
 
           <!-- ================= TOMBOL SEE ALL / BACK ================= -->
+
+          <!-- ================= TOMBOL SEE ALL / BACK ================= -->
           <button
             type="button"
             id="wishViewAll"
-            class="fade-up animate mx-auto mb-[25.64vw] flex h-[7.69vw] w-[73.08vw] cursor-pointer items-center justify-center rounded-[2.56vw] bg-[#4B3D2A] transition-opacity hover:opacity-90 md:mb-[100px] md:h-[30px] md:w-[285px] md:rounded-[10px]"
+            class="fade-up animate mx-auto mb-[25.64vw] flex h-[7.69vw] w-[73.08vw] cursor-pointer items-center justify-center rounded-[2.56vw] bg-[#4B3D2A] p-0 transition-opacity hover:opacity-90 md:mb-[100px] md:h-[30px] md:w-[285px] md:rounded-[10px]"
           >
             <div
-              class="flex items-center justify-center gap-[2.56vw] md:gap-[10px]"
+              class="flex h-full items-center justify-center gap-[2.56vw] md:gap-[10px]"
+              
             >
               <img
                 id="wishViewIcon"
                 src="assets/icons/pesan.png"
-                alt="Messages"
-                class="h-[5.64vw] w-[4.36vw] object-contain md:h-[22px] md:w-[17px]"
+                alt=""
+                aria-hidden="true"
+                class="block h-[5.64vw] w-[4.36vw] shrink-0 object-contain md:h-[22px] md:w-[17px]"
               />
 
               <span
-                class="wish-button-label font-constan text-[3.59vw] uppercase leading-none text-white md:text-[14px]"
+                class="wish-button-label block font-constan text-[3.59vw] uppercase leading-none text-white md:text-[14px]"
               >
                 See All Messages
               </span>
@@ -1447,40 +1528,49 @@
       </div>
     </div>
 
+    <!-- ================= FLOATING BUTTONS ================= -->
+    <div
+      id="floatingButtons"
+      class="pointer-events-none fixed bottom-[20px] right-[20px] z-[80] flex flex-col-reverse items-center gap-[12px] opacity-0 transition-opacity duration-500"
+    >
+      <audio id="bgAudio" loop preload="none"></audio>
+      <!-- MUSIC -->
+      <button
+        type="button"
+        id="btnMusic"
+        aria-label="Play music"
+        aria-pressed="false"
+        class="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-full border border-[#4B3D2A] bg-white text-[#4B3D2A] shadow-lg transition-transform duration-200 hover:scale-105"
+      >
+        <svg
+          id="iconPlay"
+          viewBox="0 0 24 24"
+          class="h-[20px] w-[20px]"
+          fill="currentColor"
+        >
+          <path d="M8 5v14l11-7z" />
+        </svg>
 
-<!-- ================= FLOATING BUTTONS ================= -->
-<div
-  id="floatingButtons"
-  class="pointer-events-none fixed bottom-[20px] right-[20px] z-[80] flex flex-col-reverse items-center gap-[12px] opacity-0 transition-opacity duration-500"
->
-  <!-- MUSIC -->
-  <button
-    type="button"
-    id="btnMusic"
-    aria-label="Play music"
-    aria-pressed="false"
-    class="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-full border border-[#4B3D2A] bg-white text-[#4B3D2A] shadow-lg transition-transform duration-200 hover:scale-105"
-  >
-    <svg id="iconPlay" viewBox="0 0 24 24" class="h-[20px] w-[20px]" fill="currentColor">
-      <path d="M8 5v14l11-7z" />
-    </svg>
+        <svg
+          id="iconPause"
+          viewBox="0 0 24 24"
+          class="hidden h-[20px] w-[20px]"
+          fill="currentColor"
+        >
+          <path d="M6 5h4v14H6zm8 0h4v14h-4z" />
+        </svg>
+      </button>
 
-    <svg id="iconPause" viewBox="0 0 24 24" class="hidden h-[20px] w-[20px]" fill="currentColor">
-      <path d="M6 5h4v14H6zm8 0h4v14h-4z" />
-    </svg>
-  </button>
-
-  <!-- RSVP -->
-  <button
-    type="button"
-    id="btnRsvpFloat"
-    aria-label="Go to RSVP"
-    class="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-full border border-[#4B3D2A] bg-white text-[#4B3D2A] shadow-lg transition-transform duration-200 hover:scale-105"
-  >
-    <span class="font-cinzel text-[11px] font-bold">RSVP</span>
-  </button>
-</div>
-<!-- ================= END FLOATING BUTTONS ================= -->
-
+      <!-- RSVP -->
+      <button
+        type="button"
+        id="btnRsvpFloat"
+        aria-label="Go to RSVP"
+        class="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-full border border-[#4B3D2A] bg-white text-[#4B3D2A] shadow-lg transition-transform duration-200 hover:scale-105"
+      >
+        <span class="font-cinzel text-[11px] font-bold">RSVP</span>
+      </button>
+    </div>
+    <!-- ================= END FLOATING BUTTONS ================= -->
   </body>
 </html>

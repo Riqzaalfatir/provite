@@ -1,25 +1,29 @@
-(function () {
-  const btn = document.getElementById("btnCopy");
-  const numberEl = document.getElementById("giftNumber");
-  if (!btn || !numberEl) return;
 
-  const defaultLabel = btn.textContent.trim();
-  let resetTimer;
+(function () {
+  const resetTimers = new WeakMap();
 
   function fallbackCopy(text) {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.setAttribute("readonly", "");
-    ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
-    document.body.appendChild(ta);
-    ta.select();
-    ta.setSelectionRange(0, text.length);
-    let ok = false;
+    const textarea = document.createElement("textarea");
+
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.cssText =
+      "position:fixed;top:0;left:0;opacity:0";
+
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+
+    let success = false;
+
     try {
-      ok = document.execCommand("copy");
-    } catch (e) {}
-    document.body.removeChild(ta);
-    return ok;
+      success = document.execCommand("copy");
+    } catch (error) {
+      console.error("[Gift] Fallback copy failed:", error);
+    }
+
+    textarea.remove();
+    return success;
   }
 
   async function copyText(text) {
@@ -27,20 +31,50 @@
       try {
         await navigator.clipboard.writeText(text);
         return true;
-      } catch (e) {}
+      } catch (error) {
+        console.warn("[Gift] Clipboard fallback activated");
+      }
     }
+
     return fallbackCopy(text);
   }
 
-  btn.addEventListener("click", async function () {
-    // ambil angkanya saja (spasi/strip dibuang)
-    const text = numberEl.textContent.replace(/[^\d]/g, "");
-    const ok = await copyText(text);
+  // Event delegation: mendukung kartu statis dan kartu dari API.
+  document.addEventListener("click", async (event) => {
+    const button = event.target.closest(
+      "#btnCopy, [data-gift-copy]"
+    );
 
-    btn.textContent = ok ? "Copied!" : "Failed";
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(function () {
-      btn.textContent = defaultLabel;
-    }, 1500);
+    if (!button) return;
+
+    const card = button.closest(
+      "#giftCard, [data-gift-extra]"
+    );
+
+    if (!card) return;
+
+    const numberElement = card.querySelector(
+      "#giftNumber, [data-gift-number]"
+    );
+
+    if (!numberElement) return;
+
+    const number = numberElement.textContent
+      .replace(/[^\d]/g, "");
+
+    if (!number) return;
+
+    const success = await copyText(number);
+
+    button.textContent = success ? "Copied!" : "Failed";
+
+    clearTimeout(resetTimers.get(button));
+
+    resetTimers.set(
+      button,
+      setTimeout(() => {
+        button.textContent = "Copy";
+      }, 1500)
+    );
   });
 })();

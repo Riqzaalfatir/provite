@@ -1,73 +1,388 @@
 
 (function () {
-  const btnAttend = document.getElementById("rsvpAttend");
-  const btnUnable = document.getElementById("rsvpUnable");
-  const btnConfirm = document.getElementById("rsvpConfirmBtn");
+  const $ = (id) => document.getElementById(id);
 
-  if (!btnAttend || !btnUnable || !btnConfirm) return;
+  const state = {
+    choice: 0, // 0 belum pilih, 1 hadir, 2 tidak hadir
+    sessions: [],
+    selected: new Set(),
+    counts: {},
+    smartData: [],
+    ready: false,
+    submitting: false,
+    closed: false
+  };
 
-  /* ---------- PILIHAN ATTEND / UNABLE ---------- */
+  const ZERO_ID = "00000000-0000-0000-0000-000000000000";
 
-  let choice = null; // "attend" | "unable" | null
+  const getApp = () => window.BryanApp?.state;
+  const getAPI = () => window.TwinkleAPI;
 
-  function paint(btn, active) {
-    btn.style.backgroundColor = active ? "#4B3D2A" : "transparent";
-    btn.style.color = active ? "#fff" : "#4B4B44";
-
-    btn.setAttribute(
-      "aria-pressed",
-      active ? "true" : "false"
-    );
+  function unwrap(res) {
+    return res?.data?.data ?? res?.data ?? null;
   }
 
-  function select(value) {
-    choice = value;
-
-    paint(btnAttend, value === "attend");
-    paint(btnUnable, value === "unable");
-
-    btnConfirm.innerHTML =
-      value === "attend"
-        ? "Confirm<br />Attendance"
-        : "Confirm Unable<br />To Attend";
+  function notify(type, callback) {
+    if (typeof window.showNotifModal === "function") {
+      window.showNotifModal(type, callback);
+    } else if (type === "confirm_rsvp") {
+      if (confirm("Confirm your RSVP?")) callback?.();
+    } else {
+      alert(type.replaceAll("_", " "));
+    }
   }
 
-  btnAttend.addEventListener("click", function () {
-    select("attend");
-  });
+  function paint(button, active) {
+    if (!button) return;
+    button.style.backgroundColor = active ? "#4B3D2A" : "transparent";
+    button.style.color = active ? "#fff" : "#4B4B44";
+    button.setAttribute("aria-pressed", String(active));
+  }
 
-  btnUnable.addEventListener("click", function () {
-    select("unable");
-  });
+  function updateButtons() {
+    paint($("rsvpAttend"), state.choice === 1);
+    paint($("rsvpUnable"), state.choice === 2);
 
-  /* ---------- TOMBOL CONFIRM ---------- */
+    const confirmBtn = $("rsvpConfirmBtn");
+    if (!confirmBtn) return;
 
-  btnConfirm.addEventListener("click", function () {
+    confirmBtn.innerHTML =
+      state.choice === 1
+        ? "Confirm<br>Attendance"
+        : state.choice === 2
+          ? "Confirm Unable<br>To Attend"
+          : "Confirm";
 
-    // Belum memilih Attend / Unable
-    if (!choice) {
-      window.showNotifModal("incomplete_rsvp");
+    confirmBtn.disabled = state.submitting || !state.ready || state.closed;
+    confirmBtn.style.opacity = confirmBtn.disabled ? "0.55" : "1";
+    confirmBtn.style.cursor = confirmBtn.disabled ? "not-allowed" : "pointer";
+
+    $("rsvpAttend").disabled = !state.ready || state.closed || state.submitting;
+    $("rsvpUnable").disabled = !state.ready || state.closed || state.submitting;
+  }
+
+  function selectChoice(status) {
+    if (!state.ready || state.closed || state.submitting) return;
+
+    state.choice = status;
+
+    // Satu sesi: otomatis dipilih ketika Attend
+    if (status === 1 && state.sessions.length === 1) {
+      const id = state.sessions[0].eventSessionId;
+      state.selected.add(id);
+    }
+
+    updateButtons();
+    renderSessions();
+  }
+
+  function getSessionId(session) {
+    return session.eventSessionId || session.id;
+  }
+
+  function renderSessions() {
+    const container = $("rsvpSmartForm");
+    if (!container) return;
+
+    container.replaceChildren();
+
+    if (state.choice !== 1 || state.sessions.length === 0) {
+      container.hidden = true;
       return;
     }
 
-    // Simpan pilihan saat tombol diklik
-    const selectedChoice = choice;
+    container.hidden = false;
 
-    // Tampilkan modal konfirmasi
-    window.showNotifModal("confirm_rsvp", function () {
+    // Jika hanya satu sesi, tidak perlu checkbox.
+    if (state.sessions.length === 1) {
+      return;
+    }
 
-      // TODO:
-      // Kirim selectedChoice ke API / backend di sini.
-      // Untuk sementara hanya simulasi konfirmasi.
+    const title = document.createElement("p");
+    title.className = "text-[3.59vw] md:text-[14px]";
+    title.textContent = "Please Select Your Event";
+    container.appendChild(title);
 
-      if (selectedChoice === "attend") {
-        window.showNotifModal("rsvp_confirmed_hadir");
-      } else {
-        window.showNotifModal("rsvp_confirmed_tidak_hadir");
+    state.sessions.forEach((session) => {
+      const id = getSessionId(session);
+
+      const label = document.createElement("label");
+      label.className =
+        "flex w-full items-center justify-start gap-3 rounded-md border border-[#4B3D2A] p-3 text-left text-[3.59vw] md:text-[14px]";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = state.selected.has(id);
+      checkbox.className = "h-4 w-4 accent-[#4B3D2A]";
+
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+          state.selected.add(id);
+        } else {
+          state.selected.delete(id);
+        }
+
+        renderSessions();
+      });
+
+      const text = document.createElement("span");
+      text.textContent = session.name || "Wedding Event";
+
+      label.append(checkbox, text);
+      container.appendChild(label);
+    });
+  }
+
+  function isClosed(event) {
+    if (event?.isAllowedRSVP === false) return true;
+
+    if (!event?.closeRSVPDate) return false;
+
+    const value = String(event.closeRSVPDate);
+    const normalized = /(?:Z|[+-]\d{2}:\d{2})$/i.test(value)
+      ? value
+      : value + "+07:00";
+
+    const deadline = new Date(normalized);
+
+    return !Number.isNaN(deadline.getTime()) &&
+      Date.now() > deadline.getTime();
+  }
+
+  async function loadRSVP() {
+    const app = getApp();
+    const api = getAPI();
+
+    if (!app?.dataEvent || !api) return;
+
+    state.ready = false;
+    state.closed = isClosed(app.dataEvent);
+    updateButtons();
+
+    if (!app.pin || !app.guest) {
+      console.warn("[RSVP] PIN atau data tamu tidak tersedia");
+      return;
+    }
+
+    try {
+      const [sessionResult, smartResult] = await Promise.all([
+        api.getGuestSessionsByPin(app.pin, app.dataEvent.id),
+        api.getSmartRsvpData(app.url, app.pin)
+      ]);
+
+      if (!sessionResult?.ok || !smartResult?.ok) {
+        throw new Error("Failed to load Smart RSVP data");
       }
 
+      const sessions = unwrap(sessionResult);
+      const smartData = unwrap(smartResult);
+
+      if (!Array.isArray(sessions) || !Array.isArray(smartData)) {
+        throw new Error("Invalid Smart RSVP response");
+      }
+
+      state.smartData = smartData;
+
+      state.sessions = sessions
+        .filter((s) =>
+          s.eventId === app.dataEvent.id ||
+          s.eventId === ZERO_ID
+        )
+        .map((s) => ({
+          ...s,
+          eventSessionId: getSessionId(s)
+        }));
+
+      // Baca status RSVP sebelumnya jika tersedia
+      const priorStatuses = smartData.map((s) => s.rsvpStatus);
+
+      state.choice = priorStatuses.includes(1)
+        ? 1
+        : priorStatuses.includes(2)
+          ? 2
+          : 0;
+
+      state.selected.clear();
+
+      state.sessions.forEach((session) => {
+        const id = session.eventSessionId;
+        const smart = smartData.find((s) => s.id === id);
+
+        state.counts[id] = Number(smart?.rsvp) > 0
+          ? Number(smart.rsvp)
+          : 1;
+
+        if (smart?.rsvpStatus === 1) {
+          state.selected.add(id);
+        }
+      });
+
+      if (state.choice === 1 && state.sessions.length === 1) {
+        state.selected.add(state.sessions[0].eventSessionId);
+      }
+
+      state.ready = state.sessions.length > 0;
+
+      updateButtons();
+      renderSessions();
+
+      console.log("[RSVP] Ready", {
+        pin: app.pin,
+        sessions: state.sessions.length,
+        choice: state.choice,
+        closed: state.closed,
+        smartData: state.smartData
+      });
+
+    } catch (error) {
+      state.ready = false;
+      updateButtons();
+      console.error("[RSVP] Error:", error);
+    }
+  }
+
+  function hasSmartQuestions() {
+    return state.smartData.some((item) =>
+      (Array.isArray(item.questionList) && item.questionList.length > 0) ||
+      (Array.isArray(item.questionGeneralList) &&
+        item.questionGeneralList.length > 0)
+    );
+  }
+
+  function buildPayload() {
+    const app = getApp();
+
+    return {
+      eventId: app.dataEvent.id,
+      groupId: null,
+      name: app.guest.name,
+      phone: app.guest.phone || "",
+      pin: app.pin,
+      status: state.choice,
+      url: app.url,
+      maybeDate: null,
+      maybeNote: null,
+      questionList: state.choice === 1
+        ? state.sessions.map((session) => {
+            const id = session.eventSessionId;
+            const selected = state.selected.has(id);
+
+            return {
+              eventSessionId: id,
+              guestInvitation: selected
+                ? state.counts[id] || 1
+                : 0,
+              questions: [],
+              guestAttendances: []
+            };
+          })
+        : []
+    };
+  }
+
+  function submitClick() {
+    if (state.submitting) return;
+
+    if (!state.ready) {
+      alert("RSVP data is not ready. Please refresh the invitation.");
+      return;
+    }
+
+    if (state.closed) {
+      alert("RSVP is closed. Please contact our support team.");
+      return;
+    }
+
+    if (state.choice === 0) {
+      notify("incomplete_rsvp");
+      return;
+    }
+
+    if (state.choice === 1 && state.selected.size === 0) {
+      alert("Please select at least one event.");
+      return;
+    }
+
+    // Jangan abaikan pertanyaan Smart RSVP dari database.
+    if (hasSmartQuestions()) {
+      alert(
+        "This invitation requires additional RSVP questions. " +
+        "Please complete the Smart RSVP form before submitting."
+      );
+      return;
+    }
+
+    notify("confirm_rsvp", () => {
+      submitToAPI();
     });
+  }
 
-  });
+  async function submitToAPI() {
+    if (state.submitting || !state.ready || state.closed) return;
 
+    state.submitting = true;
+    updateButtons();
+
+    try {
+      const payload = buildPayload();
+
+      console.log("[RSVP] Sending payload:", payload);
+
+      const result = await getAPI().submitRSVP(payload);
+
+      if (!result?.ok || result.status !== 200) {
+        const message =
+          result?.data?.messageEN ||
+          result?.data?.messageID ||
+          result?.data?.message ||
+          "Failed to submit RSVP.";
+
+        throw new Error(message);
+      }
+
+      notify(
+        state.choice === 1
+          ? "rsvp_confirmed_hadir"
+          : "rsvp_confirmed_tidak_hadir"
+      );
+
+      // Sinkronkan status RSVP setelah submit
+      await loadRSVP();
+
+    } catch (error) {
+      console.error("[RSVP] Submit failed:", error);
+      alert(error.message || "Failed to submit RSVP.");
+    } finally {
+      state.submitting = false;
+      updateButtons();
+    }
+  }
+
+  function init() {
+    const attend = $("rsvpAttend");
+    const unable = $("rsvpUnable");
+    const confirm = $("rsvpConfirmBtn");
+
+    if (!attend || !unable || !confirm) return;
+
+    attend.addEventListener("click", () => selectChoice(1));
+    unable.addEventListener("click", () => selectChoice(2));
+    confirm.addEventListener("click", submitClick);
+
+    updateButtons();
+
+    if (getApp()?.status === "success") {
+      loadRSVP();
+    }
+  }
+
+  window.addEventListener("bryan:data-ready", loadRSVP);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  window.BryanRSVP = { state, loadRSVP, buildPayload };
 })();

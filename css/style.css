@@ -389,3 +389,9 @@ body.gallery-lightbox-open {
 .loading-logo-pulse {
   animation: loadingLogoPulse 2s ease-in-out infinite;
 }
+
+
+#profileGroomName,
+#profileBrideName {
+  text-wrap: balance;
+}
