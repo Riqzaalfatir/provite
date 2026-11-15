@@ -7,6 +7,9 @@
 
     <title>The Wedding Bryan & Vanessa</title>
 
+    <link rel="stylesheet" href="css/tailwind.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+
     <style>
       * {
         box-sizing: border-box;
@@ -105,11 +108,90 @@
           height: 100dvh;
         }
       }
+
+      /* ============ FULLSCREEN DESKTOP OVERLAY ============ */
+
+      #desktopLoading,
+      #desktopOpening {
+        display: none;
+      }
+
+      /* Animasi logo Provite */
+      @keyframes desktopLogoPulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        /* LOADING SCREEN */
+        #desktopLoading {
+          position: fixed;
+          inset: 0;
+          z-index: 999999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #f6f0e6;
+          transition: opacity 450ms ease;
+        }
+
+        #desktopLoadingBar {
+          width: 0%;
+          height: 100%;
+          background: #4b3d2a;
+          transition: width 250ms ease;
+        }
+
+        .desktop-loading-logo {
+          animation: desktopLogoPulse 2s ease-in-out infinite;
+        }
+
+        /* OPENING SCREEN */
+        #desktopOpening {
+          position: fixed;
+          inset: 0;
+          z-index: 999998;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          opacity: 1;
+          transition: opacity 900ms ease;
+        }
+
+        #desktopOpening .opening-backdrop {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(5.2px);
+          -webkit-backdrop-filter: blur(5.2px);
+        }
+
+        /* Card ini disalin dari invitation.html */
+        #desktopOpening #openingCard {
+          position: relative;
+          z-index: 10;
+          max-width: calc(100vw - 32px);
+        }
+      }
+    </style>
+
+    <style>
+      /* Khusus undangan yang berada di iframe desktop */
+      html.desktop-iframe #openingScreen {
+        visibility: hidden !important;
+      }
     </style>
   </head>
 
   <body>
     <main class="desktop-layout">
+      <!--================ DESKTOP LEFT =================-->
+
       <!--================ DESKTOP LEFT =================-->
       <aside class="desktop-photo" aria-hidden="true">
         <!-- BACKGROUND UTAMA -->
@@ -118,6 +200,13 @@
           alt=""
           class="desktop-bg"
         />
+
+        <!-- TEKS TENGAH -->
+        <h1
+          class="absolute left-1/2 top-1/2 z-[5] w-full -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-center font-cinzel text-[52px] font-normal leading-[1.2] text-[#474541]"
+        >
+          BRYAN &amp; VANESSA
+        </h1>
 
         <!-- ORNAMEN ATAS -->
         <img
@@ -135,6 +224,8 @@
       </aside>
       <!--================ END DESKTOP LEFT =================-->
 
+      <!--================ END DESKTOP LEFT =================-->
+
       <!--================ UNDANGAN KANAN =================-->
       <iframe
         id="invitationFrame"
@@ -144,12 +235,195 @@
       ></iframe>
     </main>
 
+    <!-- =============== DESKTOP LOADING SCREEN =============== -->
+    <div id="desktopLoading">
+      <div class="w-[300px] max-w-[85vw] text-center">
+        <!-- LOGO PROVITE -->
+        <img
+          src="assets/images/loadingscreen/provite.webp"
+          alt="Provite"
+          class="desktop-loading-logo mx-auto mb-[20px] h-auto w-[127px] object-contain"
+        />
+
+        <!-- PROGRESS BAR -->
+        <div class="h-[5px] w-full overflow-hidden rounded-full bg-gray-200">
+          <div id="desktopLoadingBar"></div>
+        </div>
+
+        <!-- PERSENTASE -->
+        <p
+          id="desktopLoadingPercent"
+          class="mt-[10px] font-cinzel text-[12px] text-[#4B3D2A]"
+        >
+          0%
+        </p>
+      </div>
+    </div>
+    <!-- =============== END DESKTOP LOADING =============== -->
+
+    <!-- =============== DESKTOP OPENING SCREEN =============== -->
+    <div id="desktopOpening">
+      <!-- BACKDROP FULLSCREEN -->
+      <div class="opening-backdrop"></div>
+
+      <!--
+    Opening Card asli dari invitation.html
+    akan disalin ke sini oleh JavaScript.
+  -->
+      <div id="desktopOpeningContent"></div>
+    </div>
+    <!-- =============== END DESKTOP OPENING =============== -->
+
     <script>
-      // Teruskan parameter URL ke invitation.html
       const frame = document.getElementById("invitationFrame");
 
-      frame.src =
+      const desktopLoading = document.getElementById("desktopLoading");
+      const desktopOpening = document.getElementById("desktopOpening");
+
+      const desktopBar = document.getElementById("desktopLoadingBar");
+      const desktopPercent = document.getElementById("desktopLoadingPercent");
+
+      const openingContent = document.getElementById("desktopOpeningContent");
+
+      const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
+
+      // Teruskan parameter undangan ke iframe
+      const invitationURL =
         "invitation.html" + window.location.search + window.location.hash;
+
+      if (frame.getAttribute("src") !== invitationURL) {
+        frame.src = invitationURL;
+      }
+
+      // ==========================================
+      // PRELOAD ASET DESKTOP KIRI
+      // ==========================================
+
+      function loadDesktopImage(src) {
+        return new Promise((resolve) => {
+          const img = new Image();
+
+          let done = false;
+
+          const timer = setTimeout(() => finish(false), 20000);
+
+          function finish(success) {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+
+            if (!success) {
+              console.warn("Desktop asset failed:", src);
+            }
+
+            resolve();
+          }
+
+          img.onload = () => finish(true);
+          img.onerror = () => finish(false);
+          img.src = src;
+
+          if (img.complete) {
+            finish(img.naturalWidth > 0);
+          }
+        });
+      }
+
+      const desktopAssetsReady = isDesktop()
+        ? Promise.all([
+            loadDesktopImage("assets/images/desktop/langit.webp"),
+            loadDesktopImage("assets/images/desktop/ornamentatas.webp"),
+            loadDesktopImage("assets/images/desktop/ornamentbawah.webp"),
+          ])
+        : Promise.resolve();
+
+      // ==========================================
+      // LOADING + OPENING DESKTOP
+      // ==========================================
+
+      frame.addEventListener("load", () => {
+        if (!isDesktop()) return;
+
+        const doc = frame.contentDocument;
+
+        if (!doc) return;
+
+        const interval = setInterval(async () => {
+          // Baca progress dari loading.js di iframe
+          const innerPercent = doc.getElementById("loadingPercent");
+          const innerLoading = doc.getElementById("sectionLoading");
+
+          if (innerPercent) {
+            const progress = parseInt(innerPercent.textContent, 10) || 0;
+
+            desktopBar.style.width = `${Math.min(progress, 99)}%`;
+            desktopPercent.textContent = `${Math.min(progress, 99)}%`;
+          }
+
+          // Tunggu sampai loading asli selesai dan dihapus
+          if (innerLoading) return;
+
+          clearInterval(interval);
+
+          // Pastikan background & ornamen desktop kiri siap
+          await desktopAssetsReady;
+
+          const originalOpening = doc.getElementById("openingScreen");
+
+          if (originalOpening) {
+            originalOpening.style.visibility = "hidden";
+          }
+
+          // Ambil Opening Card asli dari invitation.html
+          const originalCard = doc.getElementById("openingCard");
+
+          if (!originalCard) {
+            console.error("Opening Card tidak ditemukan.");
+            return;
+          }
+
+          const clonedCard = originalCard.cloneNode(true);
+
+          // Masukkan Opening Card ke tengah layar desktop
+          openingContent.replaceChildren(clonedCard);
+
+          // Tampilkan opening fullscreen
+          desktopOpening.style.display = "flex";
+          desktopOpening.style.opacity = "1";
+
+          // Selesaikan progress desktop
+          desktopBar.style.width = "100%";
+          desktopPercent.textContent = "100%";
+
+          // Hilangkan loading desktop
+          desktopLoading.style.opacity = "0";
+          desktopLoading.style.pointerEvents = "none";
+
+          setTimeout(() => {
+            desktopLoading.style.display = "none";
+          }, 500);
+
+          // Tombol pada card desktop
+          const desktopButton = clonedCard.querySelector("#btnOpenInvitation");
+
+          desktopButton?.addEventListener("click", () => {
+            // Jalankan tombol asli di iframe
+            const originalButton = doc.getElementById("btnOpenInvitation");
+
+            if (!originalButton || originalButton.disabled) return;
+
+            originalButton.click();
+
+            // Tutup opening fullscreen desktop
+            desktopOpening.style.opacity = "0";
+            desktopOpening.style.pointerEvents = "none";
+
+            setTimeout(() => {
+              desktopOpening.style.display = "none";
+            }, 900);
+          });
+        }, 80);
+      });
     </script>
   </body>
 </html>

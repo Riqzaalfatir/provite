@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const IMAGES_COMMON = [
 
   // LOADING SCREEN
-  "assets/images/loadingscreen/provite.png",
+  "assets/images/loadingscreen/provite.webp",
 
   // OPENING INVITATION
   "assets/images/opening/bungaatas.webp",
