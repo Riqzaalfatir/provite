@@ -5,10 +5,16 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Semua path relatif mengacu ke root website -->
+
+    <base href="/events/bryanvanessa/" />
+
     <title>The Wedding Bryan & Vanessa</title>
 
-    <link rel="stylesheet" href="css/tailwind.css" />
+    <!-- CSS GLOBAL -->
     <link rel="stylesheet" href="css/fonts.css" />
+<link rel="stylesheet" href="css/tailwind.css" />
+<link rel="stylesheet" href="css/style.css" />
 
     <style>
       * {
@@ -231,7 +237,6 @@
         id="invitationFrame"
         class="invitation-frame"
         title="Bryan and Vanessa Wedding Invitation"
-        src="invitation.html"
       ></iframe>
     </main>
 
@@ -287,12 +292,107 @@
 
       const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
 
-      // Teruskan parameter undangan ke iframe
-      const invitationURL =
-        "invitation.html" + window.location.search + window.location.hash;
+      // ==========================================
+      // ROUTING UNDANGAN - SLUG + PIN
+      // ==========================================
 
-      if (frame.getAttribute("src") !== invitationURL) {
-        frame.src = invitationURL;
+      const DEFAULT_SLUG = "bryanvanessa";
+
+      const segments = window.location.pathname.split("/").filter(Boolean);
+
+      const routeSlug = "bryanvanessa";
+
+      const params = new URLSearchParams(window.location.search);
+
+      const routePin = segments.length >= 2 ? segments[1] : "";
+
+      const incomingPin = routePin || params.get("pin") || "";
+
+      const validPin = /^\d{1,10}$/.test(incomingPin);
+
+      // Config.js membaca "id" sebagai slug
+      // dan "pin" sebagai identitas tamu.
+      const iframeURL = new URL("invitation.html", document.baseURI);
+
+      iframeURL.searchParams.set("id", routeSlug);
+
+      for (const [key, value] of params.entries()) {
+        if (key !== "id" && key !== "url" && key !== "pin") {
+          iframeURL.searchParams.set(key, value);
+        }
+      }
+
+      if (validPin) {
+        iframeURL.searchParams.set("pin", incomingPin);
+      }
+
+      iframeURL.hash = window.location.hash;
+
+      // ==========================================
+      // SEMBUNYIKAN PIN SETELAH API BERHASIL
+      // ==========================================
+
+      function cleanInvitationURL() {
+        if (!validPin) return;
+
+        const app = frame.contentWindow?.BryanApp?.state;
+
+        // Jangan menghilangkan PIN sebelum
+        // data tamu benar-benar berhasil dimuat.
+        if (
+          app?.status !== "success" ||
+          !app?.dataEvent?.id ||
+          !app?.guest?.id
+        ) {
+          return;
+        }
+
+        // Simpan PIN agar refresh tetap
+        // dapat menampilkan data tamu.
+        try {
+          localStorage.setItem(`${routeSlug}-pin`, incomingPin);
+        } catch (error) {
+          console.warn("Unable to save guest PIN");
+        }
+
+        // Gunakan format cookie yang sama
+        // dengan js/config.js.
+        const cookieName =
+          "tb-pin-" + routeSlug.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+
+        const secure = window.location.protocol === "https:" ? "; Secure" : "";
+
+        document.cookie =
+          `${cookieName}=${encodeURIComponent(incomingPin)}; ` +
+          `Max-Age=${60 * 60 * 24 * 30}; ` +
+          `Path=/; SameSite=Lax${secure}`;
+
+        // URL bersih tanpa reload halaman.
+        const cleanPath = "/" + encodeURIComponent(routeSlug);
+
+        window.history.replaceState(
+          window.history.state,
+          "",
+          cleanPath + window.location.hash,
+        );
+
+        console.log("[Bryan] Guest loaded, URL cleaned:", cleanPath);
+      }
+
+      // Dengarkan saat data API selesai.
+      frame.addEventListener("load", () => {
+        const innerWindow = frame.contentWindow;
+
+        innerWindow?.addEventListener("bryan:data-ready", cleanInvitationURL);
+
+        // Antisipasi data sudah siap
+        // sebelum listener terpasang.
+        cleanInvitationURL();
+      });
+
+      // Load undangan ke iframe.
+      if (frame.src !== iframeURL.href) {
+        frame.src = iframeURL.href;
       }
 
       // ==========================================

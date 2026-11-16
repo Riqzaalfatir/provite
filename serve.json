@@ -1,0 +1,18 @@
+
+{
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/bryanvanessa",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/bryanvanessa/:pin",
+      "destination": "/index.html"
+    }
+  ]
+}
