@@ -592,7 +592,32 @@ if (copyButton) {
 }
 
 
+
+function showInvalidPinPage() {
+  if (window.parent !== window) {
+    window.parent.postMessage(
+      { type: "BRYAN_INVALID_PIN" },
+      window.location.origin
+    );
+  } else {
+    const privateURL = new URL(
+      "private.html",
+      document.baseURI
+    );
+
+    privateURL.searchParams.set(
+      "id",
+      state.url || "bryanvanessa"
+    );
+
+    window.location.replace(privateURL.href);
+  }
+}
+
+
+
   
+
 async function initialize() {
   const config = window.TWINKLE_CONFIG;
   const api = window.TwinkleAPI;
@@ -605,14 +630,14 @@ async function initialize() {
   const params = config.getParams();
   const url = params.slug;
 
-  // Prioritas PIN: URL → localStorage → cookie
+  // Prioritas PIN: URL -> localStorage -> cookie
   const pin =
     params.urlPin ||
     localStorage.getItem(`${url}-pin`) ||
     config.readPinCookie?.(url) ||
     null;
 
-  // Reset state setiap inisialisasi
+  // Reset state
   state.url = url;
   state.pin = pin;
   state.dataEvent = null;
@@ -621,15 +646,11 @@ async function initialize() {
   state.guest = null;
   state.error = null;
 
-  // ==========================================
-  // GLOBAL FALLBACK - TANPA PIN
-  // ==========================================
+  // TANPA PIN: mode preview
   if (!pin) {
     state.status = "fallback";
 
-    console.log(
-      "[BryanApp] Tidak ada PIN, menggunakan fallback HTML."
-    );
+    console.log("[BryanApp] Mode preview tanpa PIN");
 
     window.dispatchEvent(
       new CustomEvent("bryan:fallback-ready", {
@@ -640,46 +661,61 @@ async function initialize() {
     return;
   }
 
-  // ==========================================
-  // MODE DINAMIS - PIN TERSEDIA
-  // ==========================================
+  // DENGAN PIN: wajib validasi API
   state.status = "loading";
 
   try {
+    // 1. Ambil event
     const eventRes = await api.getCurrentEvent(url);
-
-    if (!eventRes.ok || !unwrap(eventRes)) {
-      throw new Error("Event tidak ditemukan");
-    }
-
     const event = unwrap(eventRes);
+
+    if (!eventRes?.ok || !event?.id) {
+      throw new Error("Event gagal dimuat");
+    }
+
     const eventId = event.id;
+    const lang = event.contentLanguage === "en" ? 1 : 0;
 
-    if (!eventId) {
-      throw new Error("Event ID tidak tersedia");
+    // 2. Validasi PIN terlebih dahulu
+    const guestRes = await api.getCurrentGuest(url, pin);
+    const guestData = unwrap(guestRes);
+
+    console.log("[BryanApp] Validasi PIN:", {
+      status: guestRes?.status,
+      ok: guestRes?.ok,
+      hasGuest: Boolean(guestData?.id)
+    });
+
+    // HTTP 204: PIN tidak terdaftar
+    if (guestRes?.status === 204) {
+      state.status = "invalid-pin";
+      state.error = "PIN tidak terdaftar";
+
+      showInvalidPinPage();
+      return;
     }
 
-    const lang =
-      event.contentLanguage === "en" ? 1 : 0;
-
-    const [contentRes, guestRes, sessionRes] =
-      await Promise.all([
-        api.getEventContentByLang(eventId, lang),
-        api.getCurrentGuest(url, pin),
-        api.getGuestSessionsByPin(pin, eventId)
-      ]);
-
-    // PIN harus benar-benar dikenali API.
-    if (!guestRes?.ok || !unwrap(guestRes)) {
-      throw new Error("PIN tamu tidak valid");
+    // PIN hanya diterima jika guest valid
+    if (
+      guestRes?.status !== 200 ||
+      !guestRes?.ok ||
+      !guestData?.id
+    ) {
+      throw new Error("Data tamu gagal diverifikasi");
     }
+
+    // 3. Ambil konten dan sesi setelah PIN valid
+    const [contentRes, sessionRes] = await Promise.all([
+      api.getEventContentByLang(eventId, lang),
+      api.getGuestSessionsByPin(pin, eventId)
+    ]);
 
     state.dataEvent = event;
     state.dataContent = contentRes?.ok
       ? unwrap(contentRes)
       : null;
 
-    state.guest = unwrap(guestRes);
+    state.guest = guestData;
 
     const sessions = sessionRes?.ok
       ? unwrap(sessionRes)
@@ -691,9 +727,7 @@ async function initialize() {
 
     state.status = "success";
 
-    // ==========================================
-    // RENDER SEMUA SECTION DINAMIS
-    // ==========================================
+    // 4. Render undangan
     renderOpeningEvent();
     renderOpeningGuest();
     renderProfile();
@@ -702,10 +736,7 @@ async function initialize() {
     renderRSVP();
     renderWeddingGift();
 
-    console.log(
-      "[BryanApp] Data API berhasil dimuat:",
-      state
-    );
+    console.log("[BryanApp] Data tamu berhasil dimuat");
 
     window.dispatchEvent(
       new CustomEvent("bryan:data-ready", {
@@ -714,8 +745,7 @@ async function initialize() {
     );
 
   } catch (error) {
-    // Jika PIN/API gagal, jangan menimpa fallback HTML.
-    state.status = "fallback";
+    state.status = "error";
     state.error = error.message;
 
     state.dataEvent = null;
@@ -723,18 +753,16 @@ async function initialize() {
     state.dataSession = [];
     state.guest = null;
 
-    console.warn(
-      "[BryanApp] Menggunakan fallback HTML:",
-      error.message
-    );
+    console.error("[BryanApp] API error:", error);
 
-    window.dispatchEvent(
-      new CustomEvent("bryan:fallback-ready", {
-        detail: { ...state }
-      })
+    // Kesalahan jaringan/API bukan berarti PIN salah
+    window.parent.postMessage(
+      { type: "BRYAN_GUEST_LOAD_ERROR" },
+      window.location.origin
     );
   }
 }
+
 
 
   window.BryanApp = {

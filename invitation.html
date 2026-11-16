@@ -2,7 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <base href="/events/bryanvanessa/" />
+    <base href="/" />
+<script>
+  document.querySelector("base").href =
+    location.hostname === "provite.id" ||
+    location.hostname.endsWith(".provite.id")
+      ? "/events/bryanvanessa/"
+      : "/";
+</script>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -371,6 +378,7 @@
       <video
         src="assets/video/hero.mp4"
         autoplay
+        loop
         muted
         playsinline
         preload="auto"
@@ -574,6 +582,7 @@
           class="animate-flower-middle-right absolute -bottom-[0.3vw] right-[2.5vw] z-[37] h-auto w-[76vw] max-w-none select-none pointer-events-none"
         />
 
+
         <!-- Aset Burung, Kupu Kupu -->
         <img
           src="assets/gift/bird.gif"
@@ -735,16 +744,19 @@
         /> -->
 
         <!-- ILUSTRASI SUDIRMAN GRAND BALLROOM -->
-        <div
-          class="fade-up mt-[7vw] flex w-full items-center justify-center md:mt-[70px]"
-        >
-          <img
-            src="assets/images/event/balroomsudirman.webp"
-            alt="Sudirman Grand Ballroom"
-            class="block h-[29.74vw] w-[70.51vw] max-w-none object-contain md:h-[116px] md:w-[275px]"
-            style="opacity: 0.55; filter: saturate(0.7) contrast(0.85)"
-          />
-        </div>
+        
+<!-- ILUSTRASI SUDIRMAN GRAND BALLROOM -->
+<div
+  class="fade-up mt-[7vw] flex w-full items-center justify-center md:mt-[70px]"
+>
+  <img
+    src="assets/images/event/balroomsudirman.webp"
+    alt="Sudirman Grand Ballroom"
+    class="block h-[29.74vw] w-[70.51vw] max-w-none object-contain mix-blend-multiply md:h-[116px] md:w-[275px]"
+    style="opacity: 0.75; filter: brightness(0.9)"
+  />
+</div>
+
 
         <h3
           class="fade-up mt-[3.5vw] font-cinzel text-[4.1vw] font-bold uppercase tracking-[0.03em] text-[#474541] md:mt-[15px] md:text-[16px]"
@@ -816,7 +828,7 @@
         src="assets/images/event/pohonatas.webp"
         alt=""
         aria-hidden="true"
-        class="animate-tree-top absolute left-0 top-[0vw] z-[34] h-auto w-full max-w-none select-none pointer-events-none"
+        class="absolute left-0 -top-[0vw] z-[34] h-auto w-full max-w-none select-none pointer-events-none"
       />
 
       <!-- ========== ORNAMENT POHON ATAS KIRI ========== -->

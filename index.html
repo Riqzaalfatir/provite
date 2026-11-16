@@ -7,14 +7,21 @@
 
     <!-- Semua path relatif mengacu ke root website -->
 
-    <base href="/events/bryanvanessa/" />
+    <base href="/" />
+    <script>
+      document.querySelector("base").href =
+        location.hostname === "provite.id" ||
+        location.hostname.endsWith(".provite.id")
+          ? "/events/bryanvanessa/"
+          : "/";
+    </script>
 
     <title>The Wedding Bryan & Vanessa</title>
 
     <!-- CSS GLOBAL -->
     <link rel="stylesheet" href="css/fonts.css" />
-<link rel="stylesheet" href="css/tailwind.css" />
-<link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/tailwind.css" />
+    <link rel="stylesheet" href="css/style.css" />
 
     <style>
       * {
@@ -183,6 +190,168 @@
           z-index: 10;
           max-width: calc(100vw - 32px);
         }
+
+        .desktop-ornament-background {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          z-index: 2;
+
+          width: max(100%, 1200px);
+          height: max(100%, 900px);
+
+          object-fit: cover;
+          object-position: center;
+
+          transform: translate(-50%, -50%);
+
+          pointer-events: none;
+          user-select: none;
+        }
+
+        /* ==========================================
+   DESKTOP FLOWER - RESPONSIVE GROUP
+========================================== */
+
+        @media (min-width: 1024px) {
+          .desktop-flower-group {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+
+            width: 100%;
+            height: 300px;
+
+            z-index: 34;
+            pointer-events: none;
+            user-select: none;
+          }
+
+          .desktop-flower {
+            position: absolute;
+            bottom: 0;
+            height: auto;
+            max-width: none;
+            pointer-events: none;
+            user-select: none;
+          }
+
+          /* BUNGA KIRI */
+          .flower-1 {
+            left: 0%;
+            width: 18%;
+            z-index: 4;
+          }
+
+          /* BUNGA SAMPING KIRI 1 */
+          .flower-2 {
+            left: 1%;
+            width: 41%;
+            z-index: 3;
+          }
+
+          /* BUNGA SAMPING KIRI 2 */
+          .flower-3 {
+            left: 9%;
+            width: 50%;
+            z-index: 3;
+          }
+
+          /* BUNGA SAMPING KIRI 3 */
+          .flower-4 {
+            left: 30%;
+            width: 35%;
+            z-index: 2;
+          }
+
+          /* BUNGA SAMPING KIRI 4 */
+          .flower-5 {
+            left: 45%;
+            width: 37%;
+            z-index: 2;
+          }
+
+          /* BUNGA KANAN */
+          .flower-6 {
+            right: 0;
+            width: 27%;
+            z-index: 3;
+          }
+
+          /* BUNGA SAMPING KIRI TAMBAHAN */
+          .flower-7 {
+            left: 65%;
+            width: 40%;
+            z-index: 3;
+          }
+        }
+
+        /* ==========================================
+   ORNAMEN ATAS DESKTOP
+   Posisi bisa disesuaikan masing-masing
+========================================== */
+
+        @media (min-width: 1024px) {
+          .desktop-top-ornament {
+            position: absolute;
+            height: auto;
+            max-width: none;
+            pointer-events: none;
+            user-select: none;
+          }
+
+          /* OBJECT 13 */
+          .top-ornament-1 {
+            top: 0;
+            left: 6%;
+            width: 75%;
+            z-index: 3;
+          }
+
+          /* OBJECT 14 */
+          .top-ornament-2 {
+            top: 0;
+            left: 5%;
+            width: 22%;
+            z-index: 1;
+          }
+
+          /* OBJECT 15 */
+          .top-ornament-3 {
+            top: 0;
+            right: 5%;
+            width: 50%;
+            z-index: 1;
+          }
+        }
+
+        /* ==========================================
+   DESKTOP PILLAR - RESPONSIVE
+========================================== */
+
+        @media (min-width: 1024px) {
+          .desktop-pillar {
+            position: absolute;
+            bottom: 0;
+
+            width: 11%;
+            height: auto;
+
+            z-index: 10;
+            pointer-events: none;
+            user-select: none;
+          }
+
+          /* PILAR KIRI */
+          .desktop-pillar-left {
+            left: 0;
+          }
+
+          /* PILAR KANAN */
+          .desktop-pillar-right {
+            right: 0;
+          }
+        }
       }
     </style>
 
@@ -198,37 +367,150 @@
     <main class="desktop-layout">
       <!--================ DESKTOP LEFT =================-->
 
-      <!--================ DESKTOP LEFT =================-->
-      <aside class="desktop-photo" aria-hidden="true">
-        <!-- BACKGROUND UTAMA -->
+      <aside class="desktop-photo relative overflow-hidden" aria-hidden="true">
+        <!-- LAYER 1: BACKGROUND LANGIT -->
         <img
           src="assets/images/desktop/langit.webp"
           alt=""
           class="desktop-bg"
         />
 
-        <!-- TEKS TENGAH -->
-        <h1
-          class="absolute left-1/2 top-1/2 z-[5] w-full -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-center font-cinzel text-[52px] font-normal leading-[1.2] text-[#474541]"
-        >
-          BRYAN &amp; VANESSA
-        </h1>
-
-        <!-- ORNAMEN ATAS -->
+        <!-- LAYER 2: ORNAMEN BACKGROUND -->
         <img
-          src="assets/images/desktop/ornamentatas.webp"
+          src="assets/images/desktop/ornamentbackground.webp"
           alt=""
-          class="desktop-ornament-top"
+          class="desktop-ornament-background"
         />
 
-        <!-- ORNAMEN BAWAH -->
+        <!-- LAYER 3: TEKS TENGAH -->
+        <div
+          class="flex flex-col items-center justify-center leading-none absolute left-1/2 top-1/2 z-[5] w-full -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-center"
+        >
+          <p
+            class="uppercase font-cinzel font-medium text-[24px] text-[#474541]"
+          >
+            THE WEDDING OF
+          </p>
+          <h1
+            class="mt-[13px] font-cinzel text-[64px] font-medium leading-[1.2] text-[#474541]"
+          >
+            BRYAN &amp; VANESSA
+          </h1>
+        </div>
+
+        <!-- PILAR KIRI BAWAH -->
         <img
-          src="assets/images/desktop/ornamentbawah.webp"
+          src="assets/images/desktop/pilarkiri.webp"
           alt=""
-          class="desktop-ornament-bottom"
+          aria-hidden="true"
+          class="desktop-pillar desktop-pillar-left"
+        />
+
+        <!-- PILAR KANAN BAWAH -->
+        <img
+          src="assets/images/desktop/pilarkanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="desktop-pillar desktop-pillar-right"
+        />
+
+        <!-- ==========================================
+     KELOMPOK ORNAMEN BUNGA DESKTOP
+========================================== -->
+        <div class="desktop-flower-group">
+          <img
+            src="assets/images/desktop/bungakiri.webp"
+            alt=""
+            class="desktop-flower flower-1 animate-desktop-flower-left"
+          />
+
+          <img
+            src="assets/images/desktop/bungasampingkiri1.webp"
+            alt=""
+            class="desktop-flower flower-2 animate-desktop-flower-slow"
+          />
+
+          <img
+            src="assets/images/desktop/bungasampingkiri1.webp"
+            alt=""
+            class="desktop-flower flower-7 animate-desktop-flower-reverse"
+          />
+
+          <img
+            src="assets/images/desktop/bungasampingkiri2.webp"
+            alt=""
+            class="desktop-flower flower-3 animate-desktop-flower-slow"
+          />
+
+          <img
+            src="assets/images/desktop/bungasampingkiri3.webp"
+            alt=""
+            class="desktop-flower flower-4 animate-desktop-flower-reverse"
+          />
+
+          <img
+            src="assets/images/desktop/bungasampingkiri4.webp"
+            alt=""
+            class="desktop-flower flower-5 animate-desktop-flower-slow"
+          />
+
+          <img
+            src="assets/images/desktop/bungakanan.webp"
+            alt=""
+            class="desktop-flower flower-6 animate-desktop-flower-right"
+          />
+        </div>
+
+        <!-- ==========================================
+     ORNAMEN ATAS DESKTOP
+========================================== -->
+
+        <!-- ORNAMEN ATAS 1 -->
+        <img
+          src="assets/images/desktop/Object (13).webp"
+          alt=""
+          aria-hidden="true"
+          class="desktop-top-ornament top-ornament-1 animate-desktop-top-left"
+        />
+
+        <!-- ORNAMEN ATAS 2 -->
+        <img
+          src="assets/images/desktop/Object (14).webp"
+          alt=""
+          aria-hidden="true"
+          class="desktop-top-ornament top-ornament-2 animate-desktop-top-middle"
+        />
+
+        <!-- ORNAMEN ATAS 3 -->
+        <img
+          src="assets/images/desktop/Object (15).webp"
+          alt=""
+          aria-hidden="true"
+          class="desktop-top-ornament top-ornament-3 animate-desktop-top-right"
+        />
+
+        <!-- POHON SAMPING FULL -->
+        <img
+          src="assets/images/desktop/pohon-samping-full.webp"
+          alt=""
+          aria-hidden="true"
+          class="desktop-side-tree pointer-events-none absolute -top-[4vw] left-0 z-[4] h-auto w-full select-none"
+        />
+
+          <img
+          src="assets/gift/kupuungu.gif"
+          alt=""
+          aria-hidden="true"
+          class="absolute bottom-[12.5vw] left-[2vw] z-40 h-auto w-[129px] max-w-none select-none pointer-events-none"
+        />
+
+        <img
+          src="assets/gift/kupuemas.gif"
+          alt=""
+          aria-hidden="true"
+          class="absolute bottom-[9vw] right-[6vw] z-40 h-auto w-[94px] max-w-none -scale-x-100 select-none pointer-events-none"
         />
       </aside>
-      <!--================ END DESKTOP LEFT =================-->
 
       <!--================ END DESKTOP LEFT =================-->
 
@@ -271,10 +553,6 @@
       <!-- BACKDROP FULLSCREEN -->
       <div class="opening-backdrop"></div>
 
-      <!--
-    Opening Card asli dari invitation.html
-    akan disalin ke sini oleh JavaScript.
-  -->
       <div id="desktopOpeningContent"></div>
     </div>
     <!-- =============== END DESKTOP OPENING =============== -->
@@ -304,11 +582,20 @@
 
       const params = new URLSearchParams(window.location.search);
 
-      const routePin = segments.length >= 2 ? segments[1] : "";
+      const routePin =
+        segments[0] === DEFAULT_SLUG && segments.length >= 2 ? segments[1] : "";
 
       const incomingPin = routePin || params.get("pin") || "";
 
       const validPin = /^\d{1,10}$/.test(incomingPin);
+
+      if (incomingPin && !validPin) {
+        const privateURL = new URL("private.html", document.baseURI);
+
+        privateURL.searchParams.set("id", routeSlug);
+
+        window.location.replace(privateURL.href);
+      }
 
       // Config.js membaca "id" sebagai slug
       // dan "pin" sebagai identitas tamu.
@@ -378,6 +665,46 @@
 
         console.log("[Bryan] Guest loaded, URL cleaned:", cleanPath);
       }
+
+      // ===========================================
+      // REDIRECT JIKA PIN INVALID
+      // ===========================================
+
+      function redirectToPrivate() {
+        const privateURL = new URL("private.html", document.baseURI);
+
+        privateURL.searchParams.set("id", "bryanvanessa");
+
+        window.location.replace(privateURL.href);
+      }
+
+      // Terima informasi dari API melalui iframe.
+      window.addEventListener("message", (event) => {
+        if (event.origin !== window.location.origin) return;
+
+        if (event.source !== frame.contentWindow) return;
+
+        if (event.data?.type === "BRYAN_INVALID_PIN") {
+          redirectToPrivate();
+        }
+
+        if (event.data?.type === "BRYAN_GUEST_LOAD_ERROR") {
+          console.error(
+            "[Bryan] Data tamu gagal dimuat. Undangan tidak ditampilkan.",
+          );
+
+          document.getElementById("desktopLoading")?.remove();
+
+          document.getElementById("desktopOpening")?.remove();
+
+          const frame = document.getElementById("invitationFrame");
+          if (frame) {
+            frame.style.visibility = "hidden";
+          }
+
+          alert("Data undangan belum dapat diverifikasi. Silakan coba lagi.");
+        }
+      });
 
       // Dengarkan saat data API selesai.
       frame.addEventListener("load", () => {

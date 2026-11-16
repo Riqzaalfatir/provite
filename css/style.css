@@ -555,15 +555,25 @@ body.gallery-lightbox-open {
 
 /* ========== BUNGA ATAS / MENGGANTUNG ========== */
 
+
 @keyframes swayRsvpFlower {
   0%, 100% {
-    transform: rotate(-1.5deg);
+    transform: translateX(-2px);
   }
 
   50% {
-    transform: rotate(1.5deg);
+    transform: translateX(2px);
   }
 }
+
+.animate-rsvp-flower-left {
+  animation: swayRsvpFlower 7s ease-in-out infinite;
+}
+
+.animate-rsvp-flower-right {
+  animation: swayRsvpFlower 8s ease-in-out infinite reverse;
+}
+
 
 /* ==========================================
    ANIMASI POHON
@@ -663,3 +673,77 @@ body.gallery-lightbox-open {
     transform: none;
   }
 }
+
+
+/* ==========================================
+   DESKTOP FLOWER - NATURAL WIND
+   Gerakan lebih terlihat, tetap elegan
+========================================== */
+
+@keyframes swayDesktopFlower {
+  0%, 100% {
+    transform: rotate(-1.2deg);
+  }
+
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+
+/* BUNGA KIRI UTAMA */
+.animate-desktop-flower-left {
+  transform-origin: bottom left;
+  animation: swayDesktopFlower 4.5s ease-in-out infinite;
+}
+
+/* BUNGA KANAN UTAMA */
+.animate-desktop-flower-right {
+  transform-origin: bottom right;
+  animation: swayDesktopFlower 5s ease-in-out infinite reverse;
+}
+
+/* BUNGA SAMPING - GERAK LAMBAT */
+.animate-desktop-flower-slow {
+  transform-origin: bottom center;
+  animation: swayDesktopFlower 5.5s ease-in-out infinite;
+}
+
+/* BUNGA SAMPING - GERAK BERLAWANAN */
+.animate-desktop-flower-reverse {
+  transform-origin: bottom center;
+  animation: swayDesktopFlower 4.8s ease-in-out infinite reverse;
+}
+
+
+/* ==========================================
+   DESKTOP TOP ORNAMENT - GENTLE WIND
+========================================== */
+
+@keyframes swayDesktopTop {
+  0%, 100% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+.animate-desktop-top-left {
+  animation: swayDesktopTop 6s ease-in-out infinite;
+}
+
+.animate-desktop-top-middle {
+  animation: swayDesktopTop 7s ease-in-out infinite reverse;
+}
+
+.animate-desktop-top-right {
+  animation: swayDesktopTop 6.5s ease-in-out infinite;
+}
+
+/* POHON SAMPING FULL */
+.desktop-side-tree {
+  transform-origin: top left;
+  animation: swayDesktopTop 6s ease-in-out infinite;
+}
+
