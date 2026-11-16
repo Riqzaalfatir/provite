@@ -799,3 +799,15 @@ body.gallery-lightbox-open {
 }
 
 
+
+/* COUNTDOWN - TURUNKAN POSISI ANGKA SAJA */
+#countdownDays,
+#countdownHours,
+#countdownMinutes,
+#countdownSeconds {
+  position: relative;
+  top: 10px;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+}
+
