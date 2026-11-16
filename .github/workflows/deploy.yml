@@ -1,98 +1,44 @@
 
 name: Deploy Bryan Vanessa to Provite
 
-on:
+'on':
+  push:
+    branches:
+      - main
   workflow_dispatch:
-
-permissions:
-  contents: read
-
-concurrency:
-  group: provite-bryanvanessa
-  cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Build and Upload via SFTP
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     steps:
-      - name: Checkout GitHub repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install Tailwind dependencies
-        run: npm ci --prefix tools
-
-      - name: Build Tailwind CSS
-        run: npm run build --prefix tools
-
-      - name: Prepare website files
-        run: |
-          mkdir -p deploy
-
-          cp index.html deploy/
-          cp invitation.html deploy/
-
-          cp -a assets deploy/
-          cp -a css deploy/
-          cp -a js deploy/
-
-          if [ -s private.html ]; then
-            cp private.html deploy/
-          fi
-
-          echo "Files ready for deployment:"
-          find deploy -type f | wc -l
-
-      - name: Install SFTP client
+      - name: Install LFTP
         run: |
           sudo apt-get update
           sudo apt-get install -y lftp
 
-      - name: Configure SSH host
-        env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_PORT: ${{ secrets.SFTP_PORT }}
+      - name: Prepare deployment files
         run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
+          mkdir -p deploy
+          cp index.html invitation.html private.html deploy/
+          cp -r css js assets deploy/
 
-          ssh-keyscan -T 15 -p "$SFTP_PORT" "$SFTP_HOST" \
-            > ~/.ssh/known_hosts
-
-          test -s ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-
-      - name: Upload website to Provite
+      - name: Upload via SFTP
         env:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SFTP_PORT: ${{ secrets.SFTP_PORT }}
           SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
-          lftp \
-            -u "$SFTP_USERNAME","$SFTP_PASSWORD" \
+          lftp -u "$SFTP_USERNAME","$SFTP_PASSWORD" \
             -p "$SFTP_PORT" \
-            "sftp://$SFTP_HOST" \
-            -e '
-              set cmd:fail-exit yes
-              set net:max-retries 2
-              mirror -R --verbose --no-perms \
-                --parallel=2 \
-                deploy /events/bryanvanessa
-              bye
-            '
-
-      
-      - name: Deployment completed
-        run: |
-          echo "Upload completed successfully."
-          echo "Website: https://provite.id/bryanvanessa"
-          echo "Guest invitation: https://provite.id/bryanvanessa/{PIN}"
-
+            "sftp://$SFTP_HOST" <<'EOF'
+          set net:max-retries 2
+          set net:timeout 30
+          set sftp:auto-confirm yes
+          mirror -R --verbose deploy/ /events/bryanvanessa/
+          bye
+          EOF
