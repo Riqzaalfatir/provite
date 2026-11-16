@@ -556,23 +556,51 @@ body.gallery-lightbox-open {
 /* ========== BUNGA ATAS / MENGGANTUNG ========== */
 
 
-@keyframes swayRsvpFlower {
+
+/* ==========================================
+   BUNGA ATAS RSVP & WISHES
+   Gerakan saling mendekat dan menjauh
+========================================== */
+
+
+/* ==========================================
+   BUNGA ATAS RSVP & WISHES
+   Pangkal tetap, ujung bunga bergerak lembut
+========================================== */
+
+@keyframes hangingFlowerLeft {
   0%, 100% {
-    transform: translateX(-2px);
+    transform: rotate(0deg);
   }
 
   50% {
-    transform: translateX(2px);
+    transform: rotate(1.5deg);
+  }
+}
+
+@keyframes hangingFlowerRight {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(0.65deg);
   }
 }
 
 .animate-rsvp-flower-left {
-  animation: swayRsvpFlower 7s ease-in-out infinite;
+  transform-origin: top left;
+  animation: hangingFlowerLeft 1.8s ease-in-out infinite;
 }
 
 .animate-rsvp-flower-right {
-  animation: swayRsvpFlower 8s ease-in-out infinite reverse;
+  transform-origin: top right;
+  animation: hangingFlowerRight 1.8s ease-in-out infinite;
 }
+
+
+
+
 
 
 /* ==========================================
@@ -623,19 +651,6 @@ body.gallery-lightbox-open {
   animation: swayFlower 2.8s ease-in-out infinite reverse;
 }
 
-/* ==========================================
-   ANIMASI BUNGA ATAS RSVP & WISHES
-   ========================================== */
-
-.animate-rsvp-flower-left {
-  transform-origin: top left;
-  animation: swayRsvpFlower 4s ease-in-out infinite;
-}
-
-.animate-rsvp-flower-right {
-  transform-origin: top right;
-  animation: swayRsvpFlower 4.7s ease-in-out infinite reverse;
-}
 
 /* ==========================================
    OPTIMASI ANIMASI
@@ -741,9 +756,46 @@ body.gallery-lightbox-open {
   animation: swayDesktopTop 6.5s ease-in-out infinite;
 }
 
-/* POHON SAMPING FULL */
-.desktop-side-tree {
-  transform-origin: top left;
-  animation: swayDesktopTop 6s ease-in-out infinite;
+
+/* ==========================================
+   DESKTOP SIDE TREE - NATURAL WIND
+   Ayunan lembut tanpa geser horizontal
+========================================== */
+
+@keyframes swayDesktopSideTree {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(0.25deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-0.25deg);
+  }
 }
+
+.desktop-side-tree {
+  top: -4vw;
+  left: 0;
+  max-width: none;
+
+  transform-origin: top center;
+  animation: swayDesktopSideTree 5s ease-in-out infinite;
+
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-side-tree {
+    animation: none;
+  }
+}
+
 
