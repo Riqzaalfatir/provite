@@ -39,13 +39,14 @@
     button.setAttribute("aria-pressed", String(active));
   }
 
-  function updateButtons() {
-    paint($("rsvpAttend"), state.choice === 1);
-    paint($("rsvpUnable"), state.choice === 2);
+ 
+function updateButtons() {
+  paint($("rsvpAttend"), state.choice === 1);
+  paint($("rsvpUnable"), state.choice === 2);
 
-    const confirmBtn = $("rsvpConfirmBtn");
-    if (!confirmBtn) return;
+  const confirmBtn = $("rsvpConfirmBtn");
 
+  if (confirmBtn) {
     confirmBtn.innerHTML =
       state.choice === 1
         ? "Confirm<br>Attendance"
@@ -53,16 +54,29 @@
           ? "Confirm Unable<br>To Attend"
           : "Confirm";
 
-    confirmBtn.disabled = state.submitting || !state.ready || state.closed;
+    // Deadline closed tidak mengunci interaksi UI.
+    confirmBtn.disabled = state.submitting || !state.ready;
     confirmBtn.style.opacity = confirmBtn.disabled ? "0.55" : "1";
-    confirmBtn.style.cursor = confirmBtn.disabled ? "not-allowed" : "pointer";
-
-    $("rsvpAttend").disabled = !state.ready || state.closed || state.submitting;
-    $("rsvpUnable").disabled = !state.ready || state.closed || state.submitting;
+    confirmBtn.style.cursor = confirmBtn.disabled
+      ? "not-allowed"
+      : "pointer";
   }
 
+  const attendBtn = $("rsvpAttend");
+  const unableBtn = $("rsvpUnable");
+
+  if (attendBtn) {
+    attendBtn.disabled = !state.ready || state.submitting;
+  }
+
+  if (unableBtn) {
+    unableBtn.disabled = !state.ready || state.submitting;
+  }
+}
+
+
   function selectChoice(status) {
-    if (!state.ready || state.closed || state.submitting) return;
+    if (!state.ready || state.submitting) return;
 
     state.choice = status;
 
@@ -280,42 +294,65 @@
     };
   }
 
-  function submitClick() {
-    if (state.submitting) return;
+  
+function submitClick() {
+  if (state.submitting) return;
 
-    if (!state.ready) {
-      alert("RSVP data is not ready. Please refresh the invitation.");
-      return;
-    }
-
-    if (state.closed) {
-      alert("RSVP is closed. Please contact our support team.");
-      return;
-    }
-
-    if (state.choice === 0) {
-      notify("incomplete_rsvp");
-      return;
-    }
-
-    if (state.choice === 1 && state.selected.size === 0) {
-      alert("Please select at least one event.");
-      return;
-    }
-
-    // Jangan abaikan pertanyaan Smart RSVP dari database.
-    if (hasSmartQuestions()) {
-      alert(
-        "This invitation requires additional RSVP questions. " +
-        "Please complete the Smart RSVP form before submitting."
-      );
-      return;
-    }
-
-    notify("confirm_rsvp", () => {
-      submitToAPI();
-    });
+  if (!state.ready) {
+    notify("incomplete_rsvp");
+    return;
   }
+
+  // Harus memilih Attend atau Unable.
+  if (state.choice === 0) {
+    notify("incomplete_rsvp");
+    return;
+  }
+
+  // Jika Attend, minimal satu sesi harus dipilih.
+  if (
+    state.choice === 1 &&
+    state.selected.size === 0
+  ) {
+    notify("session_required");
+    return;
+  }
+
+  // Ketika RSVP masih OPEN, pertanyaan tambahan
+  // harus didukung sebelum submit sungguhan.
+  if (!state.closed && hasSmartQuestions()) {
+    notify("incomplete_rsvp");
+    return;
+  }
+
+  // Popup konfirmasi pertama.
+  notify("confirm_rsvp", () => {
+
+    // RSVP CLOSED: SIMULASI FRONTEND SAJA.
+    if (state.closed) {
+      notify(
+        state.choice === 1
+          ? "rsvp_preview_hadir"
+          : "rsvp_preview_tidak_hadir"
+      );
+
+      console.log(
+        "[RSVP] Design simulation only. No API submission.",
+        {
+          choice: state.choice,
+          selectedSessions: [...state.selected],
+          closed: state.closed
+        }
+      );
+
+      return;
+    }
+
+    // RSVP OPEN: kirim ke backend seperti biasa.
+    submitToAPI();
+  });
+}
+
 
   async function submitToAPI() {
     if (state.submitting || !state.ready || state.closed) return;

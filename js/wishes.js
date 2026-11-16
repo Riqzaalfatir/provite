@@ -416,9 +416,57 @@ let wishes = [
     }
   });
 
+
+  // =====================================
+  // WISHES SIMULATION - TANPA PIN
+  // =====================================
+
+  function submitWishSimulation(nama, pesan) {
+    const newWish = {
+      id: `local-${Date.now()}`,
+      nama,
+      pesan
+    };
+
+    // Tambahkan pesan terbaru ke urutan pertama
+    wishes.unshift(newWish);
+
+    // Perbarui tampilan Normal dan See All
+    refreshWishesView();
+
+    // Kosongkan form
+    inputName.value = "";
+    inputMessage.value = "";
+
+    // Kembali ke daftar normal agar pesan terlihat
+    setView(false);
+    wishList.scrollTop = 0;
+
+    // Tandai popup sebagai simulasi lokal
+    const label = document.querySelector(
+      "#wishesSuccessModal .wishes-success-label"
+    );
+
+    if (label) {
+      label.textContent = "MESSAGE PREVIEW";
+    }
+
+    showWishesSuccessPopup();
+
+    console.log(
+      "[Wishes] Simulasi berhasil. Pesan hanya disimpan sementara:",
+      newWish
+    );
+  }
+
  
   // =====================================
   // SEND WISH - TWINKLEBOOK API
+  // =====================================
+
+  
+  // =====================================
+  // SEND WISH - API + SIMULASI TANPA PIN
   // =====================================
 
   form.addEventListener("submit", async (event) => {
@@ -429,6 +477,7 @@ let wishes = [
     const nama = inputName.value.trim();
     const pesan = inputMessage.value.trim();
 
+    // Validasi form
     if (!nama || !pesan) {
       if (typeof window.showNotifModal === "function") {
         window.showNotifModal("incomplete_wishes");
@@ -438,13 +487,40 @@ let wishes = [
       return;
     }
 
-    const api = window.TwinkleAPI;
     const app = window.BryanApp?.state;
 
+    // =====================================
+    // TANPA PIN: SIMULASI FRONTEND
+    // =====================================
+
+    if (!app?.pin) {
+      submitWishSimulation(nama, pesan);
+      return;
+    }
+
+    // =====================================
+    // DENGAN PIN: KIRIM KE API
+    // =====================================
+
+    const api = window.TwinkleAPI;
     const eventId = app?.dataEvent?.id || wishesEventId;
 
-    if (!eventId || !api?.submitPMG) {
-      alert("Wishes service is not ready. Please try again.");
+    if (
+      !eventId ||
+      typeof api?.submitPMG !== "function"
+    ) {
+      console.error("[Wishes] API not ready", {
+        eventId,
+        pin: app?.pin,
+        apiAvailable: Boolean(api)
+      });
+
+      if (typeof window.showNotifModal === "function") {
+        window.showNotifModal("submit_failed");
+      } else {
+        alert("Unable to send your wishes.");
+      }
+
       return;
     }
 
@@ -458,9 +534,8 @@ let wishes = [
     }
 
     try {
-      // Payload mengikuti referensi Ferdy & Hashena.
       const payload = {
-        eventId: eventId,
+        eventId,
         mediaFileId: null,
         name: nama,
         message: pesan,
@@ -477,27 +552,30 @@ let wishes = [
         );
       }
 
-      // Berhasil diterima backend.
+      // Berhasil dikirim ke backend
       inputMessage.value = "";
 
-      // Refresh daftar dari server, bukan menambah
-      // pesan lokal yang belum tentu disetujui.
-      await loadWishes();
+      // Kembalikan label popup untuk mode API
+      const label = document.querySelector(
+        "#wishesSuccessModal .wishes-success-label"
+      );
 
-      // Popup terima kasih menggunakan desain asli.
-      popupName.textContent = "Thank You";
-      popupInitials.textContent = "♥";
-      popupMessage.textContent =
-        "Message Sent!\n\n" +
-        "Thank you for your warm wishes and prayers. " +
-        "Your message has been received.";
+      if (label) {
+        label.textContent = "MESSAGE SENT";
+      }
 
-      openPopup();
+      // Popup sukses
+      showWishesSuccessPopup();
 
-      console.log("[BryanApp] Wishes submitted successfully");
+      // Refresh daftar dari API
+      loadWishes().catch((error) => {
+        console.error("[Wishes] Refresh failed:", error);
+      });
+
+      console.log("[Wishes] API submission successful");
 
     } catch (error) {
-      console.error("[BryanApp] Wishes submit failed:", error);
+      console.error("[Wishes] Submit failed:", error);
 
       if (typeof window.showNotifModal === "function") {
         window.showNotifModal("submit_failed");
@@ -514,6 +592,29 @@ let wishes = [
       }
     }
   });
+
+
+
+function showWishesSuccessPopup() {
+  const modal = document.getElementById("wishesSuccessModal");
+
+  if (!modal) return;
+
+  modal.hidden = false;
+}
+
+function closeWishesSuccessPopup() {
+  const modal = document.getElementById("wishesSuccessModal");
+
+  if (!modal) return;
+
+  modal.hidden = true;
+}
+
+document
+  .getElementById("wishesSuccessClose")
+  ?.addEventListener("click", closeWishesSuccessPopup);
+
 
 
   // =====================================

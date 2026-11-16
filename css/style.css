@@ -395,3 +395,271 @@ body.gallery-lightbox-open {
 #profileBrideName {
   text-wrap: balance;
 }
+
+
+/* ==========================================
+   WISHES - SUCCESS POPUP
+   ========================================== */
+
+.wishes-success-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.wishes-success-modal[hidden] {
+  display: none;
+}
+
+.wishes-success-card {
+  width: 300px;
+  max-width: 100%;
+  overflow: hidden;
+  border-top: 4px solid #4b3d2a;
+  border-bottom: 4px solid #4b3d2a;
+  border-radius: 16px;
+  background: #fbfaf5;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  animation: wishesSuccessIn 400ms ease-out both;
+}
+
+.wishes-success-content {
+  padding: 42px 28px 38px;
+}
+
+#wishesSuccessTitle {
+  font-family: "Caudex", serif;
+  font-size: 30px;
+  color: #4b3d2a;
+}
+
+.wishes-success-label {
+  margin-top: 30px;
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #4b3d2a;
+}
+
+.wishes-success-line {
+  width: 36px;
+  height: 1px;
+  margin: 18px auto;
+  background: #4b3d2a;
+}
+
+.wishes-success-description {
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  line-height: 20px;
+  color: #474541;
+}
+
+#wishesSuccessClose {
+  width: 140px;
+  height: 36px;
+  margin-top: 26px;
+  border: none;
+  border-radius: 71px;
+  background: #4b3d2a;
+  color: #fbfaf5;
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+@keyframes wishesSuccessIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wishes-success-card {
+    animation: none;
+  }
+}
+
+
+
+
+
+
+/* ==========================================
+   ORNAMENT - NATURAL WIND ANIMATION
+   Profile, Event Detail, Gift, RSVP & Wishes
+   ========================================== */
+
+/* ========== POHON KIRI & KANAN ========== */
+
+@keyframes swayTree {
+  0%, 100% {
+    transform: rotate(-1.2deg);
+  }
+
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+
+/* ========== POHON SAMPING ========== */
+
+@keyframes swayLeaves {
+  0%, 100% {
+    transform: rotate(-0.9deg);
+  }
+
+  50% {
+    transform: rotate(0.9deg);
+  }
+}
+
+/* ========== POHON ATAS ========== */
+
+@keyframes swayTreeTop {
+  0%, 100% {
+    transform: rotate(-0.8deg);
+  }
+
+  50% {
+    transform: rotate(0.8deg);
+  }
+}
+
+/* ========== BUNGA BAWAH ========== */
+
+@keyframes swayFlower {
+  0%, 100% {
+    transform: rotate(-1.8deg);
+  }
+
+  50% {
+    transform: rotate(1.8deg);
+  }
+}
+
+/* ========== BUNGA ATAS / MENGGANTUNG ========== */
+
+@keyframes swayRsvpFlower {
+  0%, 100% {
+    transform: rotate(-1.5deg);
+  }
+
+  50% {
+    transform: rotate(1.5deg);
+  }
+}
+
+/* ==========================================
+   ANIMASI POHON
+   ========================================== */
+
+.animate-tree-top {
+  transform-origin: top center;
+  animation: swayTreeTop 5.5s ease-in-out infinite;
+}
+
+.animate-tree-left {
+  transform-origin: bottom left;
+  animation: swayTree 4.5s ease-in-out infinite;
+}
+
+.animate-tree-right {
+  transform-origin: bottom right;
+  animation: swayTree 5.2s ease-in-out infinite reverse;
+}
+
+.animate-tree-side {
+  transform-origin: bottom left;
+  animation: swayLeaves 6s ease-in-out infinite;
+}
+
+/* ==========================================
+   ANIMASI BUNGA BAWAH
+   ========================================== */
+
+.animate-flower-left {
+  transform-origin: bottom left;
+  animation: swayFlower 3.2s ease-in-out infinite;
+}
+
+.animate-flower-right {
+  transform-origin: bottom right;
+  animation: swayFlower 3.8s ease-in-out infinite reverse;
+}
+
+.animate-flower-middle-left {
+  transform-origin: bottom center;
+  animation: swayFlower 4.2s ease-in-out infinite;
+}
+
+.animate-flower-middle-right {
+  transform-origin: bottom center;
+  animation: swayFlower 2.8s ease-in-out infinite reverse;
+}
+
+/* ==========================================
+   ANIMASI BUNGA ATAS RSVP & WISHES
+   ========================================== */
+
+.animate-rsvp-flower-left {
+  transform-origin: top left;
+  animation: swayRsvpFlower 4s ease-in-out infinite;
+}
+
+.animate-rsvp-flower-right {
+  transform-origin: top right;
+  animation: swayRsvpFlower 4.7s ease-in-out infinite reverse;
+}
+
+/* ==========================================
+   OPTIMASI ANIMASI
+   ========================================== */
+
+.animate-tree-top,
+.animate-tree-left,
+.animate-tree-right,
+.animate-tree-side,
+.animate-flower-left,
+.animate-flower-right,
+.animate-flower-middle-left,
+.animate-flower-middle-right,
+.animate-rsvp-flower-left,
+.animate-rsvp-flower-right {
+  backface-visibility: hidden;
+}
+
+/* ==========================================
+   REDUCED MOTION
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-tree-top,
+  .animate-tree-left,
+  .animate-tree-right,
+  .animate-tree-side,
+  .animate-flower-left,
+  .animate-flower-right,
+  .animate-flower-middle-left,
+  .animate-flower-middle-right,
+  .animate-rsvp-flower-left,
+  .animate-rsvp-flower-right {
+    animation: none;
+    transform: none;
+  }
+}

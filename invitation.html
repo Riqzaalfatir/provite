@@ -67,7 +67,7 @@
 
   <body class="">
     <!-- ================= LOADING SCREEN ================= -->
-    <section
+     <section
       id="sectionLoading"
       class="fixed inset-0 flex items-center justify-center bg-[#F6F0E6]"
       style="z-index: 999999; opacity: 1; transition: opacity 450ms ease"
@@ -181,7 +181,7 @@
     </style>
 
     <!-- ================= OPENING INVITATION ================= -->
-    <section
+     <section
       id="openingScreen"
       role="dialog"
       aria-modal="true"
@@ -391,7 +391,7 @@
         src="assets/images/profile/gunung.webp"
         alt=""
         aria-hidden="true"
-        class="absolute -bottom-[2vw] left-0 z-[1] h-[159.5vw] w-full max-w-none select-none pointer-events-none"
+        class="absolute -bottom-[7vw] left-0 z-[1] h-[157w] w-full max-w-none select-none pointer-events-none"
       />
 
       <img
@@ -403,7 +403,7 @@
 
       <div class="relative w-full overflow-hidden pb-[6vw]">
         <div
-          class="relative z-20 mx-[1.6vw] mt-[10.5vw] flex flex-col items-center px-[10.45vw] pb-[44vw] pt-[30.95vw] text-center text-[#474541] md:mx-0 md:mt-0 md:px-[47px] md:pt-[172px]"
+          class="relative z-[10] mx-[1.6vw] mt-[10.5vw] flex flex-col items-center px-[10.45vw] pb-[44vw] pt-[30.95vw] text-center text-[#474541] md:mx-0 md:mt-0 md:px-[47px] md:pt-[172px]"
           style="
             background-image: url(&quot;assets/images/profile/layerr.webp&quot;);
             background-size: 100% 100%;
@@ -434,7 +434,7 @@
 
           <p
             id="profileGroomParent"
-            class="fade-up mt-[1.3vw] font-constan text-[3.59vw] leading-[5.64vw] md:mt-[5px] md:text-[14px] md:leading-[25px]"
+            class="fade-up mt-[1.3vw] font-constan text-[3.59vw] leading-[4.64vw] md:mt-[5px] md:text-[14px] md:leading-[25px]"
           >
             Mr. Handy Sundjaja &amp;<br />Mrs. Lenny Simon
           </p>
@@ -479,7 +479,7 @@
 
           <p
             id="profileBrideParent"
-            class="fade-up mt-[1.3vw] font-constan text-[3.59vw] leading-[5.64vw] md:mt-[5px] md:text-[14px] md:leading-[25px]"
+            class="fade-up mt-[1.3vw] font-constan text-[3.59vw] leading-[4.64vw] md:mt-[5px] md:text-[14px] md:leading-[25px]"
           >
             Mr. Aan Fredyan Hermawan &amp;<br />Mrs. Anita Theresia
           </p>
@@ -510,19 +510,68 @@
           </p>
         </div>
 
-        <!-- Ornament Bunga Atas Bawah -->
+        <!-- ========== ORNAMENT POHON ATAS ========== -->
         <img
-          src="assets/images/profile/bungaatas.webp"
+          src="assets/images/profile/pohonatas.webp"
           alt=""
           aria-hidden="true"
-          class="absolute left-0 -top-[3vw] z-30 h-auto w-full max-w-none select-none pointer-events-none"
+          class="animate-tree-top absolute left-0 -top-[3vw] z-[34] h-auto w-full max-w-none select-none pointer-events-none"
         />
 
+        <!-- ========== ORNAMENT POHON TENGAH KIRI ========== -->
         <img
-          src="assets/images/profile/bungabawah.webp"
+          src="assets/images/profile/pohontengahkiri.webp"
           alt=""
           aria-hidden="true"
-          class="absolute -left-[26vw] -bottom-[44vw] z-30 h-auto w-[155vw] max-w-none select-none pointer-events-none md:-left-[97.5px] md:-bottom-[175.5px] md:w-[585px]"
+          class="animate-tree-left absolute left-0 top-[0vw] z-[32] h-auto w-[68vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT POHON TENGAH KANAN ========== -->
+        <img
+          src="assets/images/profile/pohontengahkanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-tree-right absolute right-[2vw] top-[0vw] z-[31] h-auto w-[77vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT POHON SAMPING ========== -->
+        <img
+          src="assets/images/profile/pohonsamping.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-tree-side absolute left-0 top-[19.5vw] z-[31] h-auto w-full max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA KIRI ========== -->
+        <img
+          src="assets/images/profile/bungakiri.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-left absolute -bottom-[0.3vw] left-0 z-[34] h-auto w-[43vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA KANAN ========== -->
+        <img
+          src="assets/images/profile/bungakanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-right absolute -bottom-[0.3vw] right-0 z-[35] h-auto w-[40.5vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA TENGAH KIRI ========== -->
+        <img
+          src="assets/images/profile/bungatengahkiri.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-middle-left absolute -bottom-[0.3vw] left-[0.5vw] z-[36] h-auto w-[87vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA TENGAH KANAN ========== -->
+        <img
+          src="assets/images/profile/bungatengahkanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-middle-right absolute -bottom-[0.3vw] right-[2.5vw] z-[37] h-auto w-[76vw] max-w-none select-none pointer-events-none"
         />
 
         <!-- Aset Burung, Kupu Kupu -->
@@ -762,19 +811,67 @@
         <!-- END DAFTAR ACARA DINAMIS -->
       </div>
 
-      <!-- ORNAMENT ATAS BAWAH -->
+      <!-- ========== ORNAMENT POHON ATAS ========== -->
       <img
-        src="assets/images/event/ornamentatas.webp"
+        src="assets/images/event/pohonatas.webp"
         alt=""
         aria-hidden="true"
-        class="absolute left-0 -top-[3vw] z-30 h-auto w-full max-w-none select-none pointer-events-none"
+        class="animate-tree-top absolute left-0 top-[0vw] z-[34] h-auto w-full max-w-none select-none pointer-events-none"
       />
 
+      <!-- ========== ORNAMENT POHON ATAS KIRI ========== -->
       <img
-        src="assets/images/event/ornamentbawah.webp"
+        src="assets/images/event/pohonataskiri.webp"
         alt=""
         aria-hidden="true"
-        class="absolute -bottom-[43vw] -left-[24.5vw] z-30 h-auto w-[150vw] max-w-none select-none pointer-events-none md:-bottom-[253.5px] md:-left-[150.15px] md:w-[702px]"
+        class="animate-tree-left absolute left-[2vw] top-[0vw] z-[32] h-auto w-[65vw] max-w-none select-none pointer-events-none"
+      />
+
+      <!-- ========== ORNAMENT POHON SAMPING ========== -->
+      <img
+        src="assets/images/event/pohonsamping.webp"
+        alt=""
+        aria-hidden="true"
+        class="animate-tree-side absolute left-0 top-[15vw] z-[31] h-auto w-full max-w-none select-none pointer-events-none"
+      />
+
+      <!-- ========== ORNAMENT BAWAH ========== -->
+      <img
+        src="assets/images/event/gapura.webp"
+        alt=""
+        aria-hidden="true"
+        class="absolute -bottom-[31vw] -left-[4.8vw] z-[30] h-auto w-[108vw] max-w-none select-none pointer-events-none md:-bottom-[253.5px] md:-left-[150.15px] md:w-[702px]"
+      />
+      <!-- ========== ORNAMENT BUNGA KIRI ========== -->
+      <img
+        src="assets/images/event/bungakiri.webp"
+        alt=""
+        aria-hidden="true"
+        class="animate-flower-left absolute -bottom-[7.7vw] left- z-[34] h-auto w-[41vw] max-w-none select-none pointer-events-none"
+      />
+
+      <!-- ========== ORNAMENT BUNGA KANAN ========== -->
+      <img
+        src="assets/images/event/bungakanan.webp"
+        alt=""
+        aria-hidden="true"
+        class="animate-flower-right absolute -bottom-[7vw] right-0 z-[35] h-auto w-[40vw] max-w-none select-none pointer-events-none"
+      />
+
+      <!-- ========== ORNAMENT BUNGA TENGAH KIRI ========== -->
+      <img
+        src="assets/images/event/bungatengahkiri.webp"
+        alt=""
+        aria-hidden="true"
+        class="animate-flower-middle-left absolute -bottom-[8.5vw] -left-[7.5vw] z-[36] h-auto w-[98vw] max-w-none select-none pointer-events-none"
+      />
+
+      <!-- ========== ORNAMENT BUNGA TENGAH KANAN ========== -->
+      <img
+        src="assets/images/event/bungatengahkanan.webp"
+        alt=""
+        aria-hidden="true"
+        class="animate-flower-middle-right absolute -bottom-[7vw] right-[0vw] z-[37] h-auto w-[88vw] max-w-none select-none pointer-events-none"
       />
 
       <!-- Aset Burung, Kupu Kupu -->
@@ -789,7 +886,7 @@
         src="assets/gift/kupuungu.gif"
         alt=""
         aria-hidden="true"
-        class="absolute bottom-[25vw] left-[4.5vw] z-40 h-auto w-[23.85vw] max-w-none select-none pointer-events-none"
+        class="absolute bottom-[23vw] left-[3.5vw] z-40 h-auto w-[23.85vw] max-w-none select-none pointer-events-none"
       />
     </section>
 
@@ -903,7 +1000,7 @@
         src="assets/images/rsvp/bungaataskiri.webp"
         alt=""
         aria-hidden="true"
-        class="absolute left-0 top-0 z-20 h-auto w-[52vw] max-w-none select-none pointer-events-none md:w-1/2"
+        class="animate-rsvp-flower-left absolute left-0 top-0 z-20 h-auto w-[52vw] max-w-none select-none pointer-events-none md:w-1/2"
       />
 
       <!-- BUNGA ATAS KANAN -->
@@ -911,7 +1008,7 @@
         src="assets/images/rsvp/bungaataskanan.webp"
         alt=""
         aria-hidden="true"
-        class="absolute right-0 top-0 z-20 h-auto w-[52vw] max-w-none select-none pointer-events-none md:w-1/2"
+        class="animate-rsvp-flower-right absolute right-0 top-0 z-20 h-auto w-[52vw] max-w-none select-none pointer-events-none md:w-1/2"
       />
 
       <!-- LAYER RSVP + KONTEN -->
@@ -1060,14 +1157,6 @@
         class="absolute inset-0 z-0 h-full w-full select-none object-cover object-[50%_40%] pointer-events-none"
       />
 
-      <!-- BACKGROUND GUNUNG -->
-      <!-- <img
-    src="assets/images/gift/gunung.webp"
-    alt=""
-    aria-hidden="true"
-    class="absolute -bottom-[2vw] left-0 z-[1] h-[159.5vw] w-full max-w-none select-none pointer-events-none"
-  /> -->
-
       <!-- POLA ATAS -->
       <img
         src="assets/images/profile/pola.webp"
@@ -1145,31 +1234,78 @@
           </div>
         </div>
 
-        <!-- ORNAMEN BUNGA ATAS -->
+        <!-- ========== ORNAMENT POHON ATAS ========== -->
         <img
-          src="assets/images/gift/bungaatas.webp"
+          src="assets/images/gift/pohonatas.webp"
           alt=""
           aria-hidden="true"
-          class="absolute left-0 -top-[5vw] z-30 h-auto w-full max-w-none select-none pointer-events-none"
+          class="animate-tree-top absolute left-0 -top-[1vw] z-[34] h-auto w-full max-w-none select-none pointer-events-none"
         />
 
-        <!-- ORNAMEN BUNGA BAWAH -->
+        <!-- ========== ORNAMENT POHON TENGAH KIRI ========== -->
         <img
-          src="assets/images/gift/bungabawah.webp"
+          src="assets/images/gift/pohontengahkiri.webp"
           alt=""
           aria-hidden="true"
-          class="absolute -bottom-[53vw] -left-[30vw] z-30 h-auto w-[162vw] max-w-none select-none pointer-events-none"
+          class="animate-tree-left absolute left-[5vw] top-[0vw] z-[32] h-auto w-[62vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT POHON TENGAH KANAN ========== -->
+        <img
+          src="assets/images/gift/pohontengahkanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-tree-right absolute right-[5vw] top-[0vw] z-[31] h-auto w-[77vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT POHON SAMPING ========== -->
+        <img
+          src="assets/images/gift/pohonsamping.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-tree-side absolute left-0 top-[18vw] z-[31] h-auto w-full max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA KIRI ========== -->
+        <img
+          src="assets/images/profile/bungakiri.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-left absolute -bottom-[6vw] left-0 z-[34] h-auto w-[44vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA KANAN ========== -->
+        <img
+          src="assets/images/profile/bungakanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-right absolute -bottom-[5vw] right-0 z-[35] h-auto w-[40vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA TENGAH KIRI ========== -->
+        <img
+          src="assets/images/profile/bungatengahkiri.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-middle-left absolute -bottom-[4.5vw] left-[3vw] z-[37] h-auto w-[83vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA TENGAH KANAN ========== -->
+        <img
+          src="assets/images/profile/bungatengahkanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-middle-right absolute -bottom-[4.5vw] right-[0vw] z-[37] h-auto w-[75vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- Kupu Kupu -->
+        <img
+          src="assets/gift/kupuungu.gif"
+          alt=""
+          aria-hidden="true"
+          class="absolute bottom-[17vw] -left-[5vw] z-40 h-auto w-[23.85vw] max-w-none select-none pointer-events-none"
         />
       </div>
-
-      <!-- Kupu Kupu -->
-
-      <img
-        src="assets/gift/kupuungu.gif"
-        alt=""
-        aria-hidden="true"
-        class="absolute bottom-[17vw] -left-[5vw] z-40 h-auto w-[23.85vw] max-w-none select-none pointer-events-none"
-      />
     </section>
 
     <!--========================== GALLERY 2 ==========================-->
@@ -1232,14 +1368,22 @@
           src="assets/images/wishes/bungaataskiri.webp"
           alt=""
           aria-hidden="true"
-          class="absolute left-0 top-0 z-0 h-auto w-[50vw] max-w-none select-none pointer-events-none md:w-[28%]"
+          class="animate-rsvp-flower-left absolute left-0 top-0 z-0 h-auto w-[50vw] max-w-none select-none pointer-events-none md:w-[28%]"
         />
 
         <img
           src="assets/images/wishes/bungaataskanan.webp"
           alt=""
           aria-hidden="true"
-          class="absolute right-0 top-0 z-0 h-auto w-[50vw] max-w-none select-none pointer-events-none md:w-[28%]"
+          class="animate-rsvp-flower-left right absolute right-0 top-0 z-0 h-auto w-[50vw] max-w-none select-none pointer-events-none md:w-[28%]"
+        />
+        <!-- Kupu Kupu -->
+
+        <img
+          src="assets/gift/kupuungu.gif"
+          alt=""
+          aria-hidden="true"
+          class="absolute top-[7vw] right-[25vw] z-40 h-auto w-[23.85vw] max-w-none select-none pointer-events-none"
         />
 
         <!-- Tampilan utama -->
@@ -1281,7 +1425,6 @@
             >
               <div
                 class="flex h-full items-center justify-center gap-[2vw] md:gap-[10px]"
-                
               >
                 <img
                   src="assets/icons/send.png"
@@ -1406,7 +1549,6 @@
           >
             <div
               class="flex h-full items-center justify-center gap-[2.56vw] md:gap-[10px]"
-              
             >
               <img
                 id="wishViewIcon"
@@ -1427,6 +1569,19 @@
 
         <!-- Semua pesan: blok #wishesAll yang di-comment tetap taruh di sini -->
       </section>
+      <!-- END WISHES -->
+
+      <!-- BURUNG MENIMPA WISHES & THANK YOU -->
+      <div
+        class="relative z-[50] h-0 w-full overflow-visible pointer-events-none"
+        aria-hidden="true"
+      >
+        <img
+          src="assets/gift/bird.gif"
+          alt=""
+          class="absolute bottom-[-25vw] left-0 block h-auto w-full max-w-none select-none pointer-events-none"
+        />
+      </div>
 
       <!-- THANK YOU -->
       <section
@@ -1452,13 +1607,74 @@
         </div>
 
         <img
-          src="assets/images/thankyou/gerbang.webp"
+          src="assets/images/thankyou/gerbangg.webp"
           alt=""
           aria-hidden="true"
-          class="relative -mt-[66vw] -bottom-[54vw] z-10 block h-auto w-[200vw] max-w-none select-none pointer-events-none"
+          class="relative -mt-[67.5vw] -bottom-[54vw] left-[0.2vw] z-10 block h-auto w-[205vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA KIRI ========== -->
+        <img
+          src="assets/images/profile/bungakiri.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-left absolute -bottom-[0.2vw] left-0 z-[34] h-auto w-[47vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA KANAN ========== -->
+        <img
+          src="assets/images/profile/bungakanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-right absolute -bottom-[0.2vw] right-0 z-[35] h-auto w-[45vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA TENGAH KIRI ========== -->
+        <img
+          src="assets/images/profile/bungatengahkiri.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-middle-left absolute -bottom-[0.3vw] -left-[3vw] z-[36] h-auto w-[95vw] max-w-none select-none pointer-events-none"
+        />
+
+        <!-- ========== ORNAMENT BUNGA TENGAH KANAN ========== -->
+        <img
+          src="assets/images/profile/bungatengahkanan.webp"
+          alt=""
+          aria-hidden="true"
+          class="animate-flower-middle-right absolute -bottom-[0.3vw] right-[2vw] z-[37] h-auto w-[80vw] max-w-none select-none pointer-events-none"
         />
       </section>
     </div>
+
+
+<!-- POPUP BERHASIL KIRIM WISHES -->
+<div id="wishesSuccessModal" class="wishes-success-modal" hidden>
+  <div
+    class="wishes-success-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="wishesSuccessTitle"
+  >
+    <div class="wishes-success-content">
+      <h3 id="wishesSuccessTitle">Thank You</h3>
+
+      <p class="wishes-success-label">MESSAGE SENT</p>
+
+      <div class="wishes-success-line"></div>
+
+      <p class="wishes-success-description">
+        Thank you for your warm wishes and prayers.<br />
+        We truly appreciate your message.
+      </p>
+
+      <button type="button" id="wishesSuccessClose">
+        CLOSE
+      </button>
+    </div>
+  </div>
+</div>
+
 
     <!-- ================= WISHES POPUP ================= -->
     <div

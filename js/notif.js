@@ -14,6 +14,31 @@ const NOTIF_ICONS = {
 // ================= CONFIG NOTIF =================
 
 const NOTIF_CONFIG = {
+
+  rsvp_preview_hadir: {
+    icon: "success",
+    title: "RSVP PREVIEW",
+    messageid:
+      "Simulasi konfirmasi kehadiran berhasil ditampilkan. Data tidak dikirim karena periode RSVP telah ditutup.",
+    messageen:
+      "Attendance confirmation preview completed. No RSVP was submitted because the RSVP period is closed.",
+    buttons: [
+      { label: "Close", action: "close" },
+    ],
+  },
+
+  rsvp_preview_tidak_hadir: {
+    icon: "success",
+    title: "RSVP PREVIEW",
+    messageid:
+      "Simulasi konfirmasi ketidakhadiran berhasil ditampilkan. Data tidak dikirim karena periode RSVP telah ditutup.",
+    messageen:
+      "Non-attendance confirmation preview completed. No RSVP was submitted because the RSVP period is closed.",
+    buttons: [
+      { label: "Close", action: "close" },
+    ],
+  },
+
   rsvp_closed: {
     icon: "warning",
     title: "RSVP CLOSED",

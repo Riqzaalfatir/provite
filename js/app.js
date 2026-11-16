@@ -104,32 +104,83 @@ function renderOpeningEvent() {
 }
 
 
+
 function renderProfile() {
   const event = state.dataEvent;
   if (!event) return;
 
-  // Update hanya jika data API tersedia.
-  // Jika kosong, HTML statis tetap ditampilkan.
-  function setText(id, value) {
-    const element = document.getElementById(id);
+  // Menampilkan dua baris tanpa menghilangkan data API.
+  function setTwoLines(elementId, firstLine, secondLine) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
 
-    if (!element || typeof value !== "string" || !value.trim()) {
-      return;
-    }
+    const line1 = document.createElement("span");
+    line1.className = "block whitespace-nowrap";
+    line1.textContent = firstLine;
 
-    element.textContent = value.trim();
+    const line2 = document.createElement("span");
+    line2.className = "block whitespace-nowrap";
+    line2.textContent = secondLine;
+
+    element.replaceChildren(line1, line2);
   }
 
-  // Nama lengkap pengantin
-  setText("profileGroomName", event.groomFullName);
-  setText("profileBrideName", event.brideFullName);
+  // Nama: pisahkan sebelum kata terakhir.
+  function splitName(fullName) {
+    const parts = String(fullName || "").trim().split(/\s+/);
 
-  // Nama orang tua
-  setText("profileGroomParent", event.groomParent);
-  setText("profileBrideParent", event.brideParent);
+    if (parts.length <= 1) {
+      return [parts[0] || "", ""];
+    }
 
-  console.log("[BryanApp] Profile updated");
+    return [
+      parts.slice(0, -1).join(" "),
+      parts[parts.length - 1]
+    ];
+  }
+
+  // Orang tua: baris kedua dimulai setelah simbol &.
+  function splitParents(parentNames) {
+    const value = String(parentNames || "").trim();
+    const separator = value.indexOf("&");
+
+    if (separator === -1) {
+      return [value, ""];
+    }
+
+    return [
+      value.slice(0, separator + 1).trim(),
+      value.slice(separator + 1).trim()
+    ];
+  }
+
+  // ===== GROOM =====
+  const groomName = splitName(
+    event.groomFullName || "Bryan Hans Sundjaja"
+  );
+
+  const groomParents = splitParents(
+    event.groomParent ||
+    "Mr. Handy Sundjaja & Mrs. Lenny Simon"
+  );
+
+  setTwoLines("profileGroomName", ...groomName);
+  setTwoLines("profileGroomParent", ...groomParents);
+
+  // ===== BRIDE =====
+  const brideName = splitName(
+    event.brideFullName || "Vanessa Reygina Agatha"
+  );
+
+  const brideParents = splitParents(
+    event.brideParent ||
+    "Mr. Aan Fredyan Hermawan & Mrs. Anita Theresia"
+  );
+
+  setTwoLines("profileBrideName", ...brideName);
+  setTwoLines("profileBrideParent", ...brideParents);
 }
+
 
 
 
@@ -541,83 +592,150 @@ if (copyButton) {
 }
 
 
-  async function initialize() {
-    const config = window.TWINKLE_CONFIG;
-    const api = window.TwinkleAPI;
+  
+async function initialize() {
+  const config = window.TWINKLE_CONFIG;
+  const api = window.TwinkleAPI;
 
-    if (!config || !api) {
-      console.error("[BryanApp] Config atau API belum tersedia");
-      return;
-    }
-
-    const params = config.getParams();
-    const url = params.slug;
-
-    // Prioritas PIN: URL → localStorage → cookie
-    const pin =
-      params.urlPin ||
-      localStorage.getItem(`${url}-pin`) ||
-      config.readPinCookie?.(url) ||
-      null;
-
-    state.url = url;
-    state.pin = pin;
-    state.status = "loading";
-
-    try {
-      const eventRes = await api.getCurrentEvent(url);
-
-      if (!eventRes.ok || !unwrap(eventRes)) {
-        throw new Error("Event tidak ditemukan");
-      }
-
-      state.dataEvent = unwrap(eventRes);
-      const eventId = state.dataEvent.id;
-
-      const lang =
-        state.dataEvent.contentLanguage === "en" ? 1 : 0;
-
-      const [contentRes, guestRes, sessionRes] =
-        await Promise.all([
-          api.getEventContentByLang(eventId, lang),
-          pin
-            ? api.getCurrentGuest(url, pin)
-            : Promise.resolve(null),
-          pin
-            ? api.getGuestSessionsByPin(pin, eventId)
-            : Promise.resolve(null)
-        ]);
-
-      state.dataContent = unwrap(contentRes);
-      state.guest = guestRes?.ok ? unwrap(guestRes) : null;
-
-      const sessions = unwrap(sessionRes);
-      state.dataSession = Array.isArray(sessions) ? sessions : [];
-
-  state.status = "success";
-
-renderOpeningEvent();
-renderOpeningGuest();
-renderProfile();
-renderEventDetail();
-renderGallery();
-renderRSVP();
-renderWeddingGift();
-
-console.log("[BryanApp] Data berhasil dimuat:", state);
-
-      window.dispatchEvent(
-        new CustomEvent("bryan:data-ready", {
-          detail: { ...state }
-        })
-      );
-    } catch (error) {
-      state.status = "error";
-      state.error = error.message;
-
-      console.error("[BryanApp]", error);
-    }
+  if (!config || !api) {
+    console.error("[BryanApp] Config atau API belum tersedia");
+    return;
   }
+
+  const params = config.getParams();
+  const url = params.slug;
+
+  // Prioritas PIN: URL → localStorage → cookie
+  const pin =
+    params.urlPin ||
+    localStorage.getItem(`${url}-pin`) ||
+    config.readPinCookie?.(url) ||
+    null;
+
+  // Reset state setiap inisialisasi
+  state.url = url;
+  state.pin = pin;
+  state.dataEvent = null;
+  state.dataContent = null;
+  state.dataSession = [];
+  state.guest = null;
+  state.error = null;
+
+  // ==========================================
+  // GLOBAL FALLBACK - TANPA PIN
+  // ==========================================
+  if (!pin) {
+    state.status = "fallback";
+
+    console.log(
+      "[BryanApp] Tidak ada PIN, menggunakan fallback HTML."
+    );
+
+    window.dispatchEvent(
+      new CustomEvent("bryan:fallback-ready", {
+        detail: { ...state }
+      })
+    );
+
+    return;
+  }
+
+  // ==========================================
+  // MODE DINAMIS - PIN TERSEDIA
+  // ==========================================
+  state.status = "loading";
+
+  try {
+    const eventRes = await api.getCurrentEvent(url);
+
+    if (!eventRes.ok || !unwrap(eventRes)) {
+      throw new Error("Event tidak ditemukan");
+    }
+
+    const event = unwrap(eventRes);
+    const eventId = event.id;
+
+    if (!eventId) {
+      throw new Error("Event ID tidak tersedia");
+    }
+
+    const lang =
+      event.contentLanguage === "en" ? 1 : 0;
+
+    const [contentRes, guestRes, sessionRes] =
+      await Promise.all([
+        api.getEventContentByLang(eventId, lang),
+        api.getCurrentGuest(url, pin),
+        api.getGuestSessionsByPin(pin, eventId)
+      ]);
+
+    // PIN harus benar-benar dikenali API.
+    if (!guestRes?.ok || !unwrap(guestRes)) {
+      throw new Error("PIN tamu tidak valid");
+    }
+
+    state.dataEvent = event;
+    state.dataContent = contentRes?.ok
+      ? unwrap(contentRes)
+      : null;
+
+    state.guest = unwrap(guestRes);
+
+    const sessions = sessionRes?.ok
+      ? unwrap(sessionRes)
+      : null;
+
+    state.dataSession = Array.isArray(sessions)
+      ? sessions
+      : [];
+
+    state.status = "success";
+
+    // ==========================================
+    // RENDER SEMUA SECTION DINAMIS
+    // ==========================================
+    renderOpeningEvent();
+    renderOpeningGuest();
+    renderProfile();
+    renderEventDetail();
+    renderGallery();
+    renderRSVP();
+    renderWeddingGift();
+
+    console.log(
+      "[BryanApp] Data API berhasil dimuat:",
+      state
+    );
+
+    window.dispatchEvent(
+      new CustomEvent("bryan:data-ready", {
+        detail: { ...state }
+      })
+    );
+
+  } catch (error) {
+    // Jika PIN/API gagal, jangan menimpa fallback HTML.
+    state.status = "fallback";
+    state.error = error.message;
+
+    state.dataEvent = null;
+    state.dataContent = null;
+    state.dataSession = [];
+    state.guest = null;
+
+    console.warn(
+      "[BryanApp] Menggunakan fallback HTML:",
+      error.message
+    );
+
+    window.dispatchEvent(
+      new CustomEvent("bryan:fallback-ready", {
+        detail: { ...state }
+      })
+    );
+  }
+}
+
 
   window.BryanApp = {
     state,
