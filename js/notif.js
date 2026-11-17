@@ -48,7 +48,7 @@ const NOTIF_CONFIG = {
       "Reservations are now closed. Thank you for your attention. If you need any assistance, our team is here to help.",
     buttons: [
       { label: "Close", action: "close" },
-      { label: "Chat with Our Team", action: "wa" },
+      
     ],
   },
 

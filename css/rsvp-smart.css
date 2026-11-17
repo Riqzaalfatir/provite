@@ -1,0 +1,142 @@
+/* Add-on khusus konten dinamis Smart RSVP Bryan & Vanessa.
+   Tidak mengubah ukuran, margin atau posisi elemen RSVP yang sudah ada. */
+#rsvpSmartForm.hidden {
+  display: none !important;
+}
+#rsvpSmartForm {
+  position: relative;
+  z-index: 40;
+  min-width: 0;
+}
+#rsvpAccordion {
+  width: 100%;
+}
+#rsvpAccordion .session-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.25s ease,
+    opacity 0.25s ease;
+}
+#rsvpAccordion .session-collapse > div {
+  min-height: 0;
+  overflow: visible;
+}
+#rsvpAccordion .session-collapse.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+#rsvpSmartForm .rsvp_question_label,
+#rsvpSmartForm .rsvp_question_title {
+  font-family: Constantia, Georgia, serif;
+  color: #4b4b44;
+}
+#rsvpSmartForm .rsvp_question_label {
+  font-size: 14px;
+  line-height: 1.4;
+}
+#rsvpSmartForm .rsvp_question_value {
+  font-family: Constantia, Georgia, serif;
+  font-size: 14px;
+  color: #4b4b44;
+}
+#rsvpSmartForm .rsvp_question_hint {
+  font-family: Constantia, Georgia, serif;
+}
+#rsvpSmartForm .fh-check {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}
+#rsvpSmartForm .fh-check-box {
+  width: 19px;
+  height: 19px;
+  border: 1px solid #4b3d2a;
+  border-radius: 4px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+#rsvpSmartForm .fh-check-box svg {
+  width: 12px;
+  height: 12px;
+  display: none;
+}
+#rsvpSmartForm .fh-check input:checked + .fh-check-box {
+  background: #4b3d2a;
+}
+#rsvpSmartForm .fh-check input:checked + .fh-check-box svg {
+  display: block;
+  fill: white;
+}
+#rsvpSmartForm .rsvp-dropdown-menu {
+  z-index: 90;
+  max-height: 220px;
+  overflow-y: auto;
+  background: white;
+}
+#rsvpSmartForm input,
+#rsvpSmartForm select,
+#rsvpSmartForm textarea,
+#rsvpSmartForm button {
+  font: inherit;
+}
+#modalRoot {
+  position: relative;
+  z-index: 1000000;
+}
+#modalRoot .status_popup_title {
+  font-family: Constantia, Georgia, serif;
+  color: #4b3d2a;
+  font-size: 24px;
+  text-align: center;
+}
+#modalRoot .status_popup_content {
+  font-family: Constantia, Georgia, serif;
+  color: #474541;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+}
+#modalRoot .status_popup_button {
+  font-family: Constantia, Georgia, serif;
+  color: #4b3d2a;
+  background: white;
+  cursor: pointer;
+}
+#modalRoot .animate-popup-zoom {
+  animation: bryanRsvpPopup 0.25s ease-out;
+}
+@keyframes bryanRsvpPopup {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #rsvpAccordion .session-collapse,
+  #modalRoot .animate-popup-zoom {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Allow Number of Guest dropdown to extend outside card */
+#rsvpSmartForm,
+#rsvpSmartForm .rsvp-dropdown-menu {
+  overflow: visible;
+}
+
+#rsvpSmartForm .rsvp-dropdown-menu {
+  z-index: 9999;
+  max-height: 120px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
