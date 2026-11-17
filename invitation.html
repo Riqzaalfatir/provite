@@ -381,7 +381,7 @@
       class="relative w-full h-screen max-h-[calc(100vw*20/9)]"
     >
       <video
-       id="heroVideo"
+        id="heroVideo"
         src="assets/video/hero.mp4"
         loop
         muted
@@ -905,93 +905,6 @@
       />
     </section>
 
-    <!--========================== GALLERY 1  ==========================-->
-    <section
-      id="gallery"
-      class="relative h-[538px] w-full overflow-hidden bg-black"
-    >
-      <div class="gallery-slider h-full w-full overflow-hidden">
-        <div id="galleryTrack" class="gallery-track">
-          <div class="gallery-slide">
-            <img
-              src="assets/images/gallery/foto1.webp"
-              alt="Bryan and Vanessa - Photo 1"
-              class="h-full w-full select-none object-cover"
-              draggable="false"
-            />
-          </div>
-
-          <div class="gallery-slide">
-            <img
-              src="assets/images/gallery/foto1.webp"
-              alt="Bryan and Vanessa - Photo 2"
-              class="h-full w-full select-none object-cover"
-              draggable="false"
-            />
-          </div>
-
-          <div class="gallery-slide">
-            <img
-              src="assets/images/gallery/foto1.webp"
-              alt="Bryan and Vanessa - Photo 3"
-              class="h-full w-full select-none object-cover"
-              draggable="false"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!--========================== GALLERY LIGHTBOX ==========================-->
-    <dialog id="galleryLightbox" class="gallery-lightbox">
-      <button
-        id="galleryClose"
-        type="button"
-        class="gallery-close"
-        aria-label="Close gallery"
-      >
-        &times;
-      </button>
-
-      <div id="galleryCounter" class="gallery-counter"></div>
-
-      <div class="gallery-lightbox-main">
-        <button
-          id="galleryPrev"
-          type="button"
-          class="gallery-arrow"
-          aria-label="Previous photo"
-        >
-          &#10094;
-        </button>
-
-        <img
-          id="galleryLightboxImage"
-          src=""
-          alt="Wedding gallery"
-          draggable="false"
-        />
-
-        <button
-          id="galleryNext"
-          type="button"
-          class="gallery-arrow"
-          aria-label="Next photo"
-        >
-          &#10095;
-        </button>
-      </div>
-
-      <div class="gallery-toolbar">
-        <button id="galleryZoomOut" type="button" aria-label="Zoom out">
-          −
-        </button>
-        <button id="galleryZoomIn" type="button" aria-label="Zoom in">+</button>
-      </div>
-
-      <div id="galleryThumbnails" class="gallery-thumbnails"></div>
-    </dialog>
-
     <!--========================== RSVP ==========================-->
     <section id="rsvp" class="relative w-full overflow-hidden">
       <!-- BACKGROUND LANGIT -->
@@ -1065,8 +978,8 @@
           <p
             class="fade-up mt-[5.5vw] font-constan text-[3.59vw] text-[#4B4B44] md:mt-[30px] md:text-[14px]"
           >
-            Kindly Confirm Your Attendance<br />
-            Before <span id="rsvpDeadline">[Due Date]</span>
+            Kindly confirm your attendance<br />
+            before <span id="rsvpDeadline">[Due Date]</span>
           </p>
 
           <div
@@ -1108,7 +1021,7 @@
           <button
             type="button"
             id="rsvpConfirmBtn"
-            class="fade-up mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] flex-col items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase leading-[1] text-white md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
+            class="fade-up mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] flex-col items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase leading-[0.5] text-white md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
           >
             Confirm Unable
             <span>To Attend</span>
@@ -1122,9 +1035,9 @@
           </p>
           <a
             href="https://api.whatsapp.com/send/?phone=6281998478131"
-  id="rsvpChatSupport"
-  target="_blank"
-  rel="noopener noreferrer"
+            id="rsvpChatSupport"
+            target="_blank"
+            rel="noopener noreferrer"
             class="fade-up mt-[3.85vw] flex h-[7.69vw] w-[41.28vw] items-center justify-center gap-[1.54vw] rounded-[1.54vw] bg-[#12877B] font-constan text-[3.59vw] uppercase leading-none text-white hover:opacity-90 md:mt-[15px] md:h-[30px] md:w-[161px] md:gap-[6px] md:rounded-[6px] md:text-[14px]"
           >
             <img
@@ -1218,35 +1131,34 @@
           </p>
 
           <!-- KARTU REKENING BCA -->
-          <div
-            id="giftCard"
-            class="fade-up mt-[8.97vw] flex h-[16.92vw] w-[63.33vw] items-center justify-between rounded-[2.8vw] border border-white bg-white px-[4.62vw] text-left md:mt-[35px] md:h-[66px] md:w-[247px] md:rounded-[10.92px] md:px-[18px]"
-            style="box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.19)"
-          >
-            <div class="flex items-center gap-[2.56vw] md:gap-[10px]">
-              <img
-                id="giftBankIcon"
-                src="assets/icons/bca.png"
-                alt="BCA"
-                class="h-[8.72vw] w-auto max-w-none md:h-[34px]"
-              />
+         <div
+  id="giftCard"
+  class="fade-up mt-[8.97vw] flex h-[16.92vw] w-[63.33vw] items-center justify-start gap-[22vw] rounded-[2.8vw] border border-white bg-white px-[2.56vw] text-left md:mt-[35px] md:h-[66px] md:w-[247px] md:gap-[24px] md:rounded-[10.92px] md:px-[18px]"
+  style="box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.19)"
+>
+  <div class="flex items-center gap-[2.56vw] md:gap-[10px]">
+    <img
+      id="giftBankIcon"
+      src="assets/icons/bca.png"
+      alt="BCA"
+      class="h-[8.72vw] w-auto max-w-none md:h-[34px]"
+    />
 
-              <div
-                class="font-constan text-[3.59vw] leading-[18px] text-black md:text-[14px]"
-              >
-                <p id="giftNumber">123456789</p>
-                <p id="giftBankName">BCA</p>
-                <p id="giftAccountName">Provite</p>
-              </div>
-            </div>
+    <div class="font-constan text-[3.59vw] leading-[18px] text-black md:text-[14px]">
+      <p id="giftNumber">123456789</p>
+      <p id="giftBankName">BCA</p>
+      <p id="giftAccountName">Provite</p>
+    </div>
+  </div>
 
-            <button
-              type="button"
-              id="btnCopy"
-              class="font-constan text-[3.08vw] leading-none text-black md:text-[12px]"
-            >
-              Copy
-            </button>
+  <button
+    type="button"
+    id="btnCopy"
+    class="font-constan text-[3.08vw] leading-none text-black md:text-[12px]"
+  >
+    Copy
+  </button>
+</div>
           </div>
         </div>
 
@@ -1364,6 +1276,56 @@
       </div>
     </section>
 
+    <!--========================== GALLERY LIGHTBOX ==========================-->
+    <dialog id="galleryLightbox" class="gallery-lightbox">
+      <button
+        id="galleryClose"
+        type="button"
+        class="gallery-close"
+        aria-label="Close gallery"
+      >
+        &times;
+      </button>
+
+      <div id="galleryCounter" class="gallery-counter"></div>
+
+      <div class="gallery-lightbox-main">
+        <button
+          id="galleryPrev"
+          type="button"
+          class="gallery-arrow"
+          aria-label="Previous photo"
+        >
+          &#10094;
+        </button>
+
+        <img
+          id="galleryLightboxImage"
+          src=""
+          alt="Wedding gallery"
+          draggable="false"
+        />
+
+        <button
+          id="galleryNext"
+          type="button"
+          class="gallery-arrow"
+          aria-label="Next photo"
+        >
+          &#10095;
+        </button>
+      </div>
+
+      <div class="gallery-toolbar">
+        <button id="galleryZoomOut" type="button" aria-label="Zoom out">
+          −
+        </button>
+        <button id="galleryZoomIn" type="button" aria-label="Zoom in">+</button>
+      </div>
+
+      <div id="galleryThumbnails" class="gallery-thumbnails"></div>
+    </dialog>
+
     <!--========================== WISHES + THANK YOU (satu background) ==========================-->
     <div class="relative w-full overflow-clip">
       <!-- BACKGROUND LANGIT DIAM SAAT SCROLL -->
@@ -1434,28 +1396,26 @@
               class="fade-up mx-auto mb-[4.1vw] block h-[27.18vw] w-[73.08vw] resize-none rounded-[2.56vw] border border-[#4B3D2A] bg-transparent px-[3.08vw] py-[1.79vw] font-constan text-[3.59vw] leading-[140%] text-[#4B3D2A] placeholder:text-[#4B3D2A]/50 focus:outline-none md:mb-[16px] md:h-[106px] md:w-[285px] md:rounded-[10px] md:px-[12px] md:py-[7px] md:text-[14px]"
             ></textarea>
 
-            <button
-              type="submit"
-              id="wishSubmit"
-              class="fade-up mx-auto mb-[4.1vw] flex h-[7.69vw] w-[73.08vw] cursor-pointer items-center justify-center rounded-[2.56vw] bg-[#4B3D2A] p-0 transition-opacity hover:opacity-90 md:mb-[16px] md:h-[30px] md:w-[285px] md:rounded-[10px]"
-            >
-              <div
-                class="flex h-full items-center justify-center gap-[2vw] md:gap-[10px]"
-              >
-                <img
-                  src="assets/icons/send.png"
-                  alt=""
-                  aria-hidden="true"
-                  class="block h-[4.36vw] w-[4.1vw] shrink-0 object-contain md:h-[17px] md:w-[16px]"
-                />
 
-                <span
-                  class="block font-constan text-[3.59vw] uppercase leading-none text-white md:text-[14px]"
-                >
-                  Send
-                </span>
-              </div>
-            </button>
+<button
+  type="submit"
+  id="wishSubmit"
+  class="fade-up mx-auto mb-[4.1vw] flex h-[7.69vw] w-[73.08vw] cursor-pointer items-center justify-center gap-[1.6vw] rounded-[2.56vw] bg-[#4B3D2A] p-0 transition-opacity hover:opacity-90 md:mb-[16px] md:h-[30px] md:w-[285px] md:gap-[10px] md:rounded-[10px]"
+>
+  <img
+    src="assets/icons/send.png"
+    alt=""
+    aria-hidden="true"
+    class="h-[4.36vw] w-[4.1vw] shrink-0 object-contain md:h-[17px] md:w-[16px] -mt-[3px]"
+  />
+
+  <span
+    class="translate-y-[0.2vw] font-constan text-[3.59vw] uppercase leading-none text-white md:translate-y-[1px] md:text-[14px]"
+  >
+    Send
+  </span>
+</button>
+
           </form>
 
           <!-- Kotak pesan -->

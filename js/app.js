@@ -287,7 +287,6 @@
   function renderGallery() {
     const galleryData = state.dataContent?.galleryImageData;
 
-    // Jika API kosong, Gallery 1 dan 2 tetap statis.
     if (!Array.isArray(galleryData) || !galleryData.length) {
       console.log("[BryanApp] Gallery 1 & 2 fallback lokal");
       return;
@@ -347,20 +346,11 @@
       track.replaceChildren(fragment);
     }
 
-    // Gallery 1
-    updateTrack("galleryTrack", "assets/images/gallery/foto1.webp");
-
-    // Gallery 2
+    // Hanya Gallery 2 yang digunakan
     updateTrack("galleryTrack2", "assets/images/gallery2/foto1.webp");
 
     // Refresh kedua slider dan lightbox.
     window.dispatchEvent(new Event("bryan:gallery-updated"));
-
-    console.log(
-      "[BryanApp] Gallery 1 & 2 updated:",
-      photos.length,
-      "foto per gallery",
-    );
   }
 
   function renderRSVP() {
@@ -406,38 +396,38 @@
       }
     }
 
-    
+    // ===========================
+    // 3. CHAT SUPPORT
+    // ===========================
+    const supportLink = document.getElementById("rsvpChatSupport");
 
-  // ===========================
-  // 3. CHAT SUPPORT
-  // ===========================
-  const supportLink = document.getElementById("rsvpChatSupport");
+    if (supportLink) {
+      // Nomor WhatsApp Support tetap
+      const phone = "6281998478131";
 
-  if (supportLink) {
-    // Nomor WhatsApp Support tetap
-    const phone = "6281998478131";
+      // Data dinamis dari API
+      const guestName = guest?.name?.trim() || "Guest";
 
-    // Data dinamis dari API
-    const guestName = guest?.name?.trim() || "Guest";
+      const eventName =
+        event.name?.trim() ||
+        `The Wedding of ${event.groomName || "Bryan"} and ${event.brideName || "Vanessa"}`;
 
-    const eventName =
-      event.name?.trim() ||
-      `The Wedding of ${event.groomName || "Bryan"} and ${event.brideName || "Vanessa"}`;
+      // Pesan WhatsApp otomatis berdasarkan data API
+      const message =
+        `Hi Provite Team, I need help with my RSVP ` +
+        `with invitation name ${guestName} ` +
+        `for The Event: ${eventName}`;
 
-    // Pesan WhatsApp otomatis berdasarkan data API
-    const message =
-      `Hi Provite Team, I need help with my RSVP ` +
-      `with invitation name ${guestName} ` +
-      `for The Event: ${eventName}`;
+      supportLink.href =
+        `https://api.whatsapp.com/send/?phone=${phone}` +
+        `&text=${encodeURIComponent(message)}`;
 
-    supportLink.href =
-      `https://api.whatsapp.com/send/?phone=${phone}` +
-      `&text=${encodeURIComponent(message)}`;
+      supportLink.target = "_blank";
+      supportLink.rel = "noopener noreferrer";
+    }
 
-    supportLink.target = "_blank";
-    supportLink.rel = "noopener noreferrer";
+    // Menutup fungsi renderRSVP()
   }
-
 
   function renderWeddingGift() {
     const electronicGivings = state.dataContent?.electronicGivings;
