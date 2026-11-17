@@ -326,11 +326,11 @@ document.addEventListener("DOMContentLoaded", () => {
     { passive: true },
   );
 
-// ==========================
-// JALANKAN GALLERY 2 SAJA
-// ==========================
+  // ==========================
+  // JALANKAN GALLERY 2 SAJA
+  // ==========================
 
-initGallery("galleryTrack2");
+  initGallery("galleryTrack2");
 
   window.addEventListener("bryan:gallery-updated", () => {
     galleries.forEach((gallery) => {

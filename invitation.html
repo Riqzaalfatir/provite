@@ -71,6 +71,35 @@
       html.desktop-iframe #openingScreen {
         visibility: hidden !important;
       }
+
+      /* RSVP: satu aset, bentuk atas dan bawah dipertahankan */
+      .rsvp-stretch-layer {
+        position: relative;
+        isolation: isolate;
+        background: transparent;
+      }
+
+      .rsvp-stretch-layer::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+
+        border-style: solid;
+        border-width: 55vw 6vw 39vw;
+
+        border-image-source: url("assets/images/rsvp/layer.webp");
+        border-image-slice: 430 45 300 45 fill;
+        border-image-width: 1;
+        border-image-repeat: stretch;
+      }
+
+      @media (min-width: 768px) {
+        .rsvp-stretch-layer::before {
+          border-width: 215px 23px 152px;
+        }
+      }
     </style>
   </head>
 
@@ -915,12 +944,12 @@
         class="absolute inset-0 z-0 h-full w-full select-none object-cover object-bottom pointer-events-none"
       />
 
-      <!-- BACKGROUND GUNUNG -->
+      <!-- BACKGROUND GUNUNG - POSISI TETAP -->
       <img
         src="assets/images/rsvp/gunungsalju.webp"
         alt=""
         aria-hidden="true"
-        class="absolute -bottom-[0vw] left-0 z-[1] h-[172vw] w-full max-w-none select-none pointer-events-none"
+        class="absolute top-[115vw] left-0 z-[1] h-[172vw] w-full max-w-none select-none pointer-events-none"
       />
 
       <!-- BUNGA ATAS KIRI -->
@@ -942,12 +971,7 @@
       <!-- LAYER RSVP + KONTEN -->
       <div class="relative w-full overflow-hidden pb-[45vw]">
         <div
-          class="relative z-30 mx-[1.6vw] mt-[14.5vw] flex flex-col items-center px-[10.26vw] pb-[61.5vw] pt-[24.7vw] text-center md:mx-0 md:mt-0 md:px-[40px] md:pt-[167px]"
-          style="
-            background-image: url(&quot;assets/images/rsvp/layer.webp&quot;);
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-          "
+          class="rsvp-stretch-layer relative z-30 mx-[1.6vw] mt-[14.5vw] flex flex-col items-center px-[10.26vw] pb-[61.5vw] pt-[24.7vw] text-center md:mx-0 md:mt-0 md:px-[40px] md:pt-[167px]"
         >
           <h2
             class="fade-up font-cinzel text-[7.18vw] uppercase text-[#4D4D4D] tracking-[0.02em] md:text-[28px]"
@@ -978,8 +1002,8 @@
           <p
             class="fade-up mt-[5.5vw] font-constan text-[3.59vw] text-[#4B4B44] md:mt-[30px] md:text-[14px]"
           >
-            Kindly confirm your attendance<br />
-            before <span id="rsvpDeadline">[Due Date]</span>
+            Kindly confirm your attendance before <br />
+            <span id="rsvpDeadline">[Due Date]</span>
           </p>
 
           <div
@@ -998,7 +1022,7 @@
               type="button"
               id="rsvpUnable"
               aria-pressed="false"
-              class="fade-left flex h-[10.77vw] w-[36.15vw] flex-col items-center justify-center rounded-[1.54vw] border border-[#4B3D2A] bg-transparent text-center font-constan text-[3.59vw] uppercase leading-[1.2] text-[#4B4B44] transition-colors duration-200 md:h-[42px] md:w-[141px] md:rounded-[6px] md:text-[14px]"
+              class="fade-left flex h-[10.77vw] w-[36.15vw] flex-col items-center justify-center rounded-[1.54vw] border border-[#4B3D2A] bg-transparent text-center font-constan text-[3.59vw] uppercase leading-[13px] text-[#4B4B44] transition-colors duration-200 md:h-[42px] md:w-[141px] md:rounded-[6px] md:text-[14px]"
             >
               Unable to
               <span>Attend</span>
@@ -1013,7 +1037,8 @@
           ></div>
 
           <p
-            class="fade-up mt-[16.6vw] font-constan text-[3.59vw] text-[#4B4B44] md:mt-[75px] md:text-[14px]"
+            id="rsvpConfirmTitle"
+            class="mt-[16.6vw] font-constan text-[3.59vw] text-[#4B4B44] md:mt-[75px] md:text-[14px]"
           >
             Confirm Your RSVP
           </p>
@@ -1021,7 +1046,7 @@
           <button
             type="button"
             id="rsvpConfirmBtn"
-            class="fade-up mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] flex-col items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase leading-[0.5] text-white md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
+            class="mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] flex-col items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase leading-[13px] text-white md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
           >
             Confirm Unable
             <span>To Attend</span>
@@ -1030,8 +1055,8 @@
           <p
             class="fade-up mt-[9.5vw] font-constan text-[3.08vw] text-[#4B4B44] md:mt-[40px] md:text-[12px]"
           >
-            If You Need Assistance With Your RSVP,<br />Please Contact Our
-            Support Team.
+            If you need assistance with your rsvp,<br />please contact our
+            support team.
           </p>
           <a
             href="https://api.whatsapp.com/send/?phone=6281998478131"
@@ -1083,15 +1108,15 @@
         src="assets/images/gift/bg.webp"
         alt=""
         aria-hidden="true"
-        class="absolute inset-0 z-0 h-full w-full select-none object-cover object-[50%_40%] pointer-events-none"
+        class="pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-cover object-[50%_40%]"
       />
 
-      <!-- POLA ATAS -->
+      <!-- POLA ATAS - SAMA DENGAN PROFILE -->
       <img
         src="assets/images/profile/pola.webp"
         alt=""
         aria-hidden="true"
-        class="relative z-10 block h-[9.25vw] w-full max-w-none select-none pointer-events-none md:h-[35px]"
+        class="pointer-events-none relative z-10 block h-[9.25vw] w-full max-w-none select-none md:h-[35px]"
       />
 
       <!-- LAYER GIFT + KONTEN -->
@@ -1131,34 +1156,35 @@
           </p>
 
           <!-- KARTU REKENING BCA -->
-         <div
-  id="giftCard"
-  class="fade-up mt-[8.97vw] flex h-[16.92vw] w-[63.33vw] items-center justify-start gap-[22vw] rounded-[2.8vw] border border-white bg-white px-[2.56vw] text-left md:mt-[35px] md:h-[66px] md:w-[247px] md:gap-[24px] md:rounded-[10.92px] md:px-[18px]"
-  style="box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.19)"
->
-  <div class="flex items-center gap-[2.56vw] md:gap-[10px]">
-    <img
-      id="giftBankIcon"
-      src="assets/icons/bca.png"
-      alt="BCA"
-      class="h-[8.72vw] w-auto max-w-none md:h-[34px]"
-    />
+          <div
+            id="giftCard"
+            class="fade-up mt-[8.97vw] flex h-[16.92vw] w-[63.33vw] items-center justify-start gap-[22vw] rounded-[2.8vw] border border-white bg-white px-[2.56vw] text-left md:mt-[35px] md:h-[66px] md:w-[247px] md:gap-[24px] md:rounded-[10.92px] md:px-[18px]"
+            style="box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.19)"
+          >
+            <div class="flex items-center gap-[2.56vw] md:gap-[10px]">
+              <img
+                id="giftBankIcon"
+                src="assets/icons/bca.png"
+                alt="BCA"
+                class="h-[8.72vw] w-auto max-w-none md:h-[34px]"
+              />
 
-    <div class="font-constan text-[3.59vw] leading-[18px] text-black md:text-[14px]">
-      <p id="giftNumber">123456789</p>
-      <p id="giftBankName">BCA</p>
-      <p id="giftAccountName">Provite</p>
-    </div>
-  </div>
+              <div
+                class="font-constan text-[3.59vw] leading-[18px] text-black md:text-[14px]"
+              >
+                <p id="giftNumber">123456789</p>
+                <p id="giftBankName">BCA</p>
+                <p id="giftAccountName">Provite</p>
+              </div>
+            </div>
 
-  <button
-    type="button"
-    id="btnCopy"
-    class="font-constan text-[3.08vw] leading-none text-black md:text-[12px]"
-  >
-    Copy
-  </button>
-</div>
+            <button
+              type="button"
+              id="btnCopy"
+              class="font-constan text-[3.08vw] leading-none text-black md:text-[12px]"
+            >
+              Copy
+            </button>
           </div>
         </div>
 
@@ -1396,26 +1422,24 @@
               class="fade-up mx-auto mb-[4.1vw] block h-[27.18vw] w-[73.08vw] resize-none rounded-[2.56vw] border border-[#4B3D2A] bg-transparent px-[3.08vw] py-[1.79vw] font-constan text-[3.59vw] leading-[140%] text-[#4B3D2A] placeholder:text-[#4B3D2A]/50 focus:outline-none md:mb-[16px] md:h-[106px] md:w-[285px] md:rounded-[10px] md:px-[12px] md:py-[7px] md:text-[14px]"
             ></textarea>
 
+            <button
+              type="submit"
+              id="wishSubmit"
+              class="fade-up mx-auto mb-[4.1vw] flex h-[7.69vw] w-[73.08vw] cursor-pointer items-center justify-center gap-[1.6vw] rounded-[2.56vw] bg-[#4B3D2A] p-0 transition-opacity hover:opacity-90 md:mb-[16px] md:h-[30px] md:w-[285px] md:gap-[10px] md:rounded-[10px]"
+            >
+              <img
+                src="assets/icons/send.png"
+                alt=""
+                aria-hidden="true"
+                class="h-[4.36vw] w-[4.1vw] shrink-0 object-contain md:h-[17px] md:w-[16px] -mt-[3px]"
+              />
 
-<button
-  type="submit"
-  id="wishSubmit"
-  class="fade-up mx-auto mb-[4.1vw] flex h-[7.69vw] w-[73.08vw] cursor-pointer items-center justify-center gap-[1.6vw] rounded-[2.56vw] bg-[#4B3D2A] p-0 transition-opacity hover:opacity-90 md:mb-[16px] md:h-[30px] md:w-[285px] md:gap-[10px] md:rounded-[10px]"
->
-  <img
-    src="assets/icons/send.png"
-    alt=""
-    aria-hidden="true"
-    class="h-[4.36vw] w-[4.1vw] shrink-0 object-contain md:h-[17px] md:w-[16px] -mt-[3px]"
-  />
-
-  <span
-    class="translate-y-[0.2vw] font-constan text-[3.59vw] uppercase leading-none text-white md:translate-y-[1px] md:text-[14px]"
-  >
-    Send
-  </span>
-</button>
-
+              <span
+                class="translate-y-[0.2vw] font-constan text-[3.59vw] uppercase leading-none text-white md:translate-y-[1px] md:text-[14px]"
+              >
+                Send
+              </span>
+            </button>
           </form>
 
           <!-- Kotak pesan -->
@@ -1757,15 +1781,35 @@
         </svg>
       </button>
 
-      <!-- RSVP -->
-      <button
-        type="button"
-        id="btnRsvpFloat"
-        aria-label="Go to RSVP"
-        class="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-full border border-[#4B3D2A] bg-white text-[#4B3D2A] shadow-lg transition-transform duration-200 hover:scale-105"
-      >
-        <span class="font-cinzel text-[11px] font-bold">RSVP</span>
-      </button>
+      <!-- RSVP FLOATING BUTTON + POPUP -->
+      <div class="relative flex items-center justify-center">
+        <!-- POPUP INFORMASI RSVP -->
+        <div
+          id="rsvpFloatPopup"
+          role="status"
+          class="pointer-events-none absolute right-[calc(100%+12px)] top-1/2 w-[220px] max-w-[calc(100vw-100px)] -translate-y-1/2 translate-x-[12px] rounded-[16px] bg-white px-[16px] py-[12px] opacity-0 shadow-lg transition-[opacity,transform] duration-700 ease-in-out"
+        >
+          <p class="font-sans text-[14px] font-bold leading-tight text-black">
+            Click Here to RSVP.
+          </p>
+
+          <p
+            class="mt-[4px] font-sans text-[12px] italic leading-snug text-black"
+          >
+            Tap this button to confirm your attendance.
+          </p>
+        </div>
+
+        <!-- TOMBOL RSVP ASLI -->
+        <button
+          type="button"
+          id="btnRsvpFloat"
+          aria-label="Go to RSVP"
+          class="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-full border border-[#4B3D2A] bg-white text-[#4B3D2A] shadow-lg transition-transform duration-200 hover:scale-105"
+        >
+          <span class="font-cinzel text-[11px] font-bold">RSVP</span>
+        </button>
+      </div>
     </div>
     <!-- ================= END FLOATING BUTTONS ================= -->
   </body>

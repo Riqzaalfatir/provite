@@ -1024,22 +1024,41 @@ window.BryanRSVP = (function () {
   function renderStatus() {
     const selected =
       s.attendStatus === 1 ? "hadir" : s.attendStatus === 2 ? "tidak" : null;
+
     setToggle($("#btnAttend"), s.attendStatus === 1);
     setToggle($("#btnNotAttend"), s.attendStatus === 2);
 
-    const toggles = $("#rsvpToggles");
-    // Jangan mengubah margin asli tombol Bryan & Vanessa.
-
+    // =====================================
+    // 1. TAMPILKAN SMART RSVP JIKA ATTEND
+    // =====================================
     $("#rsvpAttendBlock").classList.toggle(
       "hidden",
       selected !== "hadir" || s.questionData.length === 0,
     );
+
     $("#rsvpSessionHint").textContent =
       (s.questionData?.length ?? 0) > 1
         ? "Please select the events you will attend"
         : "PLEASE COMPLETE THE INFORMATION BELOW";
 
-    // Confirm menggunakan elemen HTML asli; tidak perlu pembungkus baru.
+    // =====================================
+    // 2. CONFIRM HANYA MUNCUL SETELAH MEMILIH
+    // =====================================
+    const confirmTitle = document.getElementById("rsvpConfirmTitle");
+
+    const confirmButton =
+      document.getElementById("rsvpConfirmBtn") ||
+      document.getElementById("btnSubmitRsvp");
+
+    const hasSelectedAttendance = s.attendStatus === 1 || s.attendStatus === 2;
+
+    confirmTitle?.classList.toggle("hidden", !hasSelectedAttendance);
+
+    confirmButton?.classList.toggle("hidden", !hasSelectedAttendance);
+
+    // =====================================
+    // 3. UPDATE LABEL DAN PERTANYAAN
+    // =====================================
     renderSubmitLabel();
     renderAccordion();
   }
