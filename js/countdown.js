@@ -1,4 +1,3 @@
-
 (function () {
   const FALLBACK_DATE = "2026-12-18T18:00:24";
   const pad = (n) => String(n).padStart(2, "0");
@@ -12,9 +11,7 @@
     const normalized = value.trim();
     const hasTimezone = /(?:Z|[+-]\d{2}:\d{2})$/i.test(normalized);
 
-    const date = new Date(
-      hasTimezone ? normalized : normalized + "+07:00"
-    );
+    const date = new Date(hasTimezone ? normalized : normalized + "+07:00");
 
     return Number.isNaN(date.getTime()) ? null : date;
   }
@@ -26,7 +23,7 @@
       countdownDays: Math.floor(distance / 86400000),
       countdownHours: Math.floor((distance % 86400000) / 3600000),
       countdownMinutes: Math.floor((distance % 3600000) / 60000),
-      countdownSeconds: Math.floor((distance % 60000) / 1000)
+      countdownSeconds: Math.floor((distance % 60000) / 1000),
     };
 
     Object.entries(values).forEach(([id, value]) => {
@@ -49,32 +46,35 @@
       weekday: "long",
       day: "numeric",
       month: "long",
-      year: "numeric"
+      year: "numeric",
     }).formatToParts(target);
 
-    const get = (type) => parts.find(p => p.type === type)?.value || "";
+    const get = (type) => parts.find((p) => p.type === type)?.value || "";
 
     const day = Number(get("day"));
     const suffix =
-      day % 100 >= 11 && day % 100 <= 13 ? "th" :
-      day % 10 === 1 ? "st" :
-      day % 10 === 2 ? "nd" :
-      day % 10 === 3 ? "rd" : "th";
+      day % 100 >= 11 && day % 100 <= 13
+        ? "th"
+        : day % 10 === 1
+          ? "st"
+          : day % 10 === 2
+            ? "nd"
+            : day % 10 === 3
+              ? "rd"
+              : "th";
 
     element.replaceChildren(
       document.createTextNode(`${get("weekday")}, ${day}`),
       Object.assign(document.createElement("sup"), {
         className: "text-[3.59vw] md:text-[14px]",
-        textContent: suffix
+        textContent: suffix,
       }),
-      document.createTextNode(` ${get("month")} ${get("year")}`)
+      document.createTextNode(` ${get("month")} ${get("year")}`),
     );
   }
 
   function startCountdown(dateString) {
-    const target =
-      parseEventDate(dateString) ||
-      parseEventDate(FALLBACK_DATE);
+    const target = parseEventDate(dateString) || parseEventDate(FALLBACK_DATE);
 
     if (interval) clearInterval(interval);
 

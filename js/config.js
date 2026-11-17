@@ -1,4 +1,3 @@
-
 /**
  * Bryan & Vanessa - TwinkleBook Configuration
  * Fondasi untuk integrasi API dinamis.
@@ -26,25 +25,18 @@ window.TWINKLE_CONFIG = {
   },
 
   isValidPin: function (pin) {
-    return (
-      typeof pin === "string" &&
-      /^\d{1,10}$/.test(pin.trim())
-    );
+    return typeof pin === "string" && /^\d{1,10}$/.test(pin.trim());
   },
 
   readPinCookie: function (slug) {
     try {
       const name = this.pinCookieName(slug) + "=";
 
-      const entry = document.cookie
-        .split("; ")
-        .find((c) => c.startsWith(name));
+      const entry = document.cookie.split("; ").find((c) => c.startsWith(name));
 
       if (!entry) return "";
 
-      const value = decodeURIComponent(
-        entry.substring(name.length)
-      ).trim();
+      const value = decodeURIComponent(entry.substring(name.length)).trim();
 
       return this.isValidPin(value) ? value : "";
     } catch (error) {
@@ -56,10 +48,7 @@ window.TWINKLE_CONFIG = {
     if (!this.isValidPin(pin)) return;
 
     try {
-      const secure =
-        window.location.protocol === "https:"
-          ? "; Secure"
-          : "";
+      const secure = window.location.protocol === "https:" ? "; Secure" : "";
 
       document.cookie =
         `${this.pinCookieName(slug)}=${pin.trim()}; ` +
@@ -72,21 +61,15 @@ window.TWINKLE_CONFIG = {
 
   clearPinCookie: function (slug) {
     document.cookie =
-      `${this.pinCookieName(slug)}=; ` +
-      "Max-Age=0; Path=/; SameSite=Lax";
+      `${this.pinCookieName(slug)}=; ` + "Max-Age=0; Path=/; SameSite=Lax";
   },
 
   getParams: function () {
-    const params = new URLSearchParams(
-      window.location.search
-    );
+    const params = new URLSearchParams(window.location.search);
 
     // Jangan mengambil slug dari pathname,
     // karena invitation.html dibuka melalui iframe.
-    const slug =
-      params.get("id") ||
-      params.get("url") ||
-      this.FALLBACK_SLUG;
+    const slug = params.get("id") || params.get("url") || this.FALLBACK_SLUG;
 
     const urlPin = params.get("pin") || "";
 

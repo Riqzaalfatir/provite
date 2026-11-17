@@ -1,9 +1,8 @@
-
 /* ================= SCROLL ANIMATION ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   const elements = document.querySelectorAll(
-    ".fade-up, .fade-in, .fade-left, .fade-right"
+    ".fade-up, .fade-in, .fade-left, .fade-right",
   );
 
   const observer = new IntersectionObserver(
@@ -18,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     },
     {
-      threshold: 0.15
-    }
+      threshold: 0.15,
+    },
   );
 
   elements.forEach((element) => {

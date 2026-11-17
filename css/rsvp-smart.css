@@ -1,5 +1,4 @@
-/* Add-on khusus konten dinamis Smart RSVP Bryan & Vanessa.
-   Tidak mengubah ukuran, margin atau posisi elemen RSVP yang sudah ada. */
+/* Add-on khusus konten dinamis Smart RSVP Bryan & Vanessa. */
 #rsvpSmartForm.hidden {
   display: none !important;
 }

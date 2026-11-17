@@ -21,6 +21,43 @@
 
     let isOpened = false;
 
+    async function recordInvitationOpened() {
+      const app = window.BryanApp?.state;
+      const api = window.TwinkleAPI;
+
+      if (!app?.dataEvent?.id || !app?.pin || !api?.submitOpenInvitation) {
+        console.warn(
+          "[Invitation] Data belum siap, OpenInvitation tidak dikirim.",
+        );
+        return;
+      }
+
+      try {
+        const result = await api.submitOpenInvitation(
+          app.dataEvent.id,
+          app.pin,
+        );
+
+        if (result.ok) {
+          console.log(
+            "[Invitation] Status Opened berhasil dicatat.",
+            "HTTP:",
+            result.status,
+          );
+        } else {
+          console.warn(
+            "[Invitation] OpenInvitation gagal.",
+            "HTTP:",
+            result.status,
+            "Response:",
+            result.data,
+          );
+        }
+      } catch (error) {
+        console.error("[Invitation] OpenInvitation error:", error);
+      }
+    }
+
     // =====================================
     // 1. LOCK SCROLL
     // =====================================
@@ -53,6 +90,9 @@
 
       isOpened = true;
       openBtn.disabled = true;
+
+      // Catat status Opened ke API tanpa menunggu respons.
+      void recordInvitationOpened();
 
       // Fade out background overlay
       if (backdrop) {
