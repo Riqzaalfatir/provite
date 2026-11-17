@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <base href="/" />
-<script>
-  document.querySelector("base").href =
-    location.hostname === "provite.id" ||
-    location.hostname.endsWith(".provite.id")
-      ? "/events/bryanvanessa/"
-      : "/";
-</script>
+    <script>
+      document.querySelector("base").href =
+        location.hostname === "provite.id" ||
+        location.hostname.endsWith(".provite.id")
+          ? "/events/bryanvanessa/"
+          : "/";
+    </script>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -74,7 +74,7 @@
 
   <body class="">
     <!-- ================= LOADING SCREEN ================= -->
-     <section
+    <section
       id="sectionLoading"
       class="fixed inset-0 flex items-center justify-center bg-[#F6F0E6]"
       style="z-index: 999999; opacity: 1; transition: opacity 450ms ease"
@@ -188,7 +188,7 @@
     </style>
 
     <!-- ================= OPENING INVITATION ================= -->
-     <section
+    <section
       id="openingScreen"
       role="dialog"
       aria-modal="true"
@@ -374,17 +374,20 @@
     </header>
 
     <!--========================== HERO ==========================-->
-    <section id="hero" class="relative w-full h-screen max-h-[calc(100vw*20/9)]">
-  <video
-    src="assets/video/hero.mp4"
-    autoplay
-    loop
-    muted
-    playsinline
-    preload="auto"
-    class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-  ></video>
-</section>
+    <section
+      id="hero"
+      class="relative w-full h-screen max-h-[calc(100vw*20/9)]"
+    >
+      <video
+        src="assets/video/hero.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+        class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+      ></video>
+    </section>
 
     <!--========================== PROFILE ==========================-->
     <section id="profile" class="relative w-full overflow-hidden">
@@ -582,7 +585,6 @@
           class="animate-flower-middle-right absolute -bottom-[0.3vw] right-[2.5vw] z-[37] h-auto w-[76vw] max-w-none select-none pointer-events-none"
         />
 
-
         <!-- Aset Burung, Kupu Kupu -->
         <img
           src="assets/gift/bird.gif"
@@ -634,7 +636,7 @@
             style="transition-delay: 150ms"
           >
             <span
-               id="countdownDays"
+              id="countdownDays"
               class="font-constan text-[10.75vw] leading-[10.26vw] text-[#24020A] md:text-[41.94px] md:leading-[40px]"
             >
               59
@@ -744,19 +746,18 @@
         /> -->
 
         <!-- ILUSTRASI SUDIRMAN GRAND BALLROOM -->
-        
-<!-- ILUSTRASI SUDIRMAN GRAND BALLROOM -->
-<div
-  class="fade-up mt-[7vw] flex w-full items-center justify-center md:mt-[70px]"
->
-  <img
-    src="assets/images/event/balroomsudirman.webp"
-    alt="Sudirman Grand Ballroom"
-    class="block h-[29.74vw] w-[70.51vw] max-w-none object-contain mix-blend-multiply md:h-[116px] md:w-[275px]"
-    style="opacity: 0.75; filter: brightness(0.9)"
-  />
-</div>
 
+        <!-- ILUSTRASI SUDIRMAN GRAND BALLROOM -->
+        <div
+          class="fade-up mt-[7vw] flex w-full items-center justify-center md:mt-[70px]"
+        >
+          <img
+            src="assets/images/event/balroomsudirman.webp"
+            alt="Sudirman Grand Ballroom"
+            class="block h-[29.74vw] w-[70.51vw] max-w-none object-contain mix-blend-multiply md:h-[116px] md:w-[275px]"
+            style="opacity: 0.75; filter: brightness(0.9)"
+          />
+        </div>
 
         <h3
           class="fade-up mt-[3.5vw] font-cinzel text-[4.1vw] font-bold uppercase tracking-[0.03em] text-[#474541] md:mt-[15px] md:text-[16px]"
@@ -1105,7 +1106,7 @@
           <button
             type="button"
             id="rsvpConfirmBtn"
-            class="fade-up mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] flex-col items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase leading-[1.2] text-white md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
+            class="fade-up mt-[5.2vw] flex h-[9.23vw] w-[41.28vw] flex-col items-center justify-center rounded-[1.54vw] bg-[#4B3D2A] text-center font-constan text-[3.59vw] uppercase leading-[1] text-white md:mt-[23px] md:h-[36px] md:w-[161px] md:rounded-[6px] md:text-[14px]"
           >
             Confirm Unable
             <span>To Attend</span>
@@ -1117,20 +1118,21 @@
             If You Need Assistance With Your RSVP,<br />Please Contact Our
             Support Team.
           </p>
-<a
-  href="#"
-  id="rsvpChatSupport"
-  target="_blank"
-  rel="noopener noreferrer"
-  class="fade-up mt-[3.85vw] flex h-[7.69vw] w-[41.28vw] items-center justify-center gap-[1.54vw] rounded-[1.54vw] bg-[#12877B] font-constan text-[3.59vw] uppercase leading-none text-white hover:opacity-90 md:mt-[15px] md:h-[30px] md:w-[161px] md:gap-[6px] md:rounded-[6px] md:text-[14px]"
->
-  <img
-    src="assets/icons/wa.png"
-    alt=""
-    class="h-[4.1vw] w-[4.1vw] shrink-0 object-contain md:h-[16px] md:w-[16px]"
-  />
-  <span class="translate-y-[3vw] md:translate-y-[1px]">Chat Support</span>
-</a>
+          <a
+            href="#"
+            id="rsvpChatSupport"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="fade-up mt-[3.85vw] flex h-[7.69vw] w-[41.28vw] items-center justify-center gap-[1.54vw] rounded-[1.54vw] bg-[#12877B] font-constan text-[3.59vw] uppercase leading-none text-white hover:opacity-90 md:mt-[15px] md:h-[30px] md:w-[161px] md:gap-[6px] md:rounded-[6px] md:text-[14px]"
+          >
+            <img
+              src="assets/icons/wa.png"
+              alt=""
+              class="h-[4.1vw] w-[4.1vw] shrink-0 object-contain md:h-[16px] md:w-[16px]"
+            />
+           <span class="translate-y-[0.2vw] md:translate-y-[1px]">Chat Support</span>
+             
+          </a>
         </div>
       </div>
 
@@ -1397,7 +1399,6 @@
           class="absolute top-[7vw] right-[25vw] z-40 h-auto w-[23.85vw] max-w-none select-none pointer-events-none"
         />
 
-
         <!-- Tampilan utama -->
         <div
           id="wishesMain"
@@ -1618,15 +1619,13 @@
           </p>
         </div>
 
-         
-<!-- KUPU-KUPU EMAS - THANK YOU -->
-<img
-  src="assets/gift/kupuemas.gif"
-  alt=""
-  aria-hidden="true"
-  class="pointer-events-none absolute right-[19vw] top-[44vw] z-40 h-auto w-[19.74vw] max-w-none -scale-x-100 select-none"
-/>
-
+        <!-- KUPU-KUPU EMAS - THANK YOU -->
+        <img
+          src="assets/gift/kupuemas.gif"
+          alt=""
+          aria-hidden="true"
+          class="pointer-events-none absolute right-[19vw] top-[44vw] z-40 h-auto w-[19.74vw] max-w-none -scale-x-100 select-none"
+        />
 
         <img
           src="assets/images/thankyou/gerbangg.webp"
@@ -1669,34 +1668,30 @@
       </section>
     </div>
 
+    <!-- POPUP BERHASIL KIRIM WISHES -->
+    <div id="wishesSuccessModal" class="wishes-success-modal" hidden>
+      <div
+        class="wishes-success-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="wishesSuccessTitle"
+      >
+        <div class="wishes-success-content">
+          <h3 id="wishesSuccessTitle">Thank You</h3>
 
-<!-- POPUP BERHASIL KIRIM WISHES -->
-<div id="wishesSuccessModal" class="wishes-success-modal" hidden>
-  <div
-    class="wishes-success-card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="wishesSuccessTitle"
-  >
-    <div class="wishes-success-content">
-      <h3 id="wishesSuccessTitle">Thank You</h3>
+          <p class="wishes-success-label">MESSAGE SENT</p>
 
-      <p class="wishes-success-label">MESSAGE SENT</p>
+          <div class="wishes-success-line"></div>
 
-      <div class="wishes-success-line"></div>
+          <p class="wishes-success-description">
+            Thank you for your warm wishes and prayers.<br />
+            We truly appreciate your message.
+          </p>
 
-      <p class="wishes-success-description">
-        Thank you for your warm wishes and prayers.<br />
-        We truly appreciate your message.
-      </p>
-
-      <button type="button" id="wishesSuccessClose">
-        CLOSE
-      </button>
+          <button type="button" id="wishesSuccessClose">CLOSE</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
 
     <!-- ================= WISHES POPUP ================= -->
     <div

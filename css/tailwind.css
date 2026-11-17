@@ -1696,13 +1696,28 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.translate-y-\[0\.3vw\] {
+  --tw-translate-y: 0.3vw;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .translate-y-\[30px\] {
   --tw-translate-y: 30px;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.translate-y-\[3vw\] {
-  --tw-translate-y: 3vw;
+.translate-y-\[0vw\] {
+  --tw-translate-y: 0vw;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.translate-y-\[0\.1vw\] {
+  --tw-translate-y: 0.1vw;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.translate-y-\[0\.2vw\] {
+  --tw-translate-y: 0.2vw;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -2138,16 +2153,16 @@ video {
   padding-bottom: 1.75rem;
 }
 
+.pb-\[1\.6vw\] {
+  padding-bottom: 1.6vw;
+}
+
 .pb-\[16px\] {
   padding-bottom: 16px;
 }
 
 .pb-\[1vw\] {
   padding-bottom: 1vw;
-}
-
-.pb-\[2\.6vw\] {
-  padding-bottom: 2.6vw;
 }
 
 .pb-\[21vw\] {
@@ -2232,18 +2247,6 @@ video {
 
 .pt-\[9\.5vw\] {
   padding-top: 9.5vw;
-}
-
-.pb-\[1\.5vw\] {
-  padding-bottom: 1.5vw;
-}
-
-.pb-\[1\.3vw\] {
-  padding-bottom: 1.3vw;
-}
-
-.pb-\[1\.6vw\] {
-  padding-bottom: 1.6vw;
 }
 
 .text-left {
@@ -2455,6 +2458,10 @@ video {
 }
 
 .leading-none {
+  line-height: 1;
+}
+
+.leading-\[1\] {
   line-height: 1;
 }
 
@@ -2899,10 +2906,6 @@ video {
     margin-top: 9px;
   }
 
-  .md\:aspect-\[9\/16\] {
-    aspect-ratio: 9/16;
-  }
-
   .md\:h-16 {
     height: 4rem;
   }
@@ -2969,10 +2972,6 @@ video {
 
   .md\:h-\[78px\] {
     height: 78px;
-  }
-
-  .md\:h-auto {
-    height: auto;
   }
 
   .md\:min-h-0 {
