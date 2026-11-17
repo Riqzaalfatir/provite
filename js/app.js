@@ -409,22 +409,13 @@
     // ===========================
     // 3. CHAT SUPPORT
     // ===========================
+    // ===========================
+    // 3. CHAT SUPPORT
+    // ===========================
     const supportLink = document.getElementById("rsvpChatSupport");
 
     if (supportLink) {
-      const phone = String(event.invitationWAUrl || "").replace(/\D/g, "");
-
-      if (phone) {
-        const guestName = guest?.name || "Guest";
-        const eventName = event.name || "Wedding Invitation";
-
-        const message =
-          `Hi Provite Team, i need help with my RSVP ` +
-          `with invitation name ${guestName} ` +
-          `for The Event: ${eventName}`;
-
-        supportLink.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-      }
+      supportLink.href = "https://api.whatsapp.com/send/?phone=6281998478131";
     }
 
     console.log("[BryanApp] RSVP basic data updated", {
