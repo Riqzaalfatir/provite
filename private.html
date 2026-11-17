@@ -1,103 +1,93 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Otomatis untuk localhost dan Provite -->
-  <base href="/" />
-  <script>
-    document.querySelector("base").href =
-      location.hostname === "provite.id" ||
-      location.hostname.endsWith(".provite.id")
-        ? "/events/bryanvanessa/"
-        : "/";
-  </script>
+    <!-- Otomatis untuk localhost dan Provite -->
+    <base href="/" />
+    <script>
+      document.querySelector("base").href =
+        location.hostname === "provite.id" ||
+        location.hostname.endsWith(".provite.id")
+          ? "/events/bryanvanessa/"
+          : "/";
+    </script>
 
-  <title>Invitation Only - Bryan & Vanessa</title>
+    <title>Invitation Only - Bryan & Vanessa</title>
 
-  <link rel="stylesheet" href="css/tailwind.css" />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;800&display=swap"
-  />
-</head>
+    <link rel="stylesheet" href="css/tailwind.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;800&display=swap"
+    />
+  </head>
 
-<body
-  class="min-h-screen"
-  style="
-    font-family: 'Noto Sans', sans-serif;
-    background: url('assets/images/private/wrong-pin.jpg')
-      center center / cover no-repeat;
-  "
->
-  <div
-    class="fixed inset-0 flex items-center justify-center bg-gray-900/50 p-4"
+  <body
+    class="min-h-screen"
+    style="
+      font-family: &quot;Noto Sans&quot;, sans-serif;
+      background: url(&quot;assets/images/private/wrong-pin.jpg&quot;) center
+        center / cover no-repeat;
+    "
   >
     <div
-      class="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-xl"
+      class="fixed inset-0 flex items-center justify-center bg-gray-900/50 p-4"
     >
       <div
-        class="flex flex-col items-center px-7 pb-7 pt-10 text-center"
+        class="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-xl"
       >
-        <div class="mb-3">
-          <img
-            src="assets/images/private/warning-circle.png"
-            alt="Warning"
-            class="h-auto w-[64px]"
-          />
+        <div class="flex flex-col items-center px-7 pb-7 pt-10 text-center">
+          <div class="mb-3">
+            <img
+              src="assets/images/private/warning-circle.png"
+              alt="Warning"
+              class="h-auto w-[64px]"
+            />
+          </div>
+
+          <h2 class="mb-5 text-[15px] font-extrabold text-[#605F5E]">
+            INVITATION ONLY
+          </h2>
+
+          <p class="mb-4 text-[12px] font-medium leading-[18px] text-[#605F5E]">
+            Undangan ini diperuntukkan bagi tamu yang terdaftar, mohon gunakan
+            link undangan yang sesuai. Jika membutuhkan bantuan, tim kami siap
+            membantu.
+          </p>
+
+          <p
+            class="mb-4 max-w-[300px] text-[12px] font-medium leading-[18px] text-[#605F5E]"
+          >
+            This invitation is intended for registered guests, please use the
+            assigned invitation link. If you need any assistance, our team is
+            here to help.
+          </p>
         </div>
 
-        <h2
-          class="mb-5 text-[15px] font-extrabold text-[#605F5E]"
-        >
-          INVITATION ONLY
-        </h2>
+        <div class="h-px bg-gray-200"></div>
 
-        <p
-          class="mb-4 text-[12px] font-medium leading-[18px] text-[#605F5E]"
+        <a
+          id="linkHelpdesk"
+          href="https://wa.me/6281998478131"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block py-5 text-center text-[14px] text-[#605F5E]"
         >
-          Undangan ini diperuntukkan bagi tamu yang
-          terdaftar, mohon gunakan link undangan yang
-          sesuai. Jika membutuhkan bantuan, tim kami
-          siap membantu.
-        </p>
-
-        <p
-          class="mb-4 max-w-[300px] text-[12px] font-medium leading-[18px] text-[#605F5E]"
-        >
-          This invitation is intended for registered
-          guests, please use the assigned invitation
-          link. If you need any assistance, our team
-          is here to help.
-        </p>
+          Chat with Our Team
+        </a>
       </div>
-
-      <div class="h-px bg-gray-200"></div>
-
-      <a
-        id="linkHelpdesk"
-        href="https://wa.me/6281998478131"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="block py-5 text-center text-[14px] text-[#605F5E]"
-      >
-        Chat with Our Team
-      </a>
     </div>
-  </div>
 
-  <script>
-    const helpdesk = document.getElementById("linkHelpdesk");
+    <script>
+      const helpdesk = document.getElementById("linkHelpdesk");
 
-    const message =
-      "Hi Provite Team, I need help with the invitation " +
-      "for Bryan & Vanessa.";
+      const message =
+        "Hi Provite Team, I need help with the invitation " +
+        "for Bryan & Vanessa.";
 
-    helpdesk.href =
-      "https://wa.me/6281998478131?text=" +
-      encodeURIComponent(message);
-  </script>
-</body>
+      helpdesk.href =
+        "https://wa.me/6281998478131?text=" + encodeURIComponent(message);
+    </script>
+  </body>
 </html>

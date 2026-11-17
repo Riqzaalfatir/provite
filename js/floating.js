@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const floating = document.getElementById("floatingButtons");
   const musicButton = document.getElementById("btnMusic");
@@ -35,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["style", "class"]
+      attributeFilter: ["style", "class"],
     });
   }
 
@@ -49,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     musicButton.setAttribute("aria-pressed", String(musicPlaying));
     musicButton.setAttribute(
       "aria-label",
-      musicPlaying ? "Pause music" : "Play music"
+      musicPlaying ? "Pause music" : "Play music",
     );
   });
 
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   rsvpButton.addEventListener("click", () => {
     document.getElementById("rsvp")?.scrollIntoView({
       behavior: "smooth",
-      block: "start"
+      block: "start",
     });
   });
 });

@@ -1,4 +1,3 @@
-
 /* ========================================
    BRYAN & VANESSA - HEADER NAVIGATION
 ======================================== */
@@ -15,9 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!toggle || !mobileMenu) return;
 
-  const menuItems = [
-    ...mobileMenu.querySelectorAll(".header-menu-item")
-  ];
+  const menuItems = [...mobileMenu.querySelectorAll(".header-menu-item")];
 
   let isOpen = false;
   let isBusy = false;
@@ -31,24 +28,20 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateIcon(open) {
     if (open) {
       topLine.style.top = "50%";
-      topLine.style.transform =
-        "translateY(-50%) rotate(45deg)";
+      topLine.style.transform = "translateY(-50%) rotate(45deg)";
 
       middleLine.style.opacity = "0";
-      middleLine.style.transform =
-        "translateY(-50%) scaleX(0)";
+      middleLine.style.transform = "translateY(-50%) scaleX(0)";
 
       bottomLine.style.bottom = "auto";
       bottomLine.style.top = "50%";
-      bottomLine.style.transform =
-        "translateY(-50%) rotate(-45deg)";
+      bottomLine.style.transform = "translateY(-50%) rotate(-45deg)";
     } else {
       topLine.style.top = "15%";
       topLine.style.transform = "none";
 
       middleLine.style.opacity = "1";
-      middleLine.style.transform =
-        "translateY(-50%) scaleX(1)";
+      middleLine.style.transform = "translateY(-50%) scaleX(1)";
 
       bottomLine.style.top = "auto";
       bottomLine.style.bottom = "15%";
@@ -74,21 +67,14 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.removeAttribute("inert");
     mobileMenu.setAttribute("aria-hidden", "false");
 
-    mobileMenu.classList.remove(
-      "opacity-0",
-      "pointer-events-none"
-    );
+    mobileMenu.classList.remove("opacity-0", "pointer-events-none");
 
-    mobileMenu.classList.add(
-      "opacity-100",
-      "pointer-events-auto"
-    );
+    mobileMenu.classList.add("opacity-100", "pointer-events-auto");
 
     updateIcon(true);
 
     menuItems.forEach((item, index) => {
-      item.style.transitionDelay =
-        `${150 + index * 60}ms`;
+      item.style.transitionDelay = `${150 + index * 60}ms`;
 
       requestAnimationFrame(() => {
         item.classList.add("is-visible");
@@ -115,8 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     isBusy = true;
 
     menuItems.forEach((item, index) => {
-      item.style.transitionDelay =
-        `${(menuItems.length - 1 - index) * 60}ms`;
+      item.style.transitionDelay = `${(menuItems.length - 1 - index) * 60}ms`;
 
       item.classList.remove("is-visible");
     });
@@ -132,15 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
     closeTimer = window.setTimeout(() => {
       updateIcon(false);
 
-      mobileMenu.classList.remove(
-        "opacity-100",
-        "pointer-events-auto"
-      );
+      mobileMenu.classList.remove("opacity-100", "pointer-events-auto");
 
-      mobileMenu.classList.add(
-        "opacity-0",
-        "pointer-events-none"
-      );
+      mobileMenu.classList.add("opacity-0", "pointer-events-none");
 
       toggle.setAttribute("aria-expanded", "false");
       toggle.setAttribute("aria-label", "Open menu");
@@ -149,8 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mobileMenu.setAttribute("inert", "");
         mobileMenu.setAttribute("aria-hidden", "true");
 
-        document.body.style.overflow =
-          previousOverflow;
+        document.body.style.overflow = previousOverflow;
 
         isOpen = false;
         isBusy = false;
@@ -175,18 +153,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // CLICK NAVIGATION
   // ===================================
   function navigateTo(targetId) {
-  const target = document.getElementById(targetId);
-  if (!target) return;
+    const target = document.getElementById(targetId);
+    if (!target) return;
 
-  // Langsung menuju section
-  target.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+    // Langsung menuju section
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
 
-  // Sekaligus tutup menu
-  closeMenu();
-}
+    // Sekaligus tutup menu
+    closeMenu();
+  }
 
   menuItems.forEach((item) => {
     item.addEventListener("click", (event) => {
@@ -194,8 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (isBusy) return;
 
-      const targetId =
-        item.getAttribute("href")?.replace("#", "");
+      const targetId = item.getAttribute("href")?.replace("#", "");
 
       if (targetId) {
         navigateTo(targetId);
@@ -206,39 +183,40 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===================================
   // DESKTOP NAVIGATION
   // ===================================
-  desktopNav?.querySelectorAll('a[href^="#"]')
-    .forEach((link) => {
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
+  desktopNav?.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
 
-        const targetId =
-          link.getAttribute("href").slice(1);
+      const targetId = link.getAttribute("href").slice(1);
 
-        document.getElementById(targetId)
-          ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
+      document.getElementById(targetId)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
       });
     });
+  });
 
   // ===================================
   // DESKTOP SCROLL BEHAVIOR
   // ===================================
-  window.addEventListener("scroll", () => {
-    if (!desktopNav) return;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!desktopNav) return;
 
-    const currentScrollY = window.scrollY;
-    const difference = currentScrollY - lastScrollY;
+      const currentScrollY = window.scrollY;
+      const difference = currentScrollY - lastScrollY;
 
-    if (currentScrollY <= 20 || difference < -2) {
-      desktopNav.style.transform = "translateY(0)";
-    } else if (difference > 2) {
-      desktopNav.style.transform = "translateY(-100%)";
-    }
+      if (currentScrollY <= 20 || difference < -2) {
+        desktopNav.style.transform = "translateY(0)";
+      } else if (difference > 2) {
+        desktopNav.style.transform = "translateY(-100%)";
+      }
 
-    lastScrollY = currentScrollY;
-  }, { passive: true });
+      lastScrollY = currentScrollY;
+    },
+    { passive: true },
+  );
 
   // ===================================
   // CLOSE ON ESC

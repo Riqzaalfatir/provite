@@ -1,4 +1,3 @@
-
 // ================= NOTIF MODAL =================
 
 // LINK WHATSAPP - ISI MANUAL NANTI
@@ -14,7 +13,6 @@ const NOTIF_ICONS = {
 // ================= CONFIG NOTIF =================
 
 const NOTIF_CONFIG = {
-
   rsvp_preview_hadir: {
     icon: "success",
     title: "RSVP PREVIEW",
@@ -22,9 +20,7 @@ const NOTIF_CONFIG = {
       "Simulasi konfirmasi kehadiran berhasil ditampilkan. Data tidak dikirim karena periode RSVP telah ditutup.",
     messageen:
       "Attendance confirmation preview completed. No RSVP was submitted because the RSVP period is closed.",
-    buttons: [
-      { label: "Close", action: "close" },
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 
   rsvp_preview_tidak_hadir: {
@@ -34,9 +30,7 @@ const NOTIF_CONFIG = {
       "Simulasi konfirmasi ketidakhadiran berhasil ditampilkan. Data tidak dikirim karena periode RSVP telah ditutup.",
     messageen:
       "Non-attendance confirmation preview completed. No RSVP was submitted because the RSVP period is closed.",
-    buttons: [
-      { label: "Close", action: "close" },
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 
   rsvp_closed: {
@@ -46,10 +40,7 @@ const NOTIF_CONFIG = {
       "Reservasi telah ditutup, terima kasih atas perhatian Anda. Jika ada pertanyaan, tim kami siap membantu.",
     messageen:
       "Reservations are now closed. Thank you for your attention. If you need any assistance, our team is here to help.",
-    buttons: [
-      { label: "Close", action: "close" },
-      
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 
   private_link: {
@@ -59,9 +50,7 @@ const NOTIF_CONFIG = {
       "Undangan ini diperuntukkan bagi tamu yang terdaftar; mohon gunakan tautan undangan yang sesuai.",
     messageen:
       "This invitation is intended for registered guests, please use the assigned invitation link.",
-    buttons: [
-      { label: "Chat with Our Team", action: "wa" },
-    ],
+    buttons: [{ label: "Chat with Our Team", action: "wa" }],
   },
 
   rsvp_confirmed_hadir: {
@@ -71,9 +60,7 @@ const NOTIF_CONFIG = {
       "Konfirmasi kehadiran Anda telah kami terima. Terima kasih atas respons Anda, kami menghargai partisipasi Anda.",
     messageen:
       "Your attendance has been confirmed, we look forward to welcoming you. Thank you for your confirmation.",
-    buttons: [
-      { label: "Close", action: "close" },
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 
   incomplete_rsvp: {
@@ -83,9 +70,7 @@ const NOTIF_CONFIG = {
       "Mohon lengkapi data RSVP sebelum melanjutkan. Beberapa informasi masih belum terisi.",
     messageen:
       "Please complete your RSVP details before proceeding. Some required information is still missing.",
-    buttons: [
-      { label: "Close", action: "close" },
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 
   session_required: {
@@ -95,9 +80,7 @@ const NOTIF_CONFIG = {
       "Pilihan sesi acara masih belum ditentukan. Mohon pilih minimal satu sesi yang akan dihadiri.",
     messageen:
       "Some session selections are still missing. Please select at least one session to attend.",
-    buttons: [
-      { label: "Close", action: "close" },
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 
   confirm_rsvp: {
@@ -133,9 +116,7 @@ const NOTIF_CONFIG = {
       "Konfirmasi ketidakhadiran Anda telah kami terima. Terima kasih atas konfirmasi Anda.",
     messageen:
       "Your response has been received. Thank you for your confirmation. We appreciate your response.",
-    buttons: [
-      { label: "Close", action: "close" },
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 
   incomplete_wishes: {
@@ -145,9 +126,7 @@ const NOTIF_CONFIG = {
       "Mohon lengkapi nama dan pesan sebelum mengirim. Beberapa informasi masih belum terisi.",
     messageen:
       "Please fill in your name and message before sending. Some required information is still missing.",
-    buttons: [
-      { label: "Close", action: "close" },
-    ],
+    buttons: [{ label: "Close", action: "close" }],
   },
 };
 
@@ -216,9 +195,7 @@ function showNotifModal(type, onConfirm = null) {
       "transition-colors duration-150",
       "md:text-[21px]",
       button.action === "close" ? "font-normal" : "font-bold",
-      index < config.buttons.length - 1
-        ? "border-r border-[#E0E0D8]"
-        : "",
+      index < config.buttons.length - 1 ? "border-r border-[#E0E0D8]" : "",
     ].join(" ");
 
     // ID kompatibel dengan markup lama
@@ -236,11 +213,7 @@ function showNotifModal(type, onConfirm = null) {
           return;
         }
 
-        window.open(
-          NOTIF_WA_LINK,
-          "_blank",
-          "noopener,noreferrer"
-        );
+        window.open(NOTIF_WA_LINK, "_blank", "noopener,noreferrer");
       }
 
       if (button.action === "confirm") {

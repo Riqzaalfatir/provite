@@ -1,4 +1,3 @@
-
 /* ================= HERO VIDEO ================= */
 
 document.addEventListener("DOMContentLoaded", () => {

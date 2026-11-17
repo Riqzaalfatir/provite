@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const lightbox = document.getElementById("galleryLightbox");
 
@@ -32,16 +31,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!track) return;
 
-   let photos = [];
+    let photos = [];
 
-function readPhotos() {
-  photos = Array.from(
-    track.querySelectorAll(".gallery-slide img")
-  ).map((img) => ({
-    src: img.getAttribute("src"),
-    alt: img.getAttribute("alt") || "Wedding photo"
-  }));
-}
+    function readPhotos() {
+      photos = Array.from(track.querySelectorAll(".gallery-slide img")).map(
+        (img) => ({
+          src: img.getAttribute("src"),
+          alt: img.getAttribute("alt") || "Wedding photo",
+        }),
+      );
+    }
 
     let currentIndex = 0;
     let autoplayTimer = null;
@@ -49,11 +48,9 @@ function readPhotos() {
     let swiped = false;
 
     function goToSlide(index) {
-      currentIndex =
-        (index + photos.length) % photos.length;
+      currentIndex = (index + photos.length) % photos.length;
 
-      track.style.transform =
-        `translateX(-${currentIndex * 100}%)`;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
 
     function stopAutoplay() {
@@ -76,39 +73,35 @@ function readPhotos() {
     }
 
     function refreshGallery() {
-  stopAutoplay();
-  readPhotos();
+      stopAutoplay();
+      readPhotos();
 
-  currentIndex = 0;
-  track.style.transform = "translateX(0%)";
+      currentIndex = 0;
+      track.style.transform = "translateX(0%)";
 
-  if (photos.length > 0) {
-    goToSlide(0);
-    startAutoplay();
-  }
+      if (photos.length > 0) {
+        goToSlide(0);
+        startAutoplay();
+      }
 
-  console.log(
-    `[Gallery] ${trackId}: ${photos.length} foto`
-  );
-}
+      console.log(`[Gallery] ${trackId}: ${photos.length} foto`);
+    }
 
     // Klik foto untuk membuka Lightbox
-   track.addEventListener("click", (event) => {
-  if (swiped) return;
+    track.addEventListener("click", (event) => {
+      if (swiped) return;
 
-  const slide = event.target.closest(".gallery-slide");
-  if (!slide || !track.contains(slide)) return;
+      const slide = event.target.closest(".gallery-slide");
+      if (!slide || !track.contains(slide)) return;
 
-  const slides = Array.from(
-    track.querySelectorAll(".gallery-slide")
-  );
+      const slides = Array.from(track.querySelectorAll(".gallery-slide"));
 
-  const index = slides.indexOf(slide);
+      const index = slides.indexOf(slide);
 
-  if (index >= 0) {
-    openLightbox(photos, index);
-  }
-});
+      if (index >= 0) {
+        openLightbox(photos, index);
+      }
+    });
 
     // Swipe mobile
     track.addEventListener(
@@ -117,14 +110,13 @@ function readPhotos() {
         touchStartX = event.changedTouches[0].screenX;
         swiped = false;
       },
-      { passive: true }
+      { passive: true },
     );
 
     track.addEventListener(
       "touchend",
       (event) => {
-        const touchEndX =
-          event.changedTouches[0].screenX;
+        const touchEndX = event.changedTouches[0].screenX;
 
         const distance = touchEndX - touchStartX;
 
@@ -144,16 +136,16 @@ function readPhotos() {
           }, 350);
         }
       },
-      { passive: true }
+      { passive: true },
     );
-refreshGallery();
+    refreshGallery();
 
-galleries.push({
-  trackId,
-  startAutoplay,
-  stopAutoplay,
-  refreshGallery
-});
+    galleries.push({
+      trackId,
+      startAutoplay,
+      stopAutoplay,
+      refreshGallery,
+    });
   }
 
   // ==========================
@@ -161,11 +153,9 @@ galleries.push({
   // ==========================
 
   function applyZoom() {
-    lightboxImage.style.transform =
-      `scale(${zoomScale})`;
+    lightboxImage.style.transform = `scale(${zoomScale})`;
 
-    lightboxImage.style.cursor =
-      zoomScale > 1 ? "zoom-out" : "zoom-in";
+    lightboxImage.style.cursor = zoomScale > 1 ? "zoom-out" : "zoom-in";
   }
 
   function updateLightbox() {
@@ -176,20 +166,16 @@ galleries.push({
     lightboxImage.src = photo.src;
     lightboxImage.alt = photo.alt;
 
-    counter.textContent =
-      `${lightboxIndex + 1} / ${activePhotos.length}`;
+    counter.textContent = `${lightboxIndex + 1} / ${activePhotos.length}`;
 
     zoomScale = 1;
     applyZoom();
 
-    thumbnails.querySelectorAll(
-      ".gallery-thumbnail"
-    ).forEach((thumbnail, index) => {
-      thumbnail.classList.toggle(
-        "active",
-        index === lightboxIndex
-      );
-    });
+    thumbnails
+      .querySelectorAll(".gallery-thumbnail")
+      .forEach((thumbnail, index) => {
+        thumbnail.classList.toggle("active", index === lightboxIndex);
+      });
 
     thumbnails.children[lightboxIndex]?.scrollIntoView({
       behavior: "smooth",
@@ -233,13 +219,9 @@ galleries.push({
 
     lightbox.showModal();
 
-    document.documentElement.classList.add(
-      "gallery-lightbox-open"
-    );
+    document.documentElement.classList.add("gallery-lightbox-open");
 
-    document.body.classList.add(
-      "gallery-lightbox-open"
-    );
+    document.body.classList.add("gallery-lightbox-open");
 
     updateLightbox();
   }
@@ -254,20 +236,15 @@ galleries.push({
     if (!activePhotos.length) return;
 
     lightboxIndex =
-      (lightboxIndex + direction + activePhotos.length) %
-      activePhotos.length;
+      (lightboxIndex + direction + activePhotos.length) % activePhotos.length;
 
     updateLightbox();
   }
 
   lightbox.addEventListener("close", () => {
-    document.documentElement.classList.remove(
-      "gallery-lightbox-open"
-    );
+    document.documentElement.classList.remove("gallery-lightbox-open");
 
-    document.body.classList.remove(
-      "gallery-lightbox-open"
-    );
+    document.body.classList.remove("gallery-lightbox-open");
 
     window.scrollTo({
       top: savedScrollY,
@@ -332,24 +309,21 @@ galleries.push({
   lightboxImage.addEventListener(
     "touchstart",
     (event) => {
-      lightboxTouchX =
-        event.changedTouches[0].screenX;
+      lightboxTouchX = event.changedTouches[0].screenX;
     },
-    { passive: true }
+    { passive: true },
   );
 
   lightboxImage.addEventListener(
     "touchend",
     (event) => {
-      const distance =
-        event.changedTouches[0].screenX -
-        lightboxTouchX;
+      const distance = event.changedTouches[0].screenX - lightboxTouchX;
 
       if (Math.abs(distance) > 50) {
         changeLightboxSlide(distance < 0 ? 1 : -1);
       }
     },
-    { passive: true }
+    { passive: true },
   );
 
   // ==========================
@@ -359,9 +333,9 @@ galleries.push({
   initGallery("galleryTrack");
   initGallery("galleryTrack2");
 
- window.addEventListener("bryan:gallery-updated", () => {
-  galleries.forEach((gallery) => {
-    gallery.refreshGallery();
+  window.addEventListener("bryan:gallery-updated", () => {
+    galleries.forEach((gallery) => {
+      gallery.refreshGallery();
+    });
   });
-});
 });

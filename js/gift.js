@@ -1,4 +1,3 @@
-
 (function () {
   const resetTimers = new WeakMap();
 
@@ -7,8 +6,7 @@
 
     textarea.value = text;
     textarea.setAttribute("readonly", "");
-    textarea.style.cssText =
-      "position:fixed;top:0;left:0;opacity:0";
+    textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0";
 
     document.body.appendChild(textarea);
     textarea.select();
@@ -41,26 +39,19 @@
 
   // Event delegation: mendukung kartu statis dan kartu dari API.
   document.addEventListener("click", async (event) => {
-    const button = event.target.closest(
-      "#btnCopy, [data-gift-copy]"
-    );
+    const button = event.target.closest("#btnCopy, [data-gift-copy]");
 
     if (!button) return;
 
-    const card = button.closest(
-      "#giftCard, [data-gift-extra]"
-    );
+    const card = button.closest("#giftCard, [data-gift-extra]");
 
     if (!card) return;
 
-    const numberElement = card.querySelector(
-      "#giftNumber, [data-gift-number]"
-    );
+    const numberElement = card.querySelector("#giftNumber, [data-gift-number]");
 
     if (!numberElement) return;
 
-    const number = numberElement.textContent
-      .replace(/[^\d]/g, "");
+    const number = numberElement.textContent.replace(/[^\d]/g, "");
 
     if (!number) return;
 
@@ -74,7 +65,7 @@
       button,
       setTimeout(() => {
         button.textContent = "Copy";
-      }, 1500)
+      }, 1500),
     );
   });
 })();

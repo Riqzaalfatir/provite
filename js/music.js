@@ -1,4 +1,3 @@
-
 (function () {
   const MEDIA_BASE = "https://media.twinklebook.com/";
 
@@ -17,20 +16,14 @@
     pauseIcon.classList.toggle("hidden", !playing);
 
     button.setAttribute("aria-pressed", String(playing));
-    button.setAttribute(
-      "aria-label",
-      playing ? "Pause music" : "Play music"
-    );
+    button.setAttribute("aria-label", playing ? "Pause music" : "Play music");
   }
 
   function getMusicURL() {
     const content = window.BryanApp?.state?.dataContent;
     if (!content) return "";
 
-    const raw =
-      content.backgroundSoundData?.url ||
-      content.songList ||
-      "";
+    const raw = content.backgroundSoundData?.url || content.songList || "";
 
     if (typeof raw !== "string" || !raw.trim()) {
       return "";
@@ -127,13 +120,11 @@
     audio.addEventListener("pause", () => setIcon(false));
     audio.addEventListener("ended", () => setIcon(false));
 
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibility
-    );
+    document.addEventListener("visibilitychange", handleVisibility);
 
     // Tombol opening pada invitation.html.
-    document.getElementById("btnOpenInvitation")
+    document
+      .getElementById("btnOpenInvitation")
       ?.addEventListener("click", () => {
         invitationOpened = true;
         loadMusic();
@@ -159,6 +150,6 @@
   window.BryanMusic = {
     play: playMusic,
     pause: pauseMusic,
-    load: loadMusic
+    load: loadMusic,
   };
 })();
