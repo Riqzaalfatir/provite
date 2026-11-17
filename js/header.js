@@ -1,3 +1,4 @@
+
 /* ========================================
    BRYAN & VANESSA - HEADER NAVIGATION
 ======================================== */
@@ -14,13 +15,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!toggle || !mobileMenu) return;
 
-  const menuItems = [...mobileMenu.querySelectorAll(".header-menu-item")];
+  const menuItems = [
+    ...mobileMenu.querySelectorAll(".header-menu-item"),
+  ];
 
   let isOpen = false;
   let isBusy = false;
   let lastScrollY = window.scrollY;
   let closeTimer = null;
+  let openTimer = null;
   let previousOverflow = "";
+
+  const MENU_DURATION = 0;
 
   // ===================================
   // HAMBURGER / X
@@ -28,20 +34,24 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateIcon(open) {
     if (open) {
       topLine.style.top = "50%";
-      topLine.style.transform = "translateY(-50%) rotate(45deg)";
+      topLine.style.transform =
+        "translateY(-50%) rotate(45deg)";
 
       middleLine.style.opacity = "0";
-      middleLine.style.transform = "translateY(-50%) scaleX(0)";
+      middleLine.style.transform =
+        "translateY(-50%) scaleX(0)";
 
       bottomLine.style.bottom = "auto";
       bottomLine.style.top = "50%";
-      bottomLine.style.transform = "translateY(-50%) rotate(-45deg)";
+      bottomLine.style.transform =
+        "translateY(-50%) rotate(-45deg)";
     } else {
       topLine.style.top = "15%";
       topLine.style.transform = "none";
 
       middleLine.style.opacity = "1";
-      middleLine.style.transform = "translateY(-50%) scaleX(1)";
+      middleLine.style.transform =
+        "translateY(-50%) scaleX(1)";
 
       bottomLine.style.top = "auto";
       bottomLine.style.bottom = "15%";
@@ -50,10 +60,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===================================
+  // SMOOTH SCROLL
+  // ===================================
+  function scrollToSection(targetId) {
+    const target = document.getElementById(targetId);
+
+    if (!target) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    target.scrollIntoView({
+      behavior: reduceMotion ? "instant" : "smooth",
+      block: "start",
+    });
+  }
+
+  // ===================================
   // OPEN MENU
   // ===================================
   function openMenu() {
     if (isOpen || isBusy) return;
+
+    clearTimeout(closeTimer);
+    clearTimeout(openTimer);
 
     isOpen = true;
     isBusy = true;
@@ -67,9 +98,15 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.removeAttribute("inert");
     mobileMenu.setAttribute("aria-hidden", "false");
 
-    mobileMenu.classList.remove("opacity-0", "pointer-events-none");
+    mobileMenu.classList.remove(
+      "opacity-0",
+      "pointer-events-none"
+    );
 
-    mobileMenu.classList.add("opacity-100", "pointer-events-auto");
+    mobileMenu.classList.add(
+      "opacity-100",
+      "pointer-events-auto"
+    );
 
     updateIcon(true);
 
@@ -77,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
       item.style.transitionDelay = `${150 + index * 60}ms`;
 
       requestAnimationFrame(() => {
-        item.classList.add("is-visible");
+        if (isOpen) item.classList.add("is-visible");
       });
     });
 
@@ -87,7 +124,9 @@ document.addEventListener("DOMContentLoaded", () => {
       hint.classList.add("opacity-100");
     }
 
-    window.setTimeout(() => {
+    // Animasi masuk selesai.
+    // Item navigasi tetap bisa diklik selama animasi.
+    openTimer = window.setTimeout(() => {
       isBusy = false;
     }, 1050);
   }
@@ -95,14 +134,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===================================
   // CLOSE MENU
   // ===================================
-  function closeMenu() {
-    if (!isOpen || isBusy) return;
+  function closeMenu(onClosed = null) {
+    if (!isOpen) return;
+
+    clearTimeout(closeTimer);
+    clearTimeout(openTimer);
 
     isBusy = true;
 
-    menuItems.forEach((item, index) => {
-      item.style.transitionDelay = `${(menuItems.length - 1 - index) * 60}ms`;
-
+    menuItems.forEach((item) => {
+      item.style.transitionDelay = "0ms";
       item.classList.remove("is-visible");
     });
 
@@ -112,32 +153,38 @@ document.addEventListener("DOMContentLoaded", () => {
       hint.classList.add("opacity-0");
     }
 
-    clearTimeout(closeTimer);
+    mobileMenu.classList.remove(
+      "opacity-100",
+      "pointer-events-auto"
+    );
+
+    mobileMenu.classList.add(
+      "opacity-0",
+      "pointer-events-none"
+    );
+
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Open menu");
+
+    updateIcon(false);
 
     closeTimer = window.setTimeout(() => {
-      updateIcon(false);
+      mobileMenu.setAttribute("inert", "");
+      mobileMenu.setAttribute("aria-hidden", "true");
 
-      mobileMenu.classList.remove("opacity-100", "pointer-events-auto");
+      document.body.style.overflow = previousOverflow;
 
-      mobileMenu.classList.add("opacity-0", "pointer-events-none");
+      isOpen = false;
+      isBusy = false;
 
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.setAttribute("aria-label", "Open menu");
-
-      window.setTimeout(() => {
-        mobileMenu.setAttribute("inert", "");
-        mobileMenu.setAttribute("aria-hidden", "true");
-
-        document.body.style.overflow = previousOverflow;
-
-        isOpen = false;
-        isBusy = false;
-      }, 450);
-    }, 850);
+      if (typeof onClosed === "function") {
+        requestAnimationFrame(onClosed);
+      }
+    }, MENU_DURATION);
   }
 
   // ===================================
-  // TOGGLE MENU
+  // HAMBURGER TOGGLE
   // ===================================
   toggle.addEventListener("click", () => {
     if (isBusy) return;
@@ -150,51 +197,52 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===================================
-  // CLICK NAVIGATION
+  // MOBILE NAVIGATION
   // ===================================
-  function navigateTo(targetId) {
-    const target = document.getElementById(targetId);
-    if (!target) return;
-
-    // Langsung menuju section
-    target.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-
-    // Sekaligus tutup menu
-    closeMenu();
-  }
-
   menuItems.forEach((item) => {
     item.addEventListener("click", (event) => {
       event.preventDefault();
 
-      if (isBusy) return;
+      if (!isOpen) return;
 
-      const targetId = item.getAttribute("href")?.replace("#", "");
-
-      if (targetId) {
-        navigateTo(targetId);
+      // Hindari pemrosesan berulang saat menu menutup
+      if (closeTimer !== null && isBusy && !openTimer) {
+        return;
       }
+
+      const targetId = item
+        .getAttribute("href")
+        ?.replace("#", "");
+
+      if (!targetId) return;
+
+      // Hentikan timer animasi masuk
+      clearTimeout(openTimer);
+      openTimer = null;
+
+      // Tutup overlay, kemudian smooth scroll
+      closeMenu(() => {
+        scrollToSection(targetId);
+      });
     });
   });
 
   // ===================================
   // DESKTOP NAVIGATION
   // ===================================
-  desktopNav?.querySelectorAll('a[href^="#"]').forEach((link) => {
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
+  desktopNav
+    ?.querySelectorAll('a[href^="#"]')
+    .forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
 
-      const targetId = link.getAttribute("href").slice(1);
+        const targetId = link
+          .getAttribute("href")
+          .slice(1);
 
-      document.getElementById(targetId)?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
+        scrollToSection(targetId);
       });
     });
-  });
 
   // ===================================
   // DESKTOP SCROLL BEHAVIOR
@@ -215,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       lastScrollY = currentScrollY;
     },
-    { passive: true },
+    { passive: true }
   );
 
   // ===================================
