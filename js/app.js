@@ -406,24 +406,38 @@
       }
     }
 
-    // ===========================
-    // 3. CHAT SUPPORT
-    // ===========================
-    // ===========================
-    // 3. CHAT SUPPORT
-    // ===========================
-    const supportLink = document.getElementById("rsvpChatSupport");
+    
 
-    if (supportLink) {
-      supportLink.href = "https://api.whatsapp.com/send/?phone=6281998478131";
-    }
+  // ===========================
+  // 3. CHAT SUPPORT
+  // ===========================
+  const supportLink = document.getElementById("rsvpChatSupport");
 
-    console.log("[BryanApp] RSVP basic data updated", {
-      guestName: guest?.name,
-      deadline,
-      eventId: event.id,
-    });
+  if (supportLink) {
+    // Nomor WhatsApp Support tetap
+    const phone = "6281998478131";
+
+    // Data dinamis dari API
+    const guestName = guest?.name?.trim() || "Guest";
+
+    const eventName =
+      event.name?.trim() ||
+      `The Wedding of ${event.groomName || "Bryan"} and ${event.brideName || "Vanessa"}`;
+
+    // Pesan WhatsApp otomatis berdasarkan data API
+    const message =
+      `Hi Provite Team, I need help with my RSVP ` +
+      `with invitation name ${guestName} ` +
+      `for The Event: ${eventName}`;
+
+    supportLink.href =
+      `https://api.whatsapp.com/send/?phone=${phone}` +
+      `&text=${encodeURIComponent(message)}`;
+
+    supportLink.target = "_blank";
+    supportLink.rel = "noopener noreferrer";
   }
+
 
   function renderWeddingGift() {
     const electronicGivings = state.dataContent?.electronicGivings;
