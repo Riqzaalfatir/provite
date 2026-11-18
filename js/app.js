@@ -373,7 +373,7 @@
     // ===========================
     const deadlineElement = document.getElementById("rsvpDeadline");
 
-    const deadline = guest?.closeRSVPDate || event.closeRSVPDate;
+    const deadline = event?.closeRSVPDate;
 
     if (deadlineElement && deadline) {
       // Baca bagian tanggal kalender dari API

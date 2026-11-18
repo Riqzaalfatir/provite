@@ -1078,35 +1078,58 @@ window.BryanRSVP = (function () {
     }
   }
 
-  function renderGuestTexts() {
-    const guest = s.guestData || {};
-    const name = guest.name || s.paramUrl;
-    if (name) $("#rsvpGuestName").textContent = name;
-    const date = guest.closeRSVPDate || s.data?.dataEvent?.closeRSVPDate;
-    if (date) {
-      const parsed = new Date(date);
-      if (!isNaN(parsed.getTime())) {
-        $("#rsvpDueDate").textContent = parsed.toLocaleDateString("en-GB", {
+
+function renderGuestTexts() {
+  const guest = s.guestData || {};
+  const name = guest.name || s.paramUrl;
+
+  if (name) {
+    $("#rsvpGuestName").textContent = name;
+  }
+
+  // Prioritaskan tanggal penutupan dari Event API
+  const date = s.data?.dataEvent?.closeRSVPDate;
+
+  if (date) {
+    const match = String(date).match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+    if (match) {
+      const [, year, month, day] = match;
+
+      const parsed = new Date(
+        Date.UTC(Number(year), Number(month) - 1, Number(day))
+      );
+
+      $("#rsvpDueDate").textContent =
+        new Intl.DateTimeFormat("en-GB", {
           day: "numeric",
           month: "long",
           year: "numeric",
-        });
-      }
+          timeZone: "UTC"
+        }).format(parsed);
     }
   }
+}
 
-  function isClosed(event) {
-    if (event?.isAllowedRSVP === false) return true;
-    if (!event?.closeRSVPDate) return false;
-    const raw = String(event.closeRSVPDate);
-    const normalized = /(?:Z|[+-]\d{2}:\d{2})$/i.test(raw)
-      ? raw
-      : raw + "+07:00";
-    const deadline = new Date(normalized);
-    return (
-      Number.isFinite(deadline.getTime()) && Date.now() > deadline.getTime()
-    );
-  }
+
+
+function isClosed(event) {
+  if (!event?.closeRSVPDate) return false;
+
+  const raw = String(event.closeRSVPDate);
+
+  const normalized = /(?:Z|[+-]\d{2}:\d{2})$/i.test(raw)
+    ? raw
+    : raw + "+07:00";
+
+  const deadline = new Date(normalized);
+
+  return (
+    Number.isFinite(deadline.getTime()) &&
+    Date.now() > deadline.getTime()
+  );
+}
+
 
   // Adaptasi HTML: tidak mengubah class ukuran, jarak, warna, atau ornamen yang ada.
   function prepareBryanDOM() {
