@@ -2594,10 +2594,6 @@ video {
   font-style: italic;
 }
 
-.leading-\[0px\] {
-  line-height: 0px;
-}
-
 .leading-\[1\.2\] {
   line-height: 1.2;
 }
@@ -2626,12 +2622,12 @@ video {
   line-height: 10.26vw;
 }
 
-.leading-\[140\%\] {
-  line-height: 140%;
+.leading-\[13px\] {
+  line-height: 13px;
 }
 
-.leading-\[15\.31px\] {
-  line-height: 15.31px;
+.leading-\[140\%\] {
+  line-height: 140%;
 }
 
 .leading-\[18px\] {
@@ -2684,6 +2680,10 @@ video {
 
 .leading-tight {
   line-height: 1.25;
+}
+
+.leading-\[15px\] {
+  line-height: 15px;
 }
 
 .tracking-\[0\.02em\] {
