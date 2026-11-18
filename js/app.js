@@ -333,6 +333,7 @@
         img.alt = `Bryan and Vanessa - Photo ${index + 1}`;
         img.className = "h-full w-full select-none object-cover";
         img.draggable = false;
+        
 
         img.onerror = function () {
           this.onerror = null;
