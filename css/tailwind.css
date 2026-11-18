@@ -2622,10 +2622,6 @@ video {
   line-height: 10.26vw;
 }
 
-.leading-\[13px\] {
-  line-height: 13px;
-}
-
 .leading-\[140\%\] {
   line-height: 140%;
 }
@@ -2638,8 +2634,16 @@ video {
   line-height: 1;
 }
 
+.leading-\[3\.33vw\] {
+  line-height: 3.33vw;
+}
+
 .leading-\[3\.59vw\] {
   line-height: 3.59vw;
+}
+
+.leading-\[3\.85vw\] {
+  line-height: 3.85vw;
 }
 
 .leading-\[4\.64vw\] {
@@ -2682,8 +2686,8 @@ video {
   line-height: 1.25;
 }
 
-.leading-\[15px\] {
-  line-height: 15px;
+.leading-\[1\.85vw\] {
+  line-height: 1.85vw;
 }
 
 .tracking-\[0\.02em\] {
