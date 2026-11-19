@@ -47,6 +47,11 @@
    GALLERY PORTRAIT & LANDSCAPE
    ========================== */
 
+
+/* ==========================
+   GALLERY - TWINKLEBOOK STYLE
+   ========================== */
+
 .gallery-track {
   display: flex;
   width: 100%;
@@ -58,21 +63,37 @@
 
 .gallery-slide {
   position: relative;
-  flex: 0 0 100%;
-  width: 100%;
+  flex: 0 0 auto;
   height: 100%;
   overflow: hidden;
   cursor: zoom-in;
 }
 
-/* FOTO PORTRAIT */
 .gallery-slide img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
 }
+
+.gallery-landscape-visual {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  cursor: zoom-in;
+}
+
+/* Foto samping lebih gelap seperti referensi */
+.gallery-slide-dim {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
 
 
 /* ==========================

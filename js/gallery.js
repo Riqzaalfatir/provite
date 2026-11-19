@@ -26,251 +26,375 @@ document.addEventListener("DOMContentLoaded", () => {
   // SETUP GALLERY 1 & 2
   // ==========================
 
-  function initGallery(trackId) {
-    const track = document.getElementById(trackId);
-    if (!track) return;
 
-    const viewport = track.parentElement;
+function initGallery(trackId) {
+  const track = document.getElementById(trackId);
+  if (!track) return;
 
-    let photos = [];
-    let slides = [];
-    let currentIndex = 0;
-    let autoplayTimer = null;
-    let resizeTimer = null;
-    let touchStartX = 0;
-    let swiped = false;
-    let refreshToken = 0;
+  const viewport = track.parentElement;
 
-    // =====================================
-    // 1. BACA FOTO ASLI
-    // =====================================
-    function readPhotos() {
-      const originalImages = [
-        ...track.querySelectorAll(
-          ".gallery-slide:not([data-gallery-generated]) img",
-        ),
-      ];
+  let photos = [];
+  let slides = [];
+  let currentIndex = 0;
+  let autoplayTimer = null;
+  let resizeTimer = null;
+  let refreshToken = 0;
+  let touchStartX = 0;
+  let swiped = false;
 
-      if (originalImages.length > 0) {
-        photos = originalImages.map((img) => ({
-          src: img.getAttribute("src"),
-          alt: img.getAttribute("alt") || "Wedding photo",
-          ratio: null,
-        }));
-      }
-    }
+  const FALLBACK = "assets/images/gallery2/foto1.webp";
 
-    // =====================================
-    // 2. DETEKSI RASIO FOTO
-    // =====================================
-    function detectRatio(photo) {
-      return new Promise((resolve) => {
-        const probe = new Image();
+  // =====================================
+  // 1. BACA FOTO DARI HTML / API
+  // =====================================
+  function readPhotos() {
+    const images = [
+      ...track.querySelectorAll(
+        ".gallery-slide:not([data-gallery-generated]) img"
+      )
+    ];
 
-        probe.onload = () => {
-          resolve(
-            probe.naturalHeight > 0
-              ? probe.naturalWidth / probe.naturalHeight
-              : 0.65,
-          );
-        };
+    if (!images.length) return;
 
-        probe.onerror = () => resolve(0.65);
-        probe.src = photo.src;
-      });
-    }
+    photos = images.map((img) => ({
+      src: img.getAttribute("src"),
+      alt: img.alt || "Wedding photo",
+      ratio: 0.6
+    }));
+  }
 
-    // =====================================
-    // 3. BUAT PANEL GALLERY
-    // =====================================
+  // =====================================
+  // 2. DETEKSI RASIO FOTO ASLI
+  // =====================================
+  function detectPhoto(photo) {
+    return new Promise((resolve) => {
+      const probe = new Image();
 
-    function createPanel(photo, photoIndex) {
-      const slide = document.createElement("div");
+      probe.onload = () => {
+        resolve({
+          ...photo,
+          ratio: probe.naturalHeight
+            ? probe.naturalWidth / probe.naturalHeight
+            : 0.6
+        });
+      };
 
-      slide.className = "gallery-slide";
-      slide.dataset.galleryGenerated = "true";
-      slide.dataset.photoIndex = String(photoIndex);
+      probe.onerror = () => {
+        if (probe.src.endsWith(FALLBACK)) {
+          resolve({ ...photo, ratio: 0.6 });
+        } else {
+          probe.src = FALLBACK;
+          photo.src = FALLBACK;
+        }
+      };
 
-      const width = viewport.clientWidth;
+      probe.src = photo.src;
+    });
+  }
 
-      slide.style.width = `${width}px`;
-      slide.style.flex = `0 0 ${width}px`;
-      slide.style.height = "100%";
+  // =====================================
+  // 3. BUAT PANEL FOTO
+  // =====================================
+  function createPanel(photo, photoIndex, part, height) {
+    const isLandscape = photo.ratio > 1;
 
+   const PORTRAIT_RATIO = 2 / 3.5;
+
+const width = isLandscape
+  ? (height * photo.ratio) / 3
+  : height * PORTRAIT_RATIO;
+
+    const slide = document.createElement("div");
+
+    slide.className = "gallery-slide";
+    slide.dataset.galleryGenerated = "true";
+    slide.dataset.photoIndex = String(photoIndex);
+
+    slide.style.width = `${Math.ceil(width)}px`;
+    slide.style.flex = `0 0 ${Math.ceil(width)}px`;
+    slide.style.height = "100%";
+
+    if (isLandscape) {
+      const visual = document.createElement("div");
+
+      visual.className = "gallery-landscape-visual";
+
+      visual.style.backgroundImage = `url("${photo.src}")`;
+      visual.style.backgroundSize = "300% 100%";
+      visual.style.backgroundPosition = `${part * 50}% center`;
+      visual.style.backgroundRepeat = "no-repeat";
+
+      slide.appendChild(visual);
+    } else {
       const img = document.createElement("img");
 
       img.src = photo.src;
       img.alt = photo.alt;
       img.draggable = false;
-
-      img.onerror = function () {
-        this.onerror = null;
-        this.src = "assets/images/gallery2/foto1.webp";
-      };
-
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = photo.ratio > 1 ? "contain" : "cover";
-      img.style.objectPosition = "center";
+      img.style.objectFit = "cover";
 
       slide.appendChild(img);
-
-      return slide;
     }
 
-    // =====================================
-    // 4. RENDER SLIDE PORTRAIT / LANDSCAPE
-    // =====================================
-    function buildSlides() {
-      const fragment = document.createDocumentFragment();
+    const dim = document.createElement("div");
+    dim.className = "gallery-slide-dim";
 
-      slides = [];
+    slide.appendChild(dim);
 
-      photos.forEach((photo, photoIndex) => {
-        fragment.appendChild(createPanel(photo, photoIndex));
-        slides.push({ photoIndex });
-      });
+    return slide;
+  }
 
-      track.replaceChildren(fragment);
-    }
+  // =====================================
+  // 4. BUAT SLIDE + LOOP
+  // =====================================
+  function buildSlides() {
+    const height = viewport.clientHeight || 546;
 
-    // =====================================
-    // 5. GESER SLIDE KE TENGAH
-    // =====================================
-    function goToSlide(index) {
-      if (!slides.length) return;
+    const originalSlides = [];
 
-      currentIndex = (index + slides.length) % slides.length;
-
-      const slideWidth = viewport.clientWidth;
-
-      track.style.transform = `translate3d(-${currentIndex * slideWidth}px, 0, 0)`;
-    }
-
-    // =====================================
-    // 6. AUTOPLAY
-    // =====================================
-    function stopAutoplay() {
-      if (autoplayTimer !== null) {
-        clearInterval(autoplayTimer);
-        autoplayTimer = null;
-      }
-    }
-
-    function startAutoplay() {
-      stopAutoplay();
-
-      if (slides.length <= 1) return;
-
-      autoplayTimer = setInterval(() => {
-        if (!lightbox.open && !document.hidden) {
-          goToSlide(currentIndex + 1);
+    photos.forEach((photo, photoIndex) => {
+      if (photo.ratio > 1) {
+        for (let part = 0; part < 3; part++) {
+          originalSlides.push({ photoIndex, part });
         }
-      }, AUTOPLAY_DELAY);
-    }
-
-    // =====================================
-    // 7. REFRESH DARI API
-    // =====================================
-    async function refreshGallery() {
-      const token = ++refreshToken;
-
-      stopAutoplay();
-      readPhotos();
-
-      if (!photos.length) return;
-
-      const ratios = await Promise.all(photos.map(detectRatio));
-
-      if (token !== refreshToken) return;
-
-      photos.forEach((photo, index) => {
-        photo.ratio = ratios[index];
-      });
-
-      buildSlides();
-
-      currentIndex = 0;
-
-      requestAnimationFrame(() => {
-        if (token !== refreshToken) return;
-
-        goToSlide(currentIndex);
-        startAutoplay();
-      });
-    }
-
-    // =====================================
-    // 8. KLIK FOTO -> LIGHTBOX ASLI
-    // =====================================
-    track.addEventListener("click", (event) => {
-      if (swiped) return;
-
-      const slide = event.target.closest(".gallery-slide");
-      if (!slide || !track.contains(slide)) return;
-
-      const photoIndex = Number(slide.dataset.photoIndex);
-
-      if (Number.isInteger(photoIndex) && photos[photoIndex]) {
-        openLightbox(photos, photoIndex);
+      } else {
+        originalSlides.push({ photoIndex, part: null });
       }
     });
 
-    // =====================================
-    // 9. SWIPE MOBILE
-    // =====================================
-    track.addEventListener(
-      "touchstart",
-      (event) => {
-        touchStartX = event.changedTouches[0].screenX;
-        swiped = false;
-      },
-      { passive: true },
-    );
+    // Tiga salinan agar slide sebelumnya/berikutnya
+    // tetap mengisi sisi Gallery ketika looping.
+    slides = [
+      ...originalSlides,
+      ...originalSlides,
+      ...originalSlides
+    ];
 
-    track.addEventListener(
-      "touchend",
-      (event) => {
-        const distance = event.changedTouches[0].screenX - touchStartX;
+    const fragment = document.createDocumentFragment();
 
-        if (Math.abs(distance) > 50) {
-          swiped = true;
-
-          goToSlide(currentIndex + (distance < 0 ? 1 : -1));
-
-          startAutoplay();
-
-          setTimeout(() => {
-            swiped = false;
-          }, 350);
-        }
-      },
-      { passive: true },
-    );
-
-    // =====================================
-    // 10. RESPONSIVE
-    // =====================================
-    window.addEventListener("resize", () => {
-      clearTimeout(resizeTimer);
-
-      resizeTimer = setTimeout(() => {
-        if (!photos.length) return;
-
-        buildSlides();
-        goToSlide(currentIndex);
-      }, 150);
+    slides.forEach(({ photoIndex, part }) => {
+      fragment.appendChild(
+        createPanel(
+          photos[photoIndex],
+          photoIndex,
+          part,
+          height
+        )
+      );
     });
 
-    refreshGallery();
+    track.replaceChildren(fragment);
 
-    galleries.push({
-      trackId,
-      startAutoplay,
-      stopAutoplay,
-      refreshGallery,
+    return originalSlides.length;
+  }
+
+  function getOriginalCount() {
+    return slides.length / 3;
+  }
+
+  // =====================================
+  // 5. POSISI SLIDE DI TENGAH
+  // =====================================
+  function positionSlide() {
+    const slide = track.children[currentIndex];
+    if (!slide) return;
+
+    const offset =
+      slide.offsetLeft -
+      (viewport.clientWidth - slide.offsetWidth) / 2;
+
+    track.style.transform =
+      `translate3d(${-offset}px, 0, 0)`;
+
+    const selectedPhotoIndex =
+      Number(slide.dataset.photoIndex);
+
+    [...track.children].forEach((panel) => {
+      const dim = panel.querySelector(".gallery-slide-dim");
+
+      if (dim) {
+        dim.style.opacity =
+          Number(panel.dataset.photoIndex) === selectedPhotoIndex
+            ? "0"
+            : "0.5";
+      }
     });
   }
+
+  function goToSlide(index) {
+    if (!slides.length) return;
+
+    currentIndex = index;
+    positionSlide();
+  }
+
+  // Setelah melewati salinan tengah,
+  // pindahkan posisi tanpa animasi.
+  track.addEventListener("transitionend", (event) => {
+    if (event.target !== track ||
+        event.propertyName !== "transform") return;
+
+    const count = getOriginalCount();
+    if (!count) return;
+
+    if (currentIndex < count ||
+        currentIndex >= count * 2) {
+
+      currentIndex =
+        ((currentIndex % count) + count) % count + count;
+
+      track.style.transition = "none";
+      positionSlide();
+
+      void track.offsetWidth;
+      track.style.transition = "";
+    }
+  });
+
+  // =====================================
+  // 6. AUTOPLAY
+  // =====================================
+  function stopAutoplay() {
+    if (autoplayTimer !== null) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+
+    if (getOriginalCount() <= 1) return;
+
+    autoplayTimer = setInterval(() => {
+      if (!lightbox.open && !document.hidden) {
+        goToSlide(currentIndex + 1);
+      }
+    }, AUTOPLAY_DELAY);
+  }
+
+  // =====================================
+  // 7. REFRESH FOTO DARI API
+  // =====================================
+  async function refreshGallery() {
+    const token = ++refreshToken;
+
+    stopAutoplay();
+    readPhotos();
+
+    if (!photos.length) return;
+
+    const results = await Promise.all(
+      photos.map(detectPhoto)
+    );
+
+    if (token !== refreshToken) return;
+
+    photos = results;
+
+    const count = buildSlides();
+
+    // Mulai dari salinan tengah.
+    // Jika foto pertama landscape, tampilkan panel tengah.
+    currentIndex =
+      count + (photos[0]?.ratio > 1 ? 1 : 0);
+
+    track.style.transition = "none";
+    positionSlide();
+
+    requestAnimationFrame(() => {
+      if (token !== refreshToken) return;
+
+      track.style.transition = "";
+      startAutoplay();
+    });
+
+    console.log(
+      `[Gallery] ${trackId}: ${photos.length} foto, ${count} panel`
+    );
+  }
+
+  // =====================================
+  // 8. LIGHTBOX FOTO ASLI
+  // =====================================
+  track.addEventListener("click", (event) => {
+    if (swiped) return;
+
+    const slide = event.target.closest(".gallery-slide");
+
+    if (!slide || !track.contains(slide)) return;
+
+    const photoIndex = Number(slide.dataset.photoIndex);
+
+    if (photos[photoIndex]) {
+      openLightbox(photos, photoIndex);
+    }
+  });
+
+  // =====================================
+  // 9. SWIPE MOBILE
+  // =====================================
+  track.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].screenX;
+    swiped = false;
+  }, { passive: true });
+
+  track.addEventListener("touchend", (event) => {
+    const distance =
+      event.changedTouches[0].screenX - touchStartX;
+
+    if (Math.abs(distance) > 50) {
+      swiped = true;
+
+      goToSlide(
+        currentIndex + (distance < 0 ? 1 : -1)
+      );
+
+      startAutoplay();
+
+      setTimeout(() => {
+        swiped = false;
+      }, 350);
+    }
+  }, { passive: true });
+
+  // =====================================
+  // 10. RESPONSIVE
+  // =====================================
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(() => {
+      if (!photos.length) return;
+
+      const count = getOriginalCount();
+      const relativeIndex = count
+        ? ((currentIndex % count) + count) % count
+        : 0;
+
+      const newCount = buildSlides();
+
+      currentIndex = newCount + relativeIndex;
+
+      track.style.transition = "none";
+      positionSlide();
+
+      requestAnimationFrame(() => {
+        track.style.transition = "";
+      });
+    }, 150);
+  });
+
+  refreshGallery();
+
+  galleries.push({
+    trackId,
+    startAutoplay,
+    stopAutoplay,
+    refreshGallery
+  });
+}
+
 
   // ==========================
   // LIGHTBOX
