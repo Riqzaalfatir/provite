@@ -1171,3 +1171,112 @@ html.desktop-iframe #openingScreen {
   padding-bottom: 20vh;
 }
 
+
+/* ==========================
+   GALLERY ARROWS - TWINKLEBOOK
+   ========================== */
+
+.gallery2-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background-color 200ms ease;
+}
+
+.gallery2-nav:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.gallery2-nav svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gallery2-nav-prev {
+  left: 12px;
+}
+
+.gallery2-nav-next {
+  right: 12px;
+}
+
+/* ==========================
+   GALLERY DOTS - TWINKLEBOOK
+   ========================== */
+
+.gallery2-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+  padding: 0 24px;
+
+  pointer-events: none;
+}
+
+.gallery2-dot {
+  flex: 0 0 auto;
+
+  height: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+
+  background: rgba(255, 255, 255, 0.4);
+
+  cursor: pointer;
+  pointer-events: auto;
+
+  transition:
+    width 300ms ease,
+    background-color 300ms ease;
+}
+
+.gallery2-dot.active {
+  background: #fff;
+}
+
+/* Desktop: mengikuti ukuran referensi */
+@media (min-width: 1024px) {
+  .gallery2-nav {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+
+  .gallery2-nav-prev {
+    left: 24px;
+  }
+
+  .gallery2-nav-next {
+    right: 24px;
+  }
+
+  .gallery2-dots {
+    padding: 0 32px;
+  }
+}

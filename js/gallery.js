@@ -32,6 +32,11 @@ function initGallery(trackId) {
   if (!track) return;
 
   const viewport = track.parentElement;
+  const dotsContainer = document.getElementById("gallery2Dots");
+
+let dotButtons = [];
+  const prevArrow = document.getElementById("gallery2Prev");
+const nextArrow = document.getElementById("gallery2Next");
 
   let photos = [];
   let slides = [];
@@ -192,6 +197,67 @@ const width = isLandscape
     return slides.length / 3;
   }
 
+
+function renderDots() {
+  if (!dotsContainer) return;
+
+  dotsContainer.replaceChildren();
+  dotButtons = [];
+
+  photos.forEach((photo, photoIndex) => {
+    const dot = document.createElement("button");
+
+    dot.type = "button";
+    dot.className = "gallery2-dot";
+    dot.setAttribute(
+      "aria-label",
+      `Go to photo ${photoIndex + 1}`
+    );
+
+    const isLandscape = photo.ratio > 1;
+
+    dot.dataset.inactiveWidth = isLandscape ? "22" : "14";
+    dot.dataset.activeWidth = isLandscape ? "36" : "24";
+
+    dot.style.width = `${dot.dataset.inactiveWidth}px`;
+
+    dot.addEventListener("click", () => {
+      const count = getOriginalCount();
+
+      const relativeIndex = slides
+        .slice(0, count)
+        .findIndex(
+          (slide) =>
+            slide.photoIndex === photoIndex &&
+            (slide.part === null || slide.part === 1)
+        );
+
+      if (relativeIndex < 0) return;
+
+      goToSlide(count + relativeIndex);
+      startAutoplay();
+    });
+
+    dotsContainer.appendChild(dot);
+    dotButtons.push(dot);
+  });
+}
+
+function updateDots(photoIndex) {
+  dotButtons.forEach((dot, index) => {
+    const active = index === photoIndex;
+
+    dot.classList.toggle("active", active);
+
+    dot.style.width = active
+      ? `${dot.dataset.activeWidth}px`
+      : `${dot.dataset.inactiveWidth}px`;
+
+    dot.setAttribute("aria-current", active ? "true" : "false");
+  });
+}
+
+
   // =====================================
   // 5. POSISI SLIDE DI TENGAH
   // =====================================
@@ -208,6 +274,7 @@ const width = isLandscape
 
     const selectedPhotoIndex =
       Number(slide.dataset.photoIndex);
+      updateDots(selectedPhotoIndex);
 
     [...track.children].forEach((panel) => {
       const dim = panel.querySelector(".gallery-slide-dim");
@@ -293,6 +360,7 @@ const width = isLandscape
     photos = results;
 
     const count = buildSlides();
+renderDots();
 
     // Mulai dari salinan tengah.
     // Jika foto pertama landscape, tampilkan panel tengah.
@@ -385,14 +453,26 @@ const width = isLandscape
     }, 150);
   });
 
-  refreshGallery();
+ // ARROW KIRI
+prevArrow?.addEventListener("click", () => {
+  goToSlide(currentIndex - 1);
+  startAutoplay();
+});
 
-  galleries.push({
-    trackId,
-    startAutoplay,
-    stopAutoplay,
-    refreshGallery
-  });
+// ARROW KANAN
+nextArrow?.addEventListener("click", () => {
+  goToSlide(currentIndex + 1);
+  startAutoplay();
+});
+
+refreshGallery();
+
+galleries.push({
+  trackId,
+  startAutoplay,
+  stopAutoplay,
+  refreshGallery
+});
 }
 
 
